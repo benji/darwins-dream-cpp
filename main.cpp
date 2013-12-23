@@ -13,14 +13,50 @@
 
 int width = 640;
 int height = 480;
-float field_of_view_angle = 45;
-float z_near = 1;
-float z_far = 500;
+
+void drawCube(float x, float y, float z) {
+  glPushMatrix();
+  glTranslatef(x, y, z);
+
+  glBegin(GL_QUADS); 
+  glVertex3f(0,0 ,0);
+  glVertex3f(1.0f, 0, 0);
+  glVertex3f(1.0f, 1.0f, 0);
+  glVertex3f(0, 1.0f, 0);
+
+  glVertex3f(0, 0, 0);
+  glVertex3f(0, 0, 1.0f);
+  glVertex3f(0, 1.0f, 0);
+  glVertex3f(0, 1.0f, 1.0f);
+
+  glVertex3f(0, 0, 0);
+  glVertex3f(0, 0, 1.0f);
+  glVertex3f(1.0f, 0, 1.0f);
+  glVertex3f(1.0f, 0, 0);
+
+  glVertex3f(0, 0, 1.0f);
+  glVertex3f(1.0f, 0, 1.0f);
+  glVertex3f(1.0f, 1.0f, 1.0f);
+  glVertex3f(0, 1.0f, 1.0f);
+
+  glVertex3f(0,0 ,1.0f );
+  glVertex3f(1.0f, 0, 1.0f);
+  glVertex3f(1.0f, 1.0f, 1.0f);
+  glVertex3f(0, 1.0f, 1.0f);
+
+  glVertex3f(0, 1.0f, 0);
+  glVertex3f(0, 1.0f, 1.0f);
+  glVertex3f(1.0f, 1.0f, 1.0f);
+  glVertex3f(1.0f, 1.0f, 0);
+  glEnd();
+
+  glPopMatrix();
+}
 
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
-  gluLookAt(20, -10, 10, 10, 10, 0, 0.0, 0.0, 1.0);
+  gluLookAt(20, -10, 10, 10, 0, 0, 0.0, 0.0, 1.0);
 
   // GRID
   glColor3f(1.0f, 1.0f, 1.0f);
@@ -52,12 +88,24 @@ void display() {
     glVertex3f(0, 0, 100);
   glEnd();
 
+  glColor3f(.5, .2, .8);
+  drawCube(0,0,0);
+
 	glutSwapBuffers();
 }
 
+void keyboard ( unsigned char key, int mouseX, int mouseY ) { 
+  switch ( key ) {
+    case KEY_ESCAPE:        
+      exit ( 0 );   
+      break;      
+    default:      
+      break;
+  }
+}
 
-void initialize ()  {
-	glutInit(&argc, argv);
+
+void initialize()  {
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );
 	glutInitWindowSize(width, height);
 	glutCreateWindow("Darwin's dream");
@@ -81,17 +129,8 @@ void initialize ()  {
 }
 
 
-void keyboard ( unsigned char key, int mouseX, int mouseY ) { 
-  switch ( key ) {
-    case KEY_ESCAPE:        
-      exit ( 0 );   
-      break;      
-    default:      
-      break;
-  }
-}
-
 int main(int argc, char **argv) {
+	glutInit(&argc, argv);
 	initialize();
 	glutMainLoop();
 
