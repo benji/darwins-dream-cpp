@@ -1,8 +1,10 @@
-
-#define KEY_ESCAPE 27
+#include <stdio.h>
+using namespace std;
+typedef void (*DrawFuncType)();
 
 int width = 640;
 int height = 480;
+DrawFuncType drawFunc;
 
 void drawCube(float x, float y, float z) {
   glPushMatrix();
@@ -81,12 +83,14 @@ void display() {
   glColor3f(.5, .2, .8);
   drawCube(0,0,0);
 
+  drawFunc();
+
 	glutSwapBuffers();
 }
 
 void keyboard ( unsigned char key, int mouseX, int mouseY ) { 
   switch ( key ) {
-    case KEY_ESCAPE:        
+    case 27: // esc
       exit ( 0 );   
       break;      
     default:      
@@ -95,12 +99,13 @@ void keyboard ( unsigned char key, int mouseX, int mouseY ) {
 }
 
 
-void initialize()  {
+void initialize(DrawFuncType func)  {
+  drawFunc = func;
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );
 	glutInitWindowSize(width, height);
 	glutCreateWindow("Darwin's dream");
 	glutDisplayFunc(display);
-	glutIdleFunc( display );
+	glutIdleFunc(display);
   glutKeyboardFunc(keyboard);
 
   glMatrixMode(GL_PROJECTION);

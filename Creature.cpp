@@ -1,5 +1,5 @@
 #include "Creature.h"
 
-Creature::Creature(){
+Creature::Creature(int x, int y):x(x),y(y){
   
 }

@@ -9,8 +9,10 @@ using namespace std;
 class World {
   public:
     list<Species> species;
-    World();
+    int length;
+    World(int length);
     void infest(int nbSpecies, int nbCreaturesPerSpecies);
+    int* findFreeGroundPos();
 };
 
 #endif

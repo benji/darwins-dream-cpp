@@ -8,8 +8,9 @@ using namespace std;
 
 class Creature {
   public:
+    int x,y;
     list<Cell> cells;
-    Creature();
+    Creature(int x, int y);
 };
 
 #endif
