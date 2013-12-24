@@ -17,6 +17,7 @@ class Creature {
     Creature(Species& species, int x, int y);
     void createCell(int x, int y, int z);
     void grow();
+    void growNewCell(Cell c, float* growthProbas);
 };
 
 #endif
