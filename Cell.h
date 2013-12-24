@@ -2,6 +2,7 @@
 #define CELL_H
 
 #include <list>
+
 using namespace std;
 
 class Cell {

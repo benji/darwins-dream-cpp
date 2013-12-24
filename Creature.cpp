@@ -1,10 +1,14 @@
 #include "Creature.h"
 
-Creature::Creature(int x, int y):x(x),y(y){
+Creature::Creature(Species& species, int x, int y):species(species),x(x),y(y){//species(species),
   this->createCell(x,y,0);
 }
 
 void Creature::createCell(int x, int y, int z){
   Cell c(x,y,z);
   this->cells.push_back(c);
+}
+
+void Creature::grow(){
+  
 }

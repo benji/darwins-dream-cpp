@@ -6,6 +6,8 @@
 
 using namespace std;
 
+class Creature;
+
 class Species {
   public:
     list<Creature> creatures;

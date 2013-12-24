@@ -48,7 +48,12 @@ int main(int argc, char **argv) {
   Rendering::initialize(drawWorld);
 
   std::thread renderingThread(glutMainLoop);
-  renderingThread.join(); 
+
+  while(true){
+    world.lifecycle();
+  }
+
+  renderingThread.join();
 
   return 0;
 }

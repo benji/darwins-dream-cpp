@@ -3,15 +3,20 @@
 
 #include <list>
 #include "Cell.h"
+#include "Species.h"
 
 using namespace std;
 
+class Species;
+
 class Creature {
   public:
+    Species& species;
     int x,y;
     list<Cell> cells;
-    Creature(int x, int y);
+    Creature(Species& species, int x, int y);
     void createCell(int x, int y, int z);
+    void grow();
 };
 
 #endif

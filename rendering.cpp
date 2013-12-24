@@ -99,7 +99,7 @@ void Rendering::display() {
 	glutSwapBuffers();
 }
 
-void Rendering::keyboard ( unsigned char key, int mouseX, int mouseY ) { 
+void Rendering::keyboard ( unsigned char key, int mouseX, int mouseY ) {
   switch ( key ) {
     case 27: // esc
       exit ( 0 );   

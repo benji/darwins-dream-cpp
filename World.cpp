@@ -10,7 +10,7 @@ void World::infest(int nbSpecies, int nbCreaturesPerSpecies){
     Species s;
     for (int j=0; j<nbCreaturesPerSpecies; j++){
       int* pos = findFreeGroundPos();
-      Creature c( pos[0], pos[1] );
+      Creature c( s, pos[0], pos[1] );
       s.creatures.push_back(c);
     }
     species.push_back(s);
@@ -23,5 +23,5 @@ int* World::findFreeGroundPos(){
 }
 
 void World::lifecycle(){
-  cout << "lifecycle" << endl;
+  // cout << "lifecycle" << endl;
 }
