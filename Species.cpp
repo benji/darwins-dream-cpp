@@ -3,6 +3,7 @@
 #include <iostream>
 
 Species::Species(){
+  this->dna.push_back(DNA());
   cout << "new species!" << endl;
 }
 

@@ -17,7 +17,7 @@ class DNA {
 class Species {
   public:
     float r,g,b;
-    DNA dna;
+    vector<DNA> dna;
     list<Creature> creatures;
     Species();
     void setColor(float r, float g, float b);

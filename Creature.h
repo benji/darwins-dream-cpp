@@ -1,7 +1,7 @@
 #ifndef CREATURE_H
 #define CREATURE_H
 
-#include <list>
+#include <vector>
 #include "Cell.h"
 #include "Species.h"
 
@@ -13,11 +13,12 @@ class Creature {
   public:
     Species& species;
     int x,y;
-    list<Cell> cells;
+    vector<Cell> cells; // TODO : use a vector, only additions here
     Creature(Species& species, int x, int y);
     void createCell(int x, int y, int z);
     void grow();
-    void growNewCell(Cell c, float* growthProbas);
+    Cell* growNewCell(Cell c, float* growthProbas);
+    void test();
 };
 
 #endif

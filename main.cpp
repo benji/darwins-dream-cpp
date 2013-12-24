@@ -27,22 +27,44 @@ long RENDER_EVERY_CYCLES = 1;
 void drawWorld(){
   std::list<Species>::const_iterator itSpecies;
   std::list<Creature>::const_iterator itCreature;
-  std::list<Cell>::const_iterator itCell;
+  std::vector<Cell>::const_iterator itCell;
   
   for (itSpecies = world.species.begin(); itSpecies != world.species.end(); ++itSpecies) {
     Species s = *itSpecies;
     for (itCreature = s.creatures.begin(); itCreature != s.creatures.end(); ++itCreature) {
       Creature c = *itCreature;
+      int nbCells=0;
       for (itCell = c.cells.begin(); itCell != c.cells.end(); ++itCell) {
         Cell cell = *itCell;
         Rendering::drawCube( cell.x, cell.y, cell.z, s.r, s.g, s.b );
+        nbCells++;
       }
+      cout<<"DRAW - Found "<<nbCells<<" cells."<<endl;
+    }
+  }
+}
+
+void debug(){
+
+  std::list<Species>::const_iterator itSpecies;
+  std::list<Creature>::const_iterator itCreature;
+
+  for (itSpecies = world.species.begin(); itSpecies != world.species.end(); ++itSpecies) {
+    Species s = *itSpecies;
+    for (itCreature = s.creatures.begin(); itCreature != s.creatures.end(); ++itCreature) {
+      Creature c = *itCreature;
+      int nbCells=0;
+      std::vector<Cell>::const_iterator itCell;
+      for (itCell = c.cells.begin(); itCell != c.cells.end(); ++itCell) {
+        nbCells++;
+      }
+      cout<<"WHILE - Found "<<nbCells<<" cells."<<endl;
     }
   }
 }
 
 int main(int argc, char **argv) {
-  world.infest(5,5);
+  world.infest(1,1);
 
   glutInit(&argc, argv);
   Rendering::initialize(drawWorld);
@@ -51,6 +73,7 @@ int main(int argc, char **argv) {
 
   while(true){
     world.lifecycle();
+    debug();
   }
 
   renderingThread.join();

@@ -29,15 +29,19 @@ int* World::findFreeGroundPos(int* pos){
 void World::lifecycle(){
   // cout << "lifecycle" << endl;
   
-  std::list<Species>::const_iterator itSpecies;
-  std::list<Creature>::const_iterator itCreature;
-  std::list<Cell>::const_iterator itCell;
-  
+  std::list<Species>::iterator itSpecies;
+  std::list<Creature>::iterator itCreature;
+int i=0,j=0;  
+
   for (itSpecies = species.begin(); itSpecies != species.end(); ++itSpecies) {
     Species s = *itSpecies;
     for (itCreature = s.creatures.begin(); itCreature != s.creatures.end(); ++itCreature) {
       Creature c = *itCreature;
       c.grow();
+      cout<<"LOOP1 - "<< species.front().creatures.front().cells.size() << endl;
+      s.creatures.front().grow();
+      cout<<"LOOP2 - "<< species.front().creatures.front().cells.size() << endl;
+      species.front().creatures.front().test();
     }
   }
 }
