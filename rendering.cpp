@@ -10,36 +10,44 @@ void drawCube(float x, float y, float z) {
   glPushMatrix();
   glTranslatef(x, y, z);
 
-  glBegin(GL_QUADS); 
-  glVertex3f(0,0 ,0);
-  glVertex3f(1.0f, 0, 0);
-  glVertex3f(1.0f, 1.0f, 0);
-  glVertex3f(0, 1.0f, 0);
+  glBegin(GL_QUADS);
 
+  // x=0
   glVertex3f(0, 0, 0);
-  glVertex3f(0, 0, 1.0f);
-  glVertex3f(0, 1.0f, 0);
-  glVertex3f(0, 1.0f, 1.0f);
+  glVertex3f(0, 0, 1);
+  glVertex3f(0, 1, 1);
+  glVertex3f(0, 1, 0);
 
+  // y=0
   glVertex3f(0, 0, 0);
-  glVertex3f(0, 0, 1.0f);
-  glVertex3f(1.0f, 0, 1.0f);
-  glVertex3f(1.0f, 0, 0);
+  glVertex3f(0, 0, 1);
+  glVertex3f(1, 0, 1);
+  glVertex3f(1, 0, 0);
 
-  glVertex3f(0, 0, 1.0f);
-  glVertex3f(1.0f, 0, 1.0f);
-  glVertex3f(1.0f, 1.0f, 1.0f);
-  glVertex3f(0, 1.0f, 1.0f);
+  // z=0
+  glVertex3f(0, 0 ,0);
+  glVertex3f(1, 0, 0);
+  glVertex3f(1, 1, 0);
+  glVertex3f(0, 1, 0);
 
-  glVertex3f(0,0 ,1.0f );
-  glVertex3f(1.0f, 0, 1.0f);
-  glVertex3f(1.0f, 1.0f, 1.0f);
-  glVertex3f(0, 1.0f, 1.0f);
+  // x=1
+  glVertex3f(1, 0, 0);
+  glVertex3f(1, 0, 1);
+  glVertex3f(1, 1, 1);
+  glVertex3f(1, 1, 0);
 
-  glVertex3f(0, 1.0f, 0);
-  glVertex3f(0, 1.0f, 1.0f);
-  glVertex3f(1.0f, 1.0f, 1.0f);
-  glVertex3f(1.0f, 1.0f, 0);
+  // y=1
+  glVertex3f(0, 1, 0);
+  glVertex3f(0, 1, 1);
+  glVertex3f(1, 1, 1);
+  glVertex3f(1, 1, 0);
+
+  // z=1
+  glVertex3f(0, 0 ,1 );
+  glVertex3f(1, 0, 1);
+  glVertex3f(1, 1, 1);
+  glVertex3f(0, 1, 1);
+
   glEnd();
 
   glPopMatrix();
