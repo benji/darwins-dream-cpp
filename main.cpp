@@ -23,6 +23,7 @@ using namespace std;
 
 World world(10);
 long RENDER_EVERY_CYCLES = 1;
+bool running = false;
 
 void drawWorld(){
   std::list<Species>::const_iterator itSpecies;
@@ -41,33 +42,29 @@ void drawWorld(){
   }
 }
 
-void debug(){
-
-  std::list<Species>::const_iterator itSpecies;
-  std::list<Creature>::const_iterator itCreature;
-
-  for (itSpecies = world.species.begin(); itSpecies != world.species.end(); ++itSpecies) {
-    Species s = *itSpecies;
-    for (itCreature = s.creatures.begin(); itCreature != s.creatures.end(); ++itCreature) {
-      Creature c = *itCreature;
-    }
+void playLife(){
+  running = true;
+  while(running){
+    world.lifecycle();
   }
+}
+
+void cleanupWorld(){
+  running = false;
+  cout << "Cleaning up" << endl;
 }
 
 int main(int argc, char **argv) {
   world.infest(5,5);
 
   glutInit(&argc, argv);
-  Rendering::initialize(drawWorld);
+  Rendering::initialize(drawWorld, cleanupWorld);
 
   std::thread renderingThread(glutMainLoop);
-
-  while(true){
-    world.lifecycle();
-    debug();
-  }
+  std::thread playLifeThread(playLife);
 
   renderingThread.join();
+  playLifeThread.join();
 
   return 0;
 }
