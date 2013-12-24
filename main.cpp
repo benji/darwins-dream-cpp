@@ -35,7 +35,7 @@ void drawWorld(){
       Creature c = *itCreature;
       for (itCell = c.cells.begin(); itCell != c.cells.end(); ++itCell) {
         Cell cell = *itCell;
-        Rendering::drawCube( cell.x, cell.y, cell.z );
+        Rendering::drawCube( cell.x, cell.y, cell.z, s.r, s.g, s.b );
       }
     }
   }

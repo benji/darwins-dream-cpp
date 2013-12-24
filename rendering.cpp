@@ -10,11 +10,13 @@ static int width = 640;
 static int height = 480;
 static DrawFuncType drawFunc;
 
-void Rendering::drawCube(float x, float y, float z) {
+void Rendering::drawCube(float x, float y, float z, float r, float g, float b) {
   glPushMatrix();
   glTranslatef(x, y, z);
 
   glBegin(GL_QUADS);
+
+  glColor3f(r, g, b);
 
   // x=0
   glVertex3f(0, 0, 0);
@@ -60,7 +62,7 @@ void Rendering::drawCube(float x, float y, float z) {
 void Rendering::display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
-  gluLookAt(20, -10, 10, 10, 0, 0, 0.0, 0.0, 1.0);
+  gluLookAt(20, -10, 20, 10, 0, 10, 0.0, 0.0, 1.0);
 
   // GRID
   glColor3f(1.0f, 1.0f, 1.0f);
@@ -91,8 +93,6 @@ void Rendering::display() {
     glVertex3f(0, 0, 0);
     glVertex3f(0, 0, 100);
   glEnd();
-
-  glColor3f(.5, .2, .8);
 
   drawFunc();
 

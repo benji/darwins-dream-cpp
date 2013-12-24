@@ -10,8 +10,10 @@ class Creature;
 
 class Species {
   public:
+    float r,g,b;
     list<Creature> creatures;
     Species();
+    void setColor(float r, float g, float b);
 };
 
 #endif

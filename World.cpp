@@ -8,6 +8,7 @@ World::World(int length):length(length){}
 void World::infest(int nbSpecies, int nbCreaturesPerSpecies){
   for (int i=0; i<nbSpecies; i++){
     Species s;
+    s.setColor(randDouble(),randDouble(),randDouble());
     for (int j=0; j<nbCreaturesPerSpecies; j++){
       int* pos = findFreeGroundPos();
       Creature c( s, pos[0], pos[1] );
