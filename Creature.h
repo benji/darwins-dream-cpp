@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "Cell.h"
+#include <string>
 #include "Species.h"
 
 using namespace std;
@@ -13,6 +14,7 @@ class Creature {
   public:
     Species& species;
     int x,y;
+    string name;
     vector<Cell> cells; // TODO : use a vector, only additions here
     Creature(Species& species, int x, int y);
     void createCell(int x, int y, int z);

@@ -25,7 +25,6 @@ void Creature::grow(){
 
   if (cell!=NULL) {
     cells.push_back(*cell);
-    cout<<"POST - "<< this->cells.size() << endl;
   }
 
 }
@@ -65,6 +64,6 @@ Cell* Creature::growNewCell(Cell c, float* growthProbas){
     cerr << "ERRORCell has no room to grow" << endl;
     return NULL;
   }
-cout<<"new cell"<<endl;
+
   return new Cell(x,y,z);
 }

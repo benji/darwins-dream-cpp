@@ -33,13 +33,10 @@ void drawWorld(){
     Species s = *itSpecies;
     for (itCreature = s.creatures.begin(); itCreature != s.creatures.end(); ++itCreature) {
       Creature c = *itCreature;
-      int nbCells=0;
       for (itCell = c.cells.begin(); itCell != c.cells.end(); ++itCell) {
         Cell cell = *itCell;
         Rendering::drawCube( cell.x, cell.y, cell.z, s.r, s.g, s.b );
-        nbCells++;
       }
-      cout<<"DRAW - Found "<<nbCells<<" cells."<<endl;
     }
   }
 }
@@ -53,18 +50,12 @@ void debug(){
     Species s = *itSpecies;
     for (itCreature = s.creatures.begin(); itCreature != s.creatures.end(); ++itCreature) {
       Creature c = *itCreature;
-      int nbCells=0;
-      std::vector<Cell>::const_iterator itCell;
-      for (itCell = c.cells.begin(); itCell != c.cells.end(); ++itCell) {
-        nbCells++;
-      }
-      cout<<"WHILE - Found "<<nbCells<<" cells."<<endl;
     }
   }
 }
 
 int main(int argc, char **argv) {
-  world.infest(1,1);
+  world.infest(5,5);
 
   glutInit(&argc, argv);
   Rendering::initialize(drawWorld);
