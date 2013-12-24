@@ -11,6 +11,7 @@ class Creature {
     int x,y;
     list<Cell> cells;
     Creature(int x, int y);
+    void createCell(int x, int y, int z);
 };
 
 #endif

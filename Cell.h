@@ -7,7 +7,7 @@ using namespace std;
 class Cell {
   public:
     int x,y,z;
-    Cell();
+    Cell(int x, int y, int z);
 };
 
 #endif

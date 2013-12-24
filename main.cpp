@@ -31,8 +31,9 @@ void drawWorld(){
     Species s = *itSpecies;
     for (itCreature = s.creatures.begin(); itCreature != s.creatures.end(); ++itCreature) {
       Creature c = *itCreature;
-      drawCube( c.x, c.y, 0 );
       for (itCell = c.cells.begin(); itCell != c.cells.end(); ++itCell) {
+        Cell cell = *itCell;
+        drawCube( cell.x, cell.y, cell.z );
       }
     }
   }

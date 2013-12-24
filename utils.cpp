@@ -1,3 +1,5 @@
+#include "utils.h"
+
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
