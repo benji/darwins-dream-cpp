@@ -29,11 +29,6 @@ void Creature::grow(){
 
 }
 
-void Creature::test(){
-  cout<<"TEST - "<< this->cells.size() << endl;
-}
-
-
 Cell* Creature::growNewCell(Cell c, float* growthProbas){
   bool canGrow[6] = {
     c.x>0,
@@ -66,4 +61,8 @@ Cell* Creature::growNewCell(Cell c, float* growthProbas){
   }
 
   return new Cell(x,y,z);
+}
+
+void Creature::die(){
+  cout << "Creature dies"<<endl;
 }

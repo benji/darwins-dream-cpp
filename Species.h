@@ -23,6 +23,7 @@ class Species {
     list<Creature> creatures;
     Species();
     void setColor(float r, float g, float b);
+    void killOldCreatures();
 };
 
 #endif

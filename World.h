@@ -10,7 +10,8 @@ class World {
   public:
     list<Species> species;
     int length;
-    World(int length);
+    float reproductionRate, mutationRate;
+    World(int length, float reproductionRate, float mutationRate);
     void infest(int nbSpecies, int nbCreaturesPerSpecies);
     int* findFreeGroundPos(int* pos);
     void lifecycle();

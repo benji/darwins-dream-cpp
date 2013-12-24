@@ -21,7 +21,7 @@ using namespace std;
 #include "Cell.h"
 
 
-World world(10);
+World world(10, 0.2, 0.05);
 long RENDER_EVERY_CYCLES = 1;
 bool running = false;
 

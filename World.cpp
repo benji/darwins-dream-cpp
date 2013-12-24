@@ -3,7 +3,7 @@ using namespace std;
 #include "World.h"
 #include "utils.h"
 
-World::World(int length):length(length){}
+World::World(int length, float reproductionRate, float mutationRate):length(length),reproductionRate(reproductionRate),mutationRate(mutationRate){}
 
 void World::infest(int nbSpecies, int nbCreaturesPerSpecies){
   for (int i=0; i<nbSpecies; i++){
@@ -27,9 +27,29 @@ int* World::findFreeGroundPos(int* pos){
 }
 
 void World::lifecycle(){
-  std::list<Species>::iterator itSpecies;
+  std::list<Species>::iterator itSpecies = species.begin();
   std::list<Creature>::iterator itCreature;
 
+  // death
+  while (itSpecies != species.end()) {
+    itSpecies->killOldCreatures();
+
+    if (itSpecies->creatures.size() == 0){
+      itSpecies = species.erase(itSpecies);
+    }else{
+      ++itSpecies;
+    }
+  }
+
+  // reproduction
+  for (itSpecies = species.begin(); itSpecies != species.end(); ++itSpecies) {
+    for (itCreature = itSpecies->creatures.begin(); itCreature != itSpecies->creatures.end(); ++itCreature) {
+      Creature c = *itCreature;
+      itCreature->grow();
+    }
+  }
+
+  // growth
   for (itSpecies = species.begin(); itSpecies != species.end(); ++itSpecies) {
     for (itCreature = itSpecies->creatures.begin(); itCreature != itSpecies->creatures.end(); ++itCreature) {
       Creature c = *itCreature;
