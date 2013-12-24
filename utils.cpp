@@ -1,14 +1,13 @@
-#ifndef UTILS_CPP
-#define UTILS_CPP
-
 #include <cstdlib>
 #include <ctime>
+#include <iostream>
+using namespace std;
 
 bool SRAND_INITIALIZED = false;
 
 void initSRand(){
-  if (!SRAND_INITIALIZED){
-    srand(time(NULL));
+  if (!SRAND_INITIALIZED) {
+    srand(time(0));
     SRAND_INITIALIZED = true;
   }
 }
@@ -20,9 +19,11 @@ double randDouble(){
 
 // [0;max[
 int randInt(int max){
+  if (max <= 0){
+    cerr << "randInt: Invalid max: "<<max << endl;
+    exit(-1);
+  }
   initSRand();
   return rand() % max;
 }
 
-
-#endif

@@ -1,7 +1,9 @@
-#include "World.h"
 #include <iostream>
+using namespace std;
+#include "World.h"
+#include "utils.h"
 
-World::World(int length):length(0){}
+World::World(int length):length(length){}
 
 void World::infest(int nbSpecies, int nbCreaturesPerSpecies){
   for (int i=0; i<nbSpecies; i++){
@@ -16,6 +18,6 @@ void World::infest(int nbSpecies, int nbCreaturesPerSpecies){
 }
 
 int* World::findFreeGroundPos(){
-  int pos[2] = {1,2};
+  int pos[2] = {randInt(this->length), randInt(this->length)};
   return pos;
 }

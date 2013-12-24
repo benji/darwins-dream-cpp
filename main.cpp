@@ -12,7 +12,7 @@
 
 using namespace std;
 
-#include "utils.cpp"
+#include "utils.h"
 #include "rendering.cpp"
 #include "World.h"
 #include "Species.h"
@@ -40,10 +40,6 @@ void drawWorld(){
 
 int main(int argc, char **argv) {
   world.infest(5,5);
-
-  for (int i=0;i<10;i++){
-    cout << randDouble() << endl;
-  }
 
   glutInit(&argc, argv);
   initialize(drawWorld);
