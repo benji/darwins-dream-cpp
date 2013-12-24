@@ -13,6 +13,7 @@ class World {
     World(int length);
     void infest(int nbSpecies, int nbCreaturesPerSpecies);
     int* findFreeGroundPos();
+    void lifecycle();
 };
 
 #endif

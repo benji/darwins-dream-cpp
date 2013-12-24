@@ -21,3 +21,7 @@ int* World::findFreeGroundPos(){
   int pos[2] = {randInt(this->length), randInt(this->length)};
   return pos;
 }
+
+void World::lifecycle(){
+  cout << "lifecycle" << endl;
+}

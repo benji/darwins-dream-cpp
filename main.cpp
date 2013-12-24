@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <list>
+#include <thread>
 #include <GL/gl.h>
 #include <GL/glut.h>
 
@@ -13,7 +14,7 @@
 using namespace std;
 
 #include "utils.h"
-#include "rendering.cpp"
+#include "rendering.h"
 #include "World.h"
 #include "Species.h"
 #include "Creature.h"
@@ -21,6 +22,7 @@ using namespace std;
 
 
 World world(10);
+long RENDER_EVERY_CYCLES = 1;
 
 void drawWorld(){
   std::list<Species>::const_iterator itSpecies;
@@ -33,7 +35,7 @@ void drawWorld(){
       Creature c = *itCreature;
       for (itCell = c.cells.begin(); itCell != c.cells.end(); ++itCell) {
         Cell cell = *itCell;
-        drawCube( cell.x, cell.y, cell.z );
+        Rendering::drawCube( cell.x, cell.y, cell.z );
       }
     }
   }
@@ -43,8 +45,10 @@ int main(int argc, char **argv) {
   world.infest(5,5);
 
   glutInit(&argc, argv);
-  initialize(drawWorld);
-  glutMainLoop();
+  Rendering::initialize(drawWorld);
+
+  std::thread renderingThread(glutMainLoop);
+  renderingThread.join(); 
 
   return 0;
 }

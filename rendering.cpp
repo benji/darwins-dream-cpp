@@ -1,12 +1,16 @@
 #include <stdio.h>
+#include <iostream>
+#include <GL/gl.h>
+#include <GL/glut.h>
+#include "rendering.h"
+
 using namespace std;
-typedef void (*DrawFuncType)();
 
-int width = 640;
-int height = 480;
-DrawFuncType drawFunc;
+static int width = 640;
+static int height = 480;
+static DrawFuncType drawFunc;
 
-void drawCube(float x, float y, float z) {
+void Rendering::drawCube(float x, float y, float z) {
   glPushMatrix();
   glTranslatef(x, y, z);
 
@@ -53,7 +57,7 @@ void drawCube(float x, float y, float z) {
   glPopMatrix();
 }
 
-void display() {
+void Rendering::display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
   gluLookAt(20, -10, 10, 10, 0, 0, 0.0, 0.0, 1.0);
@@ -89,14 +93,13 @@ void display() {
   glEnd();
 
   glColor3f(.5, .2, .8);
-  drawCube(0,0,0);
 
   drawFunc();
 
 	glutSwapBuffers();
 }
 
-void keyboard ( unsigned char key, int mouseX, int mouseY ) { 
+void Rendering::keyboard ( unsigned char key, int mouseX, int mouseY ) { 
   switch ( key ) {
     case 27: // esc
       exit ( 0 );   
@@ -107,14 +110,14 @@ void keyboard ( unsigned char key, int mouseX, int mouseY ) {
 }
 
 
-void initialize(DrawFuncType func)  {
+void Rendering::initialize(DrawFuncType func)  {
   drawFunc = func;
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );
 	glutInitWindowSize(width, height);
 	glutCreateWindow("Darwin's dream");
-	glutDisplayFunc(display);
-	glutIdleFunc(display);
-  glutKeyboardFunc(keyboard);
+	glutDisplayFunc(Rendering::display);
+	glutIdleFunc(Rendering::display);
+  glutKeyboardFunc(Rendering::keyboard);
 
   glMatrixMode(GL_PROJECTION);
   glViewport(0, 0, width, height);
