@@ -1,7 +1,5 @@
-#include <iostream>
+#include "common.h"
 #include "Creature.h"
-#include "utils.h"
-using namespace std;
 
 Creature::Creature(Species& species, int x, int y):species(species),x(x),y(y){
   this->createCell(x,y,0);

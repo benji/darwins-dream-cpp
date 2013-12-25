@@ -1,8 +1,7 @@
 #ifndef SPECIES_H
 #define SPECIES_H
 
-#include <list>
-#include <string>
+#include "common.h"
 #include "Creature.h"
 
 using namespace std;

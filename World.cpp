@@ -1,7 +1,5 @@
-#include <iostream>
-using namespace std;
+#include "common.h"
 #include "World.h"
-#include "utils.h"
 
 World::World(int length, float reproductionRate, float mutationRate):cycle(0),length(length),reproductionRate(reproductionRate),mutationRate(mutationRate){}
 

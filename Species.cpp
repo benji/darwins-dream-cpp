@@ -1,6 +1,5 @@
+#include "common.h"
 #include "Species.h"
-#include "utils.h"
-#include <iostream>
 
 Species::Species(){
   this->dna.push_back(new DNA());

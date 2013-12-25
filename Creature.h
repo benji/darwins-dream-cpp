@@ -1,13 +1,13 @@
 #ifndef CREATURE_H
 #define CREATURE_H
 
-#include <vector>
+#include "common.h"
 #include "Cell.h"
-#include <string>
 #include "Species.h"
 
 using namespace std;
 
+class Cell;
 class Species;
 
 class Creature {
