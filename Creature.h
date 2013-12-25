@@ -20,7 +20,7 @@ class Creature {
     void createCell(int x, int y, int z);
     void grow();
     void die();
-    Cell* growNewCell(Cell* c, float* growthProbas);
+    void growNewCell(Cell* c, float* growthProbas);
 };
 
 #endif

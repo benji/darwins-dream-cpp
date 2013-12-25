@@ -26,7 +26,6 @@ void World::reproduce(Species* s){
   int pos[2];
   findFreeGroundPos(pos);
   s->reproduce( pos[0], pos[1] );
-  // TODO: do I need to free pos?
 }
 
 void World::lifecycle(){
@@ -39,6 +38,7 @@ void World::lifecycle(){
     s->killOldCreatures();
 
     if (s->creatures.size() == 0){
+      delete s;
       itSpecies = species.erase(itSpecies);
     }else{
       ++itSpecies;

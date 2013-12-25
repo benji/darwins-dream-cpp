@@ -21,15 +21,10 @@ void Creature::grow(){
 
   // TODO: We take only the first proba here!
   float* probas = this->species.dna[0]->probas;
-  Cell* cell = growNewCell(this->cells.at(idx), probas);
-
-  if (cell!=NULL) {
-    cells.push_back(cell);
-  }
-
+  growNewCell(this->cells.at(idx), probas);
 }
 
-Cell* Creature::growNewCell(Cell* c, float* growthProbas){
+void Creature::growNewCell(Cell* c, float* growthProbas){
   bool canGrow[6] = {
     c->x>0,
     true,
@@ -57,13 +52,18 @@ Cell* Creature::growNewCell(Cell* c, float* growthProbas){
   else if (canGrow[5])                                       z-=1;
   else {
     cout << "ERROR: Cell has no room to grow" << endl;
-    return NULL;
+    return;
   }
 
-  return new Cell(x,y,z);
+  createCell(x,y,z);
 }
 
 void Creature::die(){
   cout << "Creature dies"<<endl;
-  // TODO make sure we dont leak cells!
+
+  std::vector<Cell*>::iterator itCell;
+  for (itCell = cells.begin(); itCell != cells.end(); ++itCell) {
+    Cell* cell = (*itCell);
+    delete cell;
+  }
 }

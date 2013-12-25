@@ -4,7 +4,6 @@
 
 Species::Species(){
   this->dna.push_back(new DNA());
-  cout << "new species!" << endl;
 }
 
 void Species::setColor(float r, float g, float b){
@@ -17,8 +16,8 @@ void Species::killOldCreatures(){
   while (itCreature != creatures.end()){
     Creature* c = (*itCreature);
     if (c->cells.size() > 30){ //TODO remove hardcoded value
-      cout<<"DEAD"<<endl;
       c->die();
+      delete c;
       itCreature = creatures.erase(itCreature);
     }else{
       ++itCreature;

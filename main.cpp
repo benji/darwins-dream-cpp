@@ -30,12 +30,13 @@ World world(10, 0.2, 0.05);
 long RENDER_EVERY_CYCLES = 1;
 bool running = false;
 std::vector<Cube*> cubes;
+std::vector<Cube*>::iterator itCube;
 bool lockCubes = false;
 
 void drawWorld(){
   if (lockCubes == false){
     lockCubes = true;
-    std::vector<Cube*>::iterator itCube;
+
     for (itCube = cubes.begin(); itCube != cubes.end(); ++itCube) {
       Cube* cube = (*itCube);
       Rendering::drawCube( cube->x, cube->y, cube->z, cube->r, cube->g, cube->b );
@@ -52,11 +53,15 @@ void playLife(){
     if (lockCubes == false){
       lockCubes = true;
 
+      for (itCube = cubes.begin(); itCube != cubes.end(); ++itCube) {
+        Cube* cube = (*itCube);
+        delete cube;
+      }
+      cubes.clear();
+
       std::list<Species*>::iterator itSpecies;
       std::list<Creature*>::iterator itCreature;
       std::vector<Cell*>::iterator itCell;
-
-      cubes.clear();
       
       for (itSpecies = world.species.begin(); itSpecies != world.species.end(); ++itSpecies) {
         Species* s = (*itSpecies);
