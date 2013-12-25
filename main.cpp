@@ -43,6 +43,7 @@ void drawWorld(){
       delete cube;
     }
     cubes->clear();
+    delete cubes;
 
     // swap
     cubes = nextCubes;
@@ -57,6 +58,8 @@ void drawWorld(){
 }
 
 void updateCubes(){
+
+  if (nextCubes != NULL) return;
 
   vector<Cube*>* tmpCubes = new vector<Cube*>();
 
@@ -91,6 +94,7 @@ void playLife(){
   while(running){
     world.lifecycle();
     updateCubes();
+
     if (world.cycle % UPDATE_UI_EVERY_CYCLES == 0){
       long elapsed = time(0)-START;
       if (elapsed >0){
@@ -108,6 +112,7 @@ void cleanupWorld(){
 
 int main(int argc, char **argv) {
   world.infest(5,5);
+  updateCubes();
 
   glutInit(&argc, argv);
   Rendering::initialize(drawWorld, cleanupWorld);

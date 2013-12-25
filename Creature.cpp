@@ -14,10 +14,6 @@ void Creature::createCell(int x, int y, int z){
 
 void Creature::grow(){
   int idx = this->cells.size()-1;
-  if (idx < 0){
-    cerr<<"Negative index"<<endl;
-    exit(-2);
-  }
 
   // TODO: We take only the first proba here!
   float* probas = this->species.dna[0]->probas;
