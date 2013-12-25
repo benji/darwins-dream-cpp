@@ -18,12 +18,16 @@ class DNA {
 class Species {
   public:
     float r,g,b;
-    vector<DNA> dna;
+    vector<DNA*> dna;
     string name;
-    list<Creature> creatures;
+    float test1;
+    float test2;
+    float test3;
+    list<Creature*> creatures;
     Species();
     void setColor(float r, float g, float b);
     void killOldCreatures();
+    void reproduce(int x, int y);
 };
 
 #endif

@@ -3,18 +3,14 @@ using namespace std;
 #include "World.h"
 #include "utils.h"
 
-World::World(int length, float reproductionRate, float mutationRate):length(length),reproductionRate(reproductionRate),mutationRate(mutationRate){}
+World::World(int length, float reproductionRate, float mutationRate):cycle(0),length(length),reproductionRate(reproductionRate),mutationRate(mutationRate){}
 
 void World::infest(int nbSpecies, int nbCreaturesPerSpecies){
   for (int i=0; i<nbSpecies; i++){
-    Species s;
-    s.setColor(randDouble(),randDouble(),randDouble());
+    Species* s = new Species();
+    s->setColor(randDouble(),randDouble(),randDouble());
     for (int j=0; j<nbCreaturesPerSpecies; j++){
-      int pos[2];
-      findFreeGroundPos(pos);
-      Creature c( s, pos[0], pos[1] );
-      // TODO: do I need to free pos?
-      s.creatures.push_back(c);
+      reproduce(s);
     }
     species.push_back(s);
   }
@@ -26,15 +22,23 @@ int* World::findFreeGroundPos(int* pos){
   return pos;
 }
 
+void World::reproduce(Species* s){
+  int pos[2];
+  findFreeGroundPos(pos);
+  s->reproduce( pos[0], pos[1] );
+  // TODO: do I need to free pos?
+}
+
 void World::lifecycle(){
-  std::list<Species>::iterator itSpecies = species.begin();
-  std::list<Creature>::iterator itCreature;
+  std::list<Species*>::iterator itSpecies = species.begin();
+  std::list<Creature*>::iterator itCreature;
 
   // death
   while (itSpecies != species.end()) {
-    itSpecies->killOldCreatures();
+    Species* s = (*itSpecies);
+    s->killOldCreatures();
 
-    if (itSpecies->creatures.size() == 0){
+    if (s->creatures.size() == 0){
       itSpecies = species.erase(itSpecies);
     }else{
       ++itSpecies;
@@ -43,17 +47,25 @@ void World::lifecycle(){
 
   // reproduction
   for (itSpecies = species.begin(); itSpecies != species.end(); ++itSpecies) {
-    for (itCreature = itSpecies->creatures.begin(); itCreature != itSpecies->creatures.end(); ++itCreature) {
-      Creature c = *itCreature;
-      itCreature->grow();
+    Species* s = (*itSpecies);
+    int nbCreatures = s->creatures.size();
+
+    for (int i=0;i<nbCreatures;i++) {
+      if (randDouble() < reproductionRate && nbCreatures < 30){
+        reproduce(s);
+      }
     }
   }
 
+
   // growth
   for (itSpecies = species.begin(); itSpecies != species.end(); ++itSpecies) {
-    for (itCreature = itSpecies->creatures.begin(); itCreature != itSpecies->creatures.end(); ++itCreature) {
-      Creature c = *itCreature;
-      itCreature->grow();
+    Species* s = (*itSpecies);
+    for (itCreature = s->creatures.begin(); itCreature != s->creatures.end(); ++itCreature) {
+      Creature* c = (*itCreature);
+      c->grow();
     }
   }
+
+  cycle++;
 }

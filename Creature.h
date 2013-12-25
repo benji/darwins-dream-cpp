@@ -15,12 +15,12 @@ class Creature {
     Species& species;
     int x,y;
     string name;
-    vector<Cell> cells; // TODO : use a vector, only additions here
+    vector<Cell*> cells; // TODO : use a vector, only additions here
     Creature(Species& species, int x, int y);
     void createCell(int x, int y, int z);
     void grow();
     void die();
-    Cell* growNewCell(Cell c, float* growthProbas);
+    Cell* growNewCell(Cell* c, float* growthProbas);
 };
 
 #endif
