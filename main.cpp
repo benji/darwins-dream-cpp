@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <list>
 #include <thread>
+#include <ctime>
 #include <GL/gl.h>
 #include <GL/glut.h>
 
@@ -27,10 +28,11 @@ struct Cube {
 };
 
 World world(10, 0.2, 0.05);
-long RENDER_EVERY_CYCLES = 1;
+long UPDATE_UI_EVERY_CYCLES = 1000;
 bool running = false;
 vector<Cube*>* cubes = new vector<Cube*>();
 vector<Cube*>* nextCubes = NULL;
+long START = time(0);
 
 void drawWorld(){
   if (nextCubes != NULL){ //swap requested
@@ -83,11 +85,19 @@ void updateCubes(){
   nextCubes = tmpCubes;
 }
 
+
 void playLife(){
   running = true;
   while(running){
     world.lifecycle();
     updateCubes();
+    if (world.cycle % UPDATE_UI_EVERY_CYCLES == 0){
+      long elapsed = time(0)-START;
+      if (elapsed >0){
+        float cyclesPerSecs = world.cycle/elapsed;
+        cout<<"Elapsed "<<elapsed<<" seconds, "<<cyclesPerSecs<<" cycles/s."<<endl;
+      }
+    }
   }
 }
 
