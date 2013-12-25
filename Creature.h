@@ -5,8 +5,6 @@
 #include "Cell.h"
 #include "Species.h"
 
-using namespace std;
-
 class Cell;
 class Species;
 

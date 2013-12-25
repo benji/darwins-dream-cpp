@@ -1,14 +1,13 @@
 #ifndef CELLS_REGISTRY_H
 #define CELLS_REGISTRY_H
 
-#include <list>
-#include <string>
-
-using namespace std;
+#include "Cell.h"
 
 class CellsRegistry {
   public:
     CellsRegistry();
+    void registerCell(Cell* c);
+    void unregisterCell(Cell* c);
 };
 
 #endif

@@ -4,10 +4,13 @@
 #include <vector>
 
 #include "utils.h"
-#include "World.h"
 
 using namespace std;
 
 class World;
+class Species;
+class Creature;
+class Cell;
+class CellRegistry;
 
 extern World world;

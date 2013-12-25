@@ -1,10 +1,11 @@
-#include "Cell.h"
 #include "common.h"
+#include "Cell.h"
+#include "World.h"
 
 Cell::Cell(int x, int y, int z):x(x),y(y),z(z){
-  //world.registry.register(*this);
+  world.registry.registerCell(this);
 }
 
 Cell::~Cell(){
-  cout<<"cell died"<<endl;
+  world.registry.unregisterCell(this);
 }
