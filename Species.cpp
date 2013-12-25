@@ -4,6 +4,7 @@
 
 Species::Species(){
   this->dna.push_back(new DNA());
+  HSVtoRGB( &this->r, &this->g, &this->b, randDouble(), 1, .45 );
 }
 
 void Species::setColor(float r, float g, float b){
@@ -26,7 +27,6 @@ void Species::killOldCreatures(){
 }
 
 void Species::reproduce(int x, int y){
-  cout<<"reproduction!"<<endl;
   Creature* c = new Creature( (*this), x, y );
   creatures.push_back(c);
 }

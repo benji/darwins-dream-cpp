@@ -59,8 +59,6 @@ void Creature::growNewCell(Cell* c, float* growthProbas){
 }
 
 void Creature::die(){
-  cout << "Creature dies"<<endl;
-
   std::vector<Cell*>::iterator itCell;
   for (itCell = cells.begin(); itCell != cells.end(); ++itCell) {
     Cell* cell = (*itCell);
