@@ -12,7 +12,7 @@ class Creature {
   public:
     Species& species;
     int x,y;
-    string name;
+    long creationCycle;
     vector<Cell*> cells; // TODO : use a vector, only additions here
     Creature(Species& species, int x, int y);
     void createCell(int x, int y, int z);

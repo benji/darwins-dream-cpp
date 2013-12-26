@@ -3,6 +3,7 @@
 #include <list>
 #include <thread>
 #include <ctime>
+#include <unistd.h>
 #include <GL/gl.h>
 #include <GL/glut.h>
 
@@ -27,7 +28,7 @@ struct Cube {
     float r,g,b;
 };
 
-World world(10, 0.2, 0.05);
+World world(10, 20, 0.2, 0.05);
 long UPDATE_UI_EVERY_CYCLES = 1000;
 bool running = false;
 vector<Cube*>* cubes = new vector<Cube*>();
@@ -102,6 +103,7 @@ void playLife(){
         cout<<"Elapsed "<<elapsed<<" seconds, "<<cyclesPerSecs<<" cycles/s."<<endl;
       }
     }
+    usleep(1000*100);
   }
 }
 

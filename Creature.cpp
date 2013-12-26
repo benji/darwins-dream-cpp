@@ -1,8 +1,10 @@
 #include "common.h"
 #include "Creature.h"
+#include "World.h"
 
 Creature::Creature(Species& species, int x, int y):species(species),x(x),y(y){
   this->createCell(x,y,0);
+  creationCycle = world.cycle;
 }
 
 void Creature::createCell(int x, int y, int z){
@@ -19,13 +21,15 @@ void Creature::grow(){
 }
 
 void Creature::growNewCell(Cell* c, float* growthProbas){
+  int x=c->x, y=c->y, z=c->z;
+
   bool canGrow[6] = {
-    c->x>0,
-    true,
-    c->y>0,
-    true,
-    c->z>0,
-    true
+    x < world.length-1 && !world.registry.existsXYZ(x+1,y,z), // x+1
+    x > 0              && !world.registry.existsXYZ(x-1,y,z), // x-1
+    y < world.length-1 && !world.registry.existsXYZ(x,y+1,z), // y+1
+    y > 0              && !world.registry.existsXYZ(x,y-1,z), // y-1
+    true               && !world.registry.existsXYZ(x,y,z+1), // z+1
+    z > 0              && !world.registry.existsXYZ(x,y,z-1)  // z-1
   };
 
   float sumProbasCanGrow = 0;
@@ -35,8 +39,6 @@ void Creature::growNewCell(Cell* c, float* growthProbas){
 
   float p = randDouble()*sumProbasCanGrow;
 
-  int x=c->x, y=c->y, z=c->z;
-
   float sumPrevProbas = 0;
   if      (canGrow[0] && p<(sumPrevProbas+=growthProbas[0])) x+=1;
   else if (canGrow[1] && p<(sumPrevProbas+=growthProbas[1])) x-=1;
@@ -45,7 +47,7 @@ void Creature::growNewCell(Cell* c, float* growthProbas){
   else if (canGrow[4] && p<(sumPrevProbas+=growthProbas[4])) z+=1;
   else if (canGrow[5])                                       z-=1;
   else {
-    cout << "ERROR: Cell has no room to grow" << endl;
+    //cout << "Cell has no room to grow" << endl;
     return;
   }
 

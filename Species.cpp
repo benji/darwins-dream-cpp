@@ -1,4 +1,5 @@
 #include "common.h"
+#include "World.h"
 #include "Species.h"
 
 Species::Species(){
@@ -15,7 +16,7 @@ void Species::killOldCreatures(){
 
   while (itCreature != creatures.end()){
     Creature* c = (*itCreature);
-    if (c->cells.size() > 30){ //TODO remove hardcoded value
+    if (world.cycle - c->creationCycle > world.maxCells){
       c->die();
       delete c;
       itCreature = creatures.erase(itCreature);

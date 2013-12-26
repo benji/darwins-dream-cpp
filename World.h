@@ -11,15 +11,17 @@ class World {
   public:
     list<Species*> species;
     long cycle;
-    int length;
+    int length, maxCells;
     float reproductionRate, mutationRate;
     CellsRegistry registry;
 
-    World(int length, float reproductionRate, float mutationRate);
+    World(int length, int maxCells, float reproductionRate, float mutationRate);
     void infest(int nbSpecies, int nbCreaturesPerSpecies);
     int* findFreeGroundPos(int* pos);
     void lifecycle();
     void reproduce(Species* s);
+    vector<Creature*> collectShuffleCreatures();
+    vector<Species*> collectShuffleSpecies();
 };
 
 #endif
