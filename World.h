@@ -17,11 +17,10 @@ class World {
 
     World(int length, int maxCells, float reproductionRate, float mutationRate);
     void infest(int nbSpecies, int nbCreaturesPerSpecies);
-    int* findFreeGroundPos(int* pos);
     void lifecycle();
-    void reproduce(Species* s);
-    vector<Creature*> collectShuffleCreatures();
-    vector<Species*> collectShuffleSpecies();
+    Creature* reproduce(Species* s);
+    vector<Creature*> collectCreaturesCopy();
+    vector<Species*> collectSpeciesCopy();
 };
 
 #endif

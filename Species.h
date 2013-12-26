@@ -25,8 +25,8 @@ class Species {
 
     Species();
     void setColor(float r, float g, float b);
-    void killOldCreatures();
-    void reproduce(int x, int y);
+    int killOldCreatures();
+    Creature* reproduce(int x, int y);
 };
 
 #endif

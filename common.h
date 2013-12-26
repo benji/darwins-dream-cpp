@@ -14,3 +14,5 @@ class Cell;
 class CellRegistry;
 
 extern World world;
+extern bool DEBUG;
+extern bool OUT_SUMMARY;

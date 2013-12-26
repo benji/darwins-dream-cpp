@@ -30,6 +30,15 @@ int randInt(int max){
   return rand() % max;
 }
 
+int posToIndex(int length, int x, int y){
+  return x+length*y;
+}
+
+void indexToPos(int* pos, int length, int index){
+  pos[0] = index % length;
+  pos[1] = index / length;
+}
+
 void HSVtoRGB( float *r, float *g, float *b, float h, float s, float v ){
 	int i;
 	float f, p, q, t;

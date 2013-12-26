@@ -11,24 +11,30 @@ void Species::setColor(float r, float g, float b){
   this->r=r; this->g=g; this->b=b;
 }
 
-void Species::killOldCreatures(){
+int Species::killOldCreatures(){
   std::list<Creature*>::iterator itCreature = creatures.begin();
 
+  int deathCount = 0;
   while (itCreature != creatures.end()){
     Creature* c = (*itCreature);
     if (world.cycle - c->creationCycle > world.maxCells){
+      if (DEBUG) cout << "Creature dies." <<endl;
       c->die();
       delete c;
       itCreature = creatures.erase(itCreature);
+      ++deathCount;
     }else{
       ++itCreature;
     }
   }
+
+  return deathCount;
 }
 
-void Species::reproduce(int x, int y){
+Creature* Species::reproduce(int x, int y){
   Creature* c = new Creature( (*this), x, y );
   creatures.push_back(c);
+  return c;
 }
 
 DNA::DNA(){

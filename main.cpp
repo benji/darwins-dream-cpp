@@ -15,12 +15,12 @@
 
 using namespace std;
 
-#include "utils.h"
 #include "rendering.h"
 #include "World.h"
 #include "Species.h"
 #include "Creature.h"
 #include "Cell.h"
+#include "utils.h"
 
 struct Cube {
   public:
@@ -28,12 +28,14 @@ struct Cube {
     float r,g,b;
 };
 
-World world(10, 20, 0.2, 0.05);
-long UPDATE_UI_EVERY_CYCLES = 1000;
+World world(100, 30, 0.1, 0.05);
+long UPDATE_UI_EVERY_CYCLES = 100;
 bool running = false;
 vector<Cube*>* cubes = new vector<Cube*>();
 vector<Cube*>* nextCubes = NULL;
 long START = time(0);
+bool DEBUG = false;
+bool OUT_SUMMARY = false;
 
 void drawWorld(){
   if (nextCubes != NULL){ //swap requested
@@ -59,7 +61,6 @@ void drawWorld(){
 }
 
 void updateCubes(){
-
   if (nextCubes != NULL) return;
 
   vector<Cube*>* tmpCubes = new vector<Cube*>();
@@ -92,7 +93,8 @@ void updateCubes(){
 
 void playLife(){
   running = true;
-  while(running){
+  while(running && world.species.size() > 0){
+    if (DEBUG || OUT_SUMMARY) cout << "===== Cycle "<<world.cycle<<" ====="<<endl;
     world.lifecycle();
     updateCubes();
 
@@ -103,7 +105,7 @@ void playLife(){
         cout<<"Elapsed "<<elapsed<<" seconds, "<<cyclesPerSecs<<" cycles/s."<<endl;
       }
     }
-    usleep(1000*100);
+    if (DEBUG || OUT_SUMMARY) usleep(1000*20);
   }
 }
 
