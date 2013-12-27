@@ -37,6 +37,7 @@ vector<Cube*>* nextCubes = NULL;
 long START = time(0);
 bool DEBUG = false;
 bool OUT_SUMMARY = false;
+
 Clocks CLOCKS;
 int CLOCK_DEATH = 0;
 int CLOCK_REPRODUCTION = 1;
@@ -111,6 +112,10 @@ void playLife(){
       CLOCKS.status(CLOCK_REPRODUCTION, msg2);
       string msg3("Growth");
       CLOCKS.status(CLOCK_GROWTH, msg3);
+
+      CLOCKS.reset(CLOCK_DEATH);
+      CLOCKS.reset(CLOCK_REPRODUCTION);
+      CLOCKS.reset(CLOCK_GROWTH);
 
       long elapsed = time(0)-START;
       if (elapsed >0){

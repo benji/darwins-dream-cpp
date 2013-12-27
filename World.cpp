@@ -8,7 +8,6 @@ World::World(int length, int maxCells, float reproductionRate, float mutationRat
 void World::infest(int nbSpecies, int nbCreaturesPerSpecies){
   for (int i=0; i<nbSpecies; i++){
     Species* s = new Species();
-    s->setColor(randDouble(),randDouble(),randDouble());
     for (int j=0; j<nbCreaturesPerSpecies; j++){
       reproduce(s);
     }

@@ -4,7 +4,9 @@
 
 Species::Species(){
   this->dna.push_back(new DNA());
-  HSVtoRGB( &this->r, &this->g, &this->b, randDouble(), 1, .45 );
+  // TODO HSL
+  //HSVtoRGB( &this->r, &this->g, &this->b, randDouble(), 1, .45 );
+  setColor(randDouble(),randDouble(),randDouble());
 }
 
 void Species::setColor(float r, float g, float b){
