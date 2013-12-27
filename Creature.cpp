@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Creature.h"
 #include "World.h"
+#include "Clocks.h"
 
 Creature::Creature(Species& species, int x, int y):species(species),x(x),y(y){
   this->createCell(x,y,0,false);
@@ -24,21 +25,23 @@ void Creature::growNewCell(Cell* c, float* growthProbas){
   int x=c->x, y=c->y, z=c->z;
 
   if (z==0){
-    z=1; // forcing to grow up for performance
+    z=1; // RULE_SEEDS_Z0
   } else {
 
     bool canGrow[6] = {
-      x < world.length-1 && !world.registry.existsXYZ(x+1,y,z), // x+1
-      x > 0              && !world.registry.existsXYZ(x-1,y,z), // x-1
-      y < world.length-1 && !world.registry.existsXYZ(x,y+1,z), // y+1
-      y > 0              && !world.registry.existsXYZ(x,y-1,z), // y-1
-      true               && !world.registry.existsXYZ(x,y,z+1), // z+1
-      z > 1              && !world.registry.existsXYZ(x,y,z-1)  // z-1
+      x < world.length-1 && world.registry.registryXYZ[x+1][y][z] == NULL, // x+1
+      x > 0              && world.registry.registryXYZ[x-1][y][z] == NULL, // x-1
+      y < world.length-1 && world.registry.registryXYZ[x][y+1][z] == NULL, // y+1
+      y > 0              && world.registry.registryXYZ[x][y-1][z] == NULL, // y-1
+      true               && world.registry.registryXYZ[x][y][z+1] == NULL, // z+1
+      z > 1              && world.registry.registryXYZ[x][y][z-1] == NULL  // z-1
     };
 
     float sumProbasCanGrow = 0;
     for (int i=0;i<6;i++){
-      sumProbasCanGrow += canGrow[i]?growthProbas[i]:0;
+      if (canGrow[i]) {
+        sumProbasCanGrow += growthProbas[i];
+      }
     }
 
     float p = randDouble()*sumProbasCanGrow;
@@ -54,9 +57,7 @@ void Creature::growNewCell(Cell* c, float* growthProbas){
       //cout << "Cell has no room to grow" << endl;
       return;
     }
-
   }
-
   createCell(x,y,z, true);
 }
 

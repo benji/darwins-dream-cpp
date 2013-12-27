@@ -9,7 +9,6 @@ CellsRegistry::CellsRegistry(){
   for (int i = 0; i < world.length; ++i) {
     registryXYZ[i] = new Cell**[world.length];
 
-
     for (int j = 0; j < world.length; ++j){
       registryXYZ[i][j] = new Cell*[world.maxCells];
       availableGroundTiles.push_back(i+j*world.length);
@@ -36,21 +35,15 @@ void CellsRegistry::registerCell(Cell* c){
 }
 
 int* CellsRegistry::reserveRandomAvailableGroundPos(int* pos){
-  CLOCKS.start(20);
   if (availableGroundTiles.size() == 0) {
     return NULL;
   }
 
   int idx = randInt(availableGroundTiles.size());
-  CLOCKS.pause(20);
 
-  CLOCKS.start(21);  
   indexToPos(pos, world.length, availableGroundTiles[idx]);
-  CLOCKS.pause(21);
 
-  CLOCKS.start(22);  
   availableGroundTiles.erase(availableGroundTiles.begin()+idx);
-  CLOCKS.pause(22);
 
   return pos;
 }

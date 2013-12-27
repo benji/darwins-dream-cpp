@@ -9,7 +9,7 @@ Timer::Timer(){ reset(); }
 
 long long Timer::now(){
   std::chrono::time_point<std::chrono::high_resolution_clock> tp = std::chrono::high_resolution_clock::now();
-  return std::chrono::duration_cast<std::chrono::milliseconds>(tp.time_since_epoch()).count();
+  return std::chrono::duration_cast<std::chrono::microseconds>(tp.time_since_epoch()).count();
 }
 
 void Timer::start(){
@@ -32,7 +32,7 @@ void Timer::status(string msg){
   if (lastTime != 0) {
     e += (now() - lastTime);
   }
-  cout<<"CLOCK: "<< e <<"ms : "<<msg << endl;
+  cout<<"CLOCK: "<< (e/1000) <<"ms : "<<msg << endl;
 }
 
 

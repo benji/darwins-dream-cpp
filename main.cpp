@@ -113,29 +113,9 @@ void playLife(){
       string msg3("Growth");
       CLOCKS.status(CLOCK_GROWTH, msg3);
 
-      string msg10("10");
-      CLOCKS.status(10, msg10);
-      string msg11("11");
-      CLOCKS.status(11, msg11);
-      string msg12("12");
-      CLOCKS.status(12, msg12);
-
-      string msg20("20");
-      CLOCKS.status(20, msg20);
-      string msg21("21");
-      CLOCKS.status(21, msg21);
-      string msg22("22");
-      CLOCKS.status(22, msg22);
-
       CLOCKS.reset(CLOCK_DEATH);
       CLOCKS.reset(CLOCK_REPRODUCTION);
       CLOCKS.reset(CLOCK_GROWTH);
-      CLOCKS.reset(10);
-      CLOCKS.reset(11);
-      CLOCKS.reset(12);
-      CLOCKS.reset(20);
-      CLOCKS.reset(21);
-      CLOCKS.reset(22);
 
       long elapsed = time(0)-START;
       if (elapsed >0){

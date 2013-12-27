@@ -17,13 +17,9 @@ void World::infest(int nbSpecies, int nbCreaturesPerSpecies){
 
 Creature* World::reproduce(Species* s){
   int pos[2];
-  CLOCKS.start(11);
   int* ptr = registry.reserveRandomAvailableGroundPos(pos);
-  CLOCKS.pause(11);
   if (ptr != NULL){
-    CLOCKS.start(12);
     Creature* c = s->reproduce( pos[0], pos[1] );
-    CLOCKS.pause(12);
     return c;
   }else{
     return NULL;
@@ -54,10 +50,8 @@ void World::lifecycle(){
 
   // reproduction
   CLOCKS.start(CLOCK_REPRODUCTION);
-  CLOCKS.start(10);
   vector<Species*> speciesCopy = collectSpeciesCopy();
   random_shuffle(std::begin(speciesCopy), std::end(speciesCopy));
-  CLOCKS.pause(10);
 
   int birthCount = 0;
   vector<Species*>::iterator itSpeciesV;
@@ -117,16 +111,4 @@ vector<Species*> World::collectSpeciesCopy(){
 
   return collected;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -3,6 +3,8 @@
 #include <GL/gl.h>
 #include <GL/glut.h>
 #include "rendering.h"
+#include "common.h"
+#include "World.h"
 
 using namespace std;
 
@@ -63,7 +65,8 @@ void Rendering::drawCube(float x, float y, float z, float r, float g, float b) {
 void Rendering::display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
-  gluLookAt(20, -10, 20, 10, 0, 10, 0.0, 0.0, 1.0);
+  //gluLookAt(20, -10, 20, 10, 0, 10, 0.0, 0.0, 1.0);
+  gluLookAt(world.length*1.2, -world.length*.5, world.length*1, world.length/2, world.length/2, 0, 0.0, 0.0, 1.0);
 
   // GRID
   glColor3f(1.0f, 1.0f, 1.0f);
