@@ -1,5 +1,6 @@
 #include "common.h"
 #include "World.h"
+#include "Clocks.h"
 #include <algorithm>
 
 World::World(int length, int maxCells, float reproductionRate, float mutationRate):cycle(0),length(length),maxCells(maxCells),reproductionRate(reproductionRate),mutationRate(mutationRate){}
@@ -29,6 +30,7 @@ void World::lifecycle(){
   std::list<Creature*>::iterator itCreature;
 
   // death
+  CLOCKS.start(CLOCK_DEATH);
   int deathCount = 0;
   while (itSpecies != species.end()) {
     Species* s = (*itSpecies);
@@ -42,9 +44,11 @@ void World::lifecycle(){
       ++itSpecies;
     }
   }
+  CLOCKS.pause(CLOCK_DEATH);
   if (DEBUG || OUT_SUMMARY) cout << deathCount << " creatures died." << endl;
 
   // reproduction
+  CLOCKS.start(CLOCK_REPRODUCTION);
   vector<Species*> speciesCopy = collectSpeciesCopy();
   random_shuffle(std::begin(speciesCopy), std::end(speciesCopy));
 
@@ -60,10 +64,12 @@ void World::lifecycle(){
       }
     }
   }
+  CLOCKS.pause(CLOCK_REPRODUCTION);
   if (DEBUG || OUT_SUMMARY) cout << birthCount << " new creatures." << endl;
 
 
   // growth
+  CLOCKS.start(CLOCK_GROWTH);
   vector<Creature*> creaturesCopy = collectCreaturesCopy();
   random_shuffle(std::begin(creaturesCopy), std::end(creaturesCopy));
 
@@ -72,6 +78,7 @@ void World::lifecycle(){
     Creature* c = (*itCreatureV);
     c->grow();
   }
+  CLOCKS.pause(CLOCK_GROWTH);
 
   cycle++;
 }

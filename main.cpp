@@ -20,6 +20,7 @@ using namespace std;
 #include "Species.h"
 #include "Creature.h"
 #include "Cell.h"
+#include "Clocks.h"
 #include "utils.h"
 
 struct Cube {
@@ -36,6 +37,10 @@ vector<Cube*>* nextCubes = NULL;
 long START = time(0);
 bool DEBUG = false;
 bool OUT_SUMMARY = false;
+Clocks CLOCKS;
+int CLOCK_DEATH = 0;
+int CLOCK_REPRODUCTION = 1;
+int CLOCK_GROWTH = 2;
 
 void drawWorld(){
   if (nextCubes != NULL){ //swap requested
@@ -99,6 +104,14 @@ void playLife(){
     updateCubes();
 
     if (world.cycle % UPDATE_UI_EVERY_CYCLES == 0){
+  
+      string msg("Death");
+      CLOCKS.status(CLOCK_DEATH, msg);
+      string msg2("Reproducion");
+      CLOCKS.status(CLOCK_REPRODUCTION, msg2);
+      string msg3("Growth");
+      CLOCKS.status(CLOCK_GROWTH, msg3);
+
       long elapsed = time(0)-START;
       if (elapsed >0){
         float cyclesPerSecs = world.cycle/elapsed;

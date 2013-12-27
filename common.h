@@ -12,7 +12,14 @@ class Species;
 class Creature;
 class Cell;
 class CellRegistry;
+class Timer;
+class Clocks;
 
 extern World world;
 extern bool DEBUG;
 extern bool OUT_SUMMARY;
+
+extern Clocks CLOCKS;
+extern int CLOCK_DEATH;
+extern int CLOCK_REPRODUCTION;
+extern int CLOCK_GROWTH;
