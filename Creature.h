@@ -15,7 +15,7 @@ class Creature {
     long creationCycle;
     vector<Cell*> cells; // TODO : use a vector, only additions here
     Creature(Species& species, int x, int y);
-    void createCell(int x, int y, int z);
+    void createCell(int x, int y, int z, bool registerCell);
     void grow();
     void die();
     void growNewCell(Cell* c, float* growthProbas);

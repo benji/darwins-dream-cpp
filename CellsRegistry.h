@@ -6,16 +6,15 @@
 class CellsRegistry {
   public:
     Cell****registryXYZ;
-    Cell***registryXY0;
     int nbAvailableGroundTiles;
+    vector<int> availableGroundTiles;
 
     CellsRegistry();
     void registerCell(Cell* c);
     void unregisterCell(Cell* c);
     bool existsXYZ(int x, int y, int z);
-    bool existsXY0(int x, int y);
     ~CellsRegistry();
-    int* findRandomAvailableGroundPos(int* pos);
+    int* reserveRandomAvailableGroundPos(int* pos);
 };
 
 #endif

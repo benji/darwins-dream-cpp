@@ -6,7 +6,7 @@
 class Cell {
   public:
     int x,y,z;
-    Cell(int x, int y, int z);
+    Cell(int x, int y, int z, bool registerCell);
     ~Cell();
 };
 

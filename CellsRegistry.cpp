@@ -2,18 +2,17 @@
 
 #include "Cell.h"
 #include "World.h"
+#include "Clocks.h"
 
 CellsRegistry::CellsRegistry(){
   registryXYZ = new Cell***[world.length];
-  registryXY0 = new Cell**[world.length];
-
   for (int i = 0; i < world.length; ++i) {
     registryXYZ[i] = new Cell**[world.length];
-    registryXY0[i] = new Cell*[world.length];
+
 
     for (int j = 0; j < world.length; ++j){
       registryXYZ[i][j] = new Cell*[world.maxCells];
-      registryXY0[i][j] = NULL;
+      availableGroundTiles.push_back(i+j*world.length);
 
       for (int k = 0; k < world.maxCells; ++k){
         registryXYZ[i][j][k] = NULL;
@@ -28,45 +27,38 @@ bool CellsRegistry::existsXYZ(int x, int y, int z){
   return registryXYZ[x][y][z] != NULL;
 }
 
-bool CellsRegistry::existsXY0(int x, int y){
-  return registryXY0[x][y] != NULL;
-}
-
 void CellsRegistry::registerCell(Cell* c){
   registryXYZ[c->x][c->y][c->z] = c;
   if (c->z == 0){
-    registryXY0[c->x][c->y] = c;
-    nbAvailableGroundTiles--;
+    cerr << "Disallowed cell with Z=0" << endl;
+    throw 1;
   }
 }
 
-int* CellsRegistry::findRandomAvailableGroundPos(int* pos){
-  if (nbAvailableGroundTiles == 0) {
+int* CellsRegistry::reserveRandomAvailableGroundPos(int* pos){
+  CLOCKS.start(20);
+  if (availableGroundTiles.size() == 0) {
     return NULL;
   }
-  if (nbAvailableGroundTiles < 0) throw "More cells than tiles!";
 
-  int idx = randInt(nbAvailableGroundTiles);  
+  int idx = randInt(availableGroundTiles.size());
+  CLOCKS.pause(20);
 
-  int tmp[2] = {0,0};
-  int i=0;
-  while (i <= idx){
-    indexToPos(tmp, world.length, i);
-    if (registryXY0[tmp[0]][tmp[1]] != NULL){
-      idx++;
-    }
-    i++;
-  }
+  CLOCKS.start(21);  
+  indexToPos(pos, world.length, availableGroundTiles[idx]);
+  CLOCKS.pause(21);
 
-  indexToPos(pos, world.length, idx);
+  CLOCKS.start(22);  
+  availableGroundTiles.erase(availableGroundTiles.begin()+idx);
+  CLOCKS.pause(22);
+
   return pos;
 }
 
 void CellsRegistry::unregisterCell(Cell* c){
   registryXYZ[c->x][c->y][c->z] = NULL;
   if (c->z == 0){
-    registryXY0[c->x][c->y] = NULL;
-    nbAvailableGroundTiles++;
+    availableGroundTiles.push_back(c->x + c->y * world.length);
   }
 }
 
@@ -76,9 +68,7 @@ CellsRegistry::~CellsRegistry(){
       delete [] registryXYZ[i][j];
     }
     delete [] registryXYZ[i];
-    delete [] registryXY0[i];
   }
   delete [] registryXYZ;
-  delete [] registryXY0;
 
 }
