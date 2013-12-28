@@ -3,7 +3,7 @@
 #include "Clocks.h"
 #include <algorithm>
 
-World::World(int length, int maxCells, float reproductionRate, float mutationRate):cycle(0),length(length),maxCells(maxCells),reproductionRate(reproductionRate),mutationRate(mutationRate){}
+World::World(int length, int maxCells, float reproductionRate, float mutationRate):cycle(0),length(length),maxCells(maxCells),reproductionRate(reproductionRate),mutationRate(mutationRate),minimumEnergyPerCell(.25){}
 
 void World::infest(int nbSpecies, int nbCreaturesPerSpecies){
   for (int i=0; i<nbSpecies; i++){
@@ -29,13 +29,41 @@ Creature* World::reproduce(Species* s){
 void World::lifecycle(){
   std::list<Species*>::iterator itSpecies = species.begin();
   std::list<Creature*>::iterator itCreature;
+  std::vector<Cell*>::iterator itCell;
+
+  // sunshine
+  CLOCKS.start(CLOCK_SUNSHINE);
+  for (itSpecies = species.begin(); itSpecies != species.end(); ++itSpecies) {
+    Species* s = (*itSpecies);
+    for (itCreature = s->creatures.begin(); itCreature != s->creatures.end(); ++itCreature) {
+      Creature* c = (*itCreature);
+      for (itCell = c->cells.begin(); itCell != c->cells.end(); ++itCell) {
+        (*itCell)->energy = 0;
+      }
+    }
+  }
+
+  for (int i=0; i<world.length; ++i){
+    for (int j=0; j<world.length; ++j){
+      float energyFromSun = 1;
+      for (int k=world.maxCells-1; k>=0; --k){
+        Cell* c = world.registry.registryXYZ[i][j][k];
+        if (c != NULL){
+          c->energy = energyFromSun;
+          energyFromSun/=2.;
+        }
+      }
+    }
+  }
+  CLOCKS.pause(CLOCK_SUNSHINE);
 
   // death
   CLOCKS.start(CLOCK_DEATH);
   int deathCount = 0;
+  itSpecies = species.begin();
   while (itSpecies != species.end()) {
     Species* s = (*itSpecies);
-    deathCount += s->killOldCreatures();
+    deathCount += s->killOldAndWeakCreatures();
 
     if (s->creatures.size() == 0){
       if (DEBUG) cout << "Species goes extinct." <<endl;
@@ -80,7 +108,6 @@ void World::lifecycle(){
     c->grow();
   }
   CLOCKS.pause(CLOCK_GROWTH);
-
   cycle++;
 }
 

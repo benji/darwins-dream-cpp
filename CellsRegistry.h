@@ -5,7 +5,7 @@
 
 class CellsRegistry {
   public:
-    Cell****registryXYZ;
+    Cell****registryXYZ; // /!\ unused for Z=0
     int nbAvailableGroundTiles;
     vector<int> availableGroundTiles;
 

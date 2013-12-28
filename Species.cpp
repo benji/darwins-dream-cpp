@@ -13,13 +13,13 @@ void Species::setColor(float r, float g, float b){
   this->r=r; this->g=g; this->b=b;
 }
 
-int Species::killOldCreatures(){
+int Species::killOldAndWeakCreatures(){
   std::list<Creature*>::iterator itCreature = creatures.begin();
 
   int deathCount = 0;
   while (itCreature != creatures.end()){
     Creature* c = (*itCreature);
-    if (world.cycle - c->creationCycle > world.maxCells){
+    if (world.cycle - c->creationCycle > world.maxCells || !c->hasEnoughEnergy()){
       if (DEBUG) cout << "Creature dies." <<endl;
       c->die();
       delete c;

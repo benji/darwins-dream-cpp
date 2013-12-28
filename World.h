@@ -12,7 +12,7 @@ class World {
     list<Species*> species;
     long cycle;
     int length, maxCells;
-    float reproductionRate, mutationRate;
+    float reproductionRate, mutationRate, minimumEnergyPerCell;
     CellsRegistry registry;
 
     World(int length, int maxCells, float reproductionRate, float mutationRate);

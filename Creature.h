@@ -19,6 +19,7 @@ class Creature {
     void grow();
     void die();
     void growNewCell(Cell* c, float* growthProbas);
+    bool hasEnoughEnergy();
 };
 
 #endif

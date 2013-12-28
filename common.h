@@ -23,3 +23,4 @@ extern Clocks CLOCKS;
 extern int CLOCK_DEATH;
 extern int CLOCK_REPRODUCTION;
 extern int CLOCK_GROWTH;
+extern int CLOCK_SUNSHINE;

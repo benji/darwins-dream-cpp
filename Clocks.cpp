@@ -13,6 +13,7 @@ long long Timer::now(){
 }
 
 void Timer::start(){
+  ++count;
   lastTime = now();
 }
 
@@ -23,8 +24,10 @@ void Timer::pause(){
 }
 
 void Timer::reset(){
+  //cout<<"reseting with count="<<count<<endl;
   elapsed = 0;
   lastTime = 0;
+  count = 0;
 }
 
 void Timer::status(string msg){
@@ -32,7 +35,7 @@ void Timer::status(string msg){
   if (lastTime != 0) {
     e += (now() - lastTime);
   }
-  cout<<"CLOCK: "<< (e/1000) <<"ms : "<<msg << endl;
+  cout<<"CLOCK: "<< (e/1000) <<"ms : "<<msg << " (called "<<count<<" times)"<< endl;
 }
 
 

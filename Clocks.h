@@ -10,6 +10,7 @@ class Timer {
   public:
     long long elapsed;
     long long lastTime;
+    long count;
 
     Timer();
     long long now();

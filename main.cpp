@@ -42,6 +42,7 @@ Clocks CLOCKS;
 int CLOCK_DEATH = 0;
 int CLOCK_REPRODUCTION = 1;
 int CLOCK_GROWTH = 2;
+int CLOCK_SUNSHINE = 4;
 
 void drawWorld(){
   if (nextCubes != NULL){ //swap requested
@@ -106,16 +107,61 @@ void playLife(){
 
     if (world.cycle % UPDATE_UI_EVERY_CYCLES == 0){
   
+      string msg4("Sunshine");
+      CLOCKS.status(CLOCK_SUNSHINE, msg4);
+      CLOCKS.reset(CLOCK_SUNSHINE);
+  
       string msg("Death");
       CLOCKS.status(CLOCK_DEATH, msg);
+      CLOCKS.reset(CLOCK_DEATH);
+
       string msg2("Reproducion");
       CLOCKS.status(CLOCK_REPRODUCTION, msg2);
+      CLOCKS.reset(CLOCK_REPRODUCTION);
+
       string msg3("Growth");
       CLOCKS.status(CLOCK_GROWTH, msg3);
-
-      CLOCKS.reset(CLOCK_DEATH);
-      CLOCKS.reset(CLOCK_REPRODUCTION);
       CLOCKS.reset(CLOCK_GROWTH);
+
+      string msg10("10");
+      CLOCKS.status(10, msg10);
+      CLOCKS.reset(10);
+
+      string msg11("11");
+      CLOCKS.status(11, msg11);
+      CLOCKS.reset(11);
+
+      string msg12("12");
+      CLOCKS.status(12, msg12);
+      CLOCKS.reset(12);
+
+      Cell* c;
+      long x;
+
+      CLOCKS.start(13);
+      for (int k=0;k<100;k++)
+        for (int i=0;i<100;i++)
+          for (int j=0;j<100;j++){
+            c=world.registry.registryXYZ[i][j][1];
+            if (c != NULL){
+              x += c->x;
+            }
+          }
+      CLOCKS.pause(13);
+
+      //cout << x <<endl;
+
+      string msg13("13");
+      CLOCKS.status(13, msg13);
+      CLOCKS.reset(13);
+
+      list<Species*>::iterator itSpecies;
+      long nbCreatures = 0;
+      for (itSpecies = world.species.begin(); itSpecies != world.species.end(); ++itSpecies) {
+        Species* s = (*itSpecies);
+        nbCreatures += s->creatures.size();
+      }
+      cout << "Ending cycle with "<<nbCreatures<<" creatures."<<endl;
 
       long elapsed = time(0)-START;
       if (elapsed >0){
