@@ -7,12 +7,17 @@ World::World(int length, int maxCells, float reproductionRate, float mutationRat
 
 void World::infest(int nbSpecies, int nbCreaturesPerSpecies){
   for (int i=0; i<nbSpecies; i++){
-    Species* s = new Species();
+    Species* s = createSpecies(NULL);
     for (int j=0; j<nbCreaturesPerSpecies; j++){
       reproduce(s);
     }
-    species.push_back(s);
   }
+}
+
+Species* World::createSpecies(Species* originalSpecies){
+  Species* s = new Species(originalSpecies);
+  species.push_back(s);
+  return s;
 }
 
 Creature* World::reproduce(Species* s){
@@ -24,6 +29,13 @@ Creature* World::reproduce(Species* s){
   }else{
     return NULL;
   }
+}
+
+Species* World::evolve(Species* s){
+  //cout<<"NEW SPECIES!!!"<<endl;
+  Species* newSpecies = createSpecies(s);
+  reproduce(s);
+  return newSpecies;
 }
 
 void World::lifecycle(){
@@ -76,19 +88,24 @@ void World::lifecycle(){
   CLOCKS.pause(CLOCK_DEATH);
   if (DEBUG || OUT_SUMMARY) cout << deathCount << " creatures died." << endl;
 
-  // reproduction
+  // reproduction & mutation
   CLOCKS.start(CLOCK_REPRODUCTION);
   vector<Species*> speciesCopy = collectSpeciesCopy();
   random_shuffle(std::begin(speciesCopy), std::end(speciesCopy));
 
-  int birthCount = 0;
+  int birthCount = 0, newSpecies=0;
   vector<Species*>::iterator itSpeciesV;
   for (itSpeciesV = speciesCopy.begin(); itSpeciesV != speciesCopy.end(); ++itSpeciesV) {
     Species* s = (*itSpeciesV);
     int nbCreatures = s->creatures.size();
 
     for (int i=0;i<nbCreatures;i++) {
-      if (randDouble() < reproductionRate){
+      if (randDouble() < mutationRate){
+        if (evolve(s) != NULL) {
+          ++newSpecies;
+          ++birthCount;
+        }
+      } else if (randDouble() < reproductionRate){
         if (reproduce(s) != NULL) ++birthCount;
       }
     }

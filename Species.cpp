@@ -2,8 +2,20 @@
 #include "World.h"
 #include "Species.h"
 
-Species::Species(){
-  this->dna.push_back(new DNA());
+Species::Species(Species* originalSpecies){
+  if (originalSpecies == NULL){
+    this->dna.push_back(new DNA(NULL));
+  }else{
+    vector<DNA*>::iterator itDNA;
+    for (itDNA = originalSpecies->dna.begin(); itDNA != originalSpecies->dna.end(); ++itDNA) {
+      DNA* from = (*itDNA);
+      this->dna.push_back(new DNA(from));
+    }
+    // mutation:
+    int randIdx = randInt(dna.size());
+    delete this->dna[randIdx];
+    this->dna[randIdx] = new DNA(NULL);
+  }
   // TODO HSL
   //HSVtoRGB( &this->r, &this->g, &this->b, randDouble(), 1, .45 );
   setColor(randDouble(),randDouble(),randDouble());
@@ -39,8 +51,15 @@ Creature* Species::reproduce(int x, int y){
   return c;
 }
 
-DNA::DNA(){
+Species::~Species(){
+  vector<DNA*>::iterator itDNA;
+  for (itDNA = dna.begin(); itDNA != dna.end(); ++itDNA) {
+    delete (*itDNA);
+  }
+}
+
+DNA::DNA(DNA* from){
   for (int i=0;i<6;i++) {
-    this->probas[i]=randDouble();
+    this->probas[i] = (from!=NULL) ? from->probas[i] : randDouble();
   }
 }

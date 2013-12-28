@@ -11,22 +11,20 @@ class Creature;
 class DNA {
   public:
     float probas[6];
-    DNA();
+    DNA(DNA* from);
 };
 
 class Species {
   public:
     float r,g,b;
     vector<DNA*> dna;
-    float test1;
-    float test2;
-    float test3;
     list<Creature*> creatures;
 
-    Species();
+    Species(Species* originalSpecies);
     void setColor(float r, float g, float b);
     int killOldAndWeakCreatures();
     Creature* reproduce(int x, int y);
+    ~Species();
 };
 
 #endif

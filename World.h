@@ -18,7 +18,9 @@ class World {
     World(int length, int maxCells, float reproductionRate, float mutationRate);
     void infest(int nbSpecies, int nbCreaturesPerSpecies);
     void lifecycle();
+    Species* createSpecies(Species* originalSpecies);
     Creature* reproduce(Species* s);
+    Species* evolve(Species* s);
     vector<Creature*> collectCreaturesCopy();
     vector<Species*> collectSpeciesCopy();
 };
