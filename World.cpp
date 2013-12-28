@@ -105,7 +105,8 @@ void World::lifecycle(){
           ++newSpecies;
           ++birthCount;
         }
-      } else if (randDouble() < reproductionRate){
+      }
+      if (randDouble() < reproductionRate){
         if (reproduce(s) != NULL) ++birthCount;
       }
     }

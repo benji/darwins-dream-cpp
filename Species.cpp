@@ -21,6 +21,13 @@ Species::Species(Species* originalSpecies){
   setColor(randDouble(),randDouble(),randDouble());
 }
 
+DNA* Species::getDNA(int idx) {
+  while (idx >= (int)dna.size()){
+    dna.push_back(new DNA(NULL));
+  }
+  return dna[idx];
+}
+
 void Species::setColor(float r, float g, float b){
   this->r=r; this->g=g; this->b=b;
 }

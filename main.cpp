@@ -29,7 +29,7 @@ struct Cube {
     float r,g,b;
 };
 
-World world(100, 10, 0.1, 0.01);
+World world(100, 10, 0.1, 0.05);
 long UPDATE_UI_EVERY_CYCLES = 100;
 bool running = false;
 vector<Cube*>* cubes = new vector<Cube*>();
@@ -156,13 +156,14 @@ void playLife(){
       CLOCKS.reset(13);
 
       list<Species*>::iterator itSpecies;
-      long nbSpecies = 0,nbCreatures = 0;
+      long nbSpecies = 0,nbCreatures = 0, nbSpeciesWithMoreThanOneCreature=0;
       for (itSpecies = world.species.begin(); itSpecies != world.species.end(); ++itSpecies) {
         Species* s = (*itSpecies);
         nbCreatures += s->creatures.size();
+        if (s->creatures.size() > 1) ++nbSpeciesWithMoreThanOneCreature;
         ++nbSpecies;
       }
-      cout << "Ending cycle with "<<nbSpecies<<" species and "<<nbCreatures<<" creatures."<<endl;
+      cout << "Ending cycle with "<<nbSpecies<<" species("<<nbSpeciesWithMoreThanOneCreature<<") and "<<nbCreatures<<" creatures."<<endl;
 
       long elapsed = time(0)-START;
       if (elapsed >0){

@@ -15,9 +15,7 @@ void Creature::createCell(int x, int y, int z, bool registerCell){
 
 void Creature::grow(){
   int idx = this->cells.size()-1;
-
-  // TODO: We take only the first proba here!
-  float* probas = this->species.dna[0]->probas;
+  float* probas = this->species.getDNA(idx)->probas;
   growNewCell(this->cells.at(idx), probas);
 }
 

@@ -8,8 +8,8 @@
 
 using namespace std;
 
-static int width = 640;
-static int height = 480;
+static int width = 1024;
+static int height = 800;
 static DrawFuncType drawFunc;
 static DrawFuncType exitFunc;
 
