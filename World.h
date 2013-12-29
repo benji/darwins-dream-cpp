@@ -19,7 +19,7 @@ class World {
     void infest(int nbSpecies, int nbCreaturesPerSpecies);
     void lifecycle();
     Species* createSpecies(Species* originalSpecies);
-    Creature* reproduce(Species* s);
+    Creature* reproduce(Species* s, Creature* parent);
     Species* evolve(Species* s);
     vector<Creature*> collectCreaturesCopy();
     vector<Species*> collectSpeciesCopy();

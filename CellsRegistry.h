@@ -15,6 +15,7 @@ class CellsRegistry {
     bool existsXYZ(int x, int y, int z);
     ~CellsRegistry();
     int* reserveRandomAvailableGroundPos(int* pos);
+    int* reserveRandomAvailableGroundPosAround(int* returnPos, int parentX, int parentY, int sqrLen);
 };
 
 #endif

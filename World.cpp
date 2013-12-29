@@ -9,7 +9,7 @@ void World::infest(int nbSpecies, int nbCreaturesPerSpecies){
   for (int i=0; i<nbSpecies; i++){
     Species* s = createSpecies(NULL);
     for (int j=0; j<nbCreaturesPerSpecies; j++){
-      reproduce(s);
+      reproduce(s, NULL);
     }
   }
 }
@@ -20,9 +20,15 @@ Species* World::createSpecies(Species* originalSpecies){
   return s;
 }
 
-Creature* World::reproduce(Species* s){
+Creature* World::reproduce(Species* s, Creature* parent){
   int pos[2];
-  int* ptr = registry.reserveRandomAvailableGroundPos(pos);
+  int* ptr;
+  if (true){//if (parent == NULL){
+    ptr = registry.reserveRandomAvailableGroundPos(pos);
+  }else{
+    Cell* root = parent->cells[0];
+    ptr = registry.reserveRandomAvailableGroundPosAround(pos, root->x, root->y, 5);
+  }
   if (ptr != NULL){
     Creature* c = s->reproduce( pos[0], pos[1] );
     return c;
@@ -34,7 +40,7 @@ Creature* World::reproduce(Species* s){
 Species* World::evolve(Species* s){
   //cout<<"NEW SPECIES!!!"<<endl;
   Species* newSpecies = createSpecies(s);
-  reproduce(s);
+  reproduce(s, NULL);
   return newSpecies;
 }
 
@@ -97,9 +103,8 @@ void World::lifecycle(){
   vector<Species*>::iterator itSpeciesV;
   for (itSpeciesV = speciesCopy.begin(); itSpeciesV != speciesCopy.end(); ++itSpeciesV) {
     Species* s = (*itSpeciesV);
-    int nbCreatures = s->creatures.size();
 
-    for (int i=0;i<nbCreatures;i++) {
+    for (itCreature = s->creatures.begin(); itCreature != s->creatures.end(); ++itCreature) {
       if (randDouble() < mutationRate){
         if (evolve(s) != NULL) {
           ++newSpecies;
@@ -107,7 +112,7 @@ void World::lifecycle(){
         }
       }
       if (randDouble() < reproductionRate){
-        if (reproduce(s) != NULL) ++birthCount;
+        if (reproduce(s, *itCreature) != NULL) ++birthCount;
       }
     }
   }

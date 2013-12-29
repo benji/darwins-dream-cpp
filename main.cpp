@@ -30,7 +30,7 @@ struct Cube {
 };
 
 World world(100, 10, 0.1, 0.05);
-long UPDATE_UI_EVERY_CYCLES = 100;
+long UPDATE_UI_EVERY_CYCLES = 500;
 bool running = false;
 vector<Cube*>* cubes = new vector<Cube*>();
 vector<Cube*>* nextCubes = NULL;
@@ -103,9 +103,9 @@ void playLife(){
   while(running && world.species.size() > 0){
     if (DEBUG || OUT_SUMMARY) cout << "===== Cycle "<<world.cycle<<" ====="<<endl;
     world.lifecycle();
-    updateCubes();
 
     if (world.cycle % UPDATE_UI_EVERY_CYCLES == 0){
+      updateCubes();
   
       string msg4("Sunshine");
       CLOCKS.status(CLOCK_SUNSHINE, msg4);
