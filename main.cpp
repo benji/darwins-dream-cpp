@@ -153,43 +153,62 @@ void playLife(){
 }
 
 void start(){
-  running = true;
-  playLifeThread = new thread(playLife);
+  if (!running){
+    running = true;
+    playLifeThread = new thread(playLife);
+  }
 }
 
 void stop(){
-  running = false;
-  playLifeThread->join();
-  delete playLifeThread;
+  if (running){
+    running = false;
+    playLifeThread->join();
+    delete playLifeThread;
+  }
 }
 
 void exitWorld(){
-  if (running) {
-    stop();
-  }
+  stop();
   // TODO cleanup
   cout << "Exiting." << endl;
   exit(0);
 }
 
+void printSummary(){
+  stop();
 
+  cout << "Summary:" << endl;
+  list<Species*>::iterator itSpecies = world.species.begin();
+  int i = 0;
+  while (i<=5 && itSpecies != world.species.end()){
+    Species* s = (*itSpecies);
+    cout << "\tSpecies with "<< s->creatures.size() << " creatures." << endl;
+    ++itSpecies;
+  }
+  cout << "----------" << endl;
+
+  start();
+}
 
 void keyboard(unsigned char key, int mouseX, int mouseY) {
   switch ( key ) {
-    case 'n':
+    case 's': // Summary
+      printSummary();
+      break;
+    case 'n': // Next
       if (!running){
         world.lifecycle();
         updateUI();
       }
       break;
-    case ' ':
+    case ' ': // pause/play
       if (running) {
         stop();
       }else{
         start();
       }
       break;
-    case 27: // esc
+    case 27: // exit
       exitWorld();
       break;
     default:
