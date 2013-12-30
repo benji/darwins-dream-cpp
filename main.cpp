@@ -29,13 +29,13 @@ struct Cube {
     float r,g,b;
 };
 
-World world(100, 10, 0.1, 0.05);
+World world(100, 20, 0.1, 0.01);
 
 bool running = false;
 thread* playLifeThread;
 long START = time(0);
 
-long UPDATE_UI_EVERY_CYCLES = 30;
+long UPDATE_UI_EVERY_CYCLES = 100;
 long lastRenderingCycle = -1;
 vector<Cube*>* cubes = new vector<Cube*>();
 vector<Cube*>* nextCubes = NULL;

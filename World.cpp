@@ -40,7 +40,7 @@ Creature* World::reproduce(Species* s, Creature* parent){
 Species* World::evolve(Species* s){
   //cout<<"NEW SPECIES!!!"<<endl;
   Species* newSpecies = createSpecies(s);
-  reproduce(s, NULL);
+  reproduce(newSpecies, NULL);
   return newSpecies;
 }
 
