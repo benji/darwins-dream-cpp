@@ -2,7 +2,10 @@
 #include "World.h"
 #include "Species.h"
 
+static long idGen = 0;
+
 Species::Species(Species* originalSpecies){
+  id = idGen++;
   if (originalSpecies == NULL){
     this->dna.push_back(new DNA(NULL));
   }else{

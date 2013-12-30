@@ -29,7 +29,7 @@ struct Cube {
     float r,g,b;
 };
 
-World world(100, 20, 0.1, 0.01);
+World world(100, 100, 0.1, 0.001);
 
 bool running = false;
 thread* playLifeThread;
@@ -182,7 +182,7 @@ void printSummary(){
   int i = 0;
   while (i<=5 && itSpecies != world.species.end()){
     Species* s = (*itSpecies);
-    cout << "\tSpecies with "<< s->creatures.size() << " creatures." << endl;
+    cout << "\tSpecies "<< s->id <<" with "<< s->creatures.size() << " creatures." << endl;
     ++itSpecies;
   }
   cout << "----------" << endl;

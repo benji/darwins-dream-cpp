@@ -11,4 +11,12 @@ From there the creature will grow a cell at Z=1 and never come back at Z=0.
 This is actually a performance improvement that greatly simplify the search for an available tile underground.
 
 
+TODO:
 
+- Split screen and show on the right hand side the dominant species in 3D rotation, the color of the link being more red if the proba is high.
+
+- If possible show its lineage, at least generation in summary.
+
+- Multi threading
+
+- incorporate some kind of gravity constraint to have creatures a bit less linear? Maybe allow to grow from any existing cell, not only the head?

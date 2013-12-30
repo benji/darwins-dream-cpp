@@ -19,6 +19,7 @@ class Species {
     float r,g,b;
     vector<DNA*> dna;
     list<Creature*> creatures;
+    long id;
 
     Species(Species* originalSpecies);
     void setColor(float r, float g, float b);
