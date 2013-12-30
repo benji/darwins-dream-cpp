@@ -8,10 +8,9 @@
 
 using namespace std;
 
-static int width = 1024;
-static int height = 800;
-static DrawFuncType drawFunc;
-static DrawFuncType exitFunc;
+static int width = 600;
+static int height = 400;
+static VoidFuncType drawFunc;
 
 void Rendering::drawCube(float x, float y, float z, float r, float g, float b) {
   glPushMatrix();
@@ -103,27 +102,15 @@ void Rendering::display() {
 	glutSwapBuffers();
 }
 
-void Rendering::keyboard ( unsigned char key, int mouseX, int mouseY ) {
-  switch ( key ) {
-    case 27: // esc
-      exitFunc();
-      exit ( 0 );   
-      break;      
-    default:      
-      break;
-  }
-}
 
-
-void Rendering::initialize(DrawFuncType func1, DrawFuncType func2)  {
-  drawFunc = func1;
-  exitFunc = func2;
+void Rendering::initialize(VoidFuncType drawF, keyboardFuncType keyPressedF)  {
+  drawFunc = drawF;
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );
 	glutInitWindowSize(width, height);
 	glutCreateWindow("Darwin's dream");
 	glutDisplayFunc(Rendering::display);
 	glutIdleFunc(Rendering::display);
-  glutKeyboardFunc(Rendering::keyboard);
+  glutKeyboardFunc(keyPressedF);
 
   glMatrixMode(GL_PROJECTION);
   glViewport(0, 0, width, height);

@@ -96,42 +96,37 @@ void World::lifecycle(){
 
   // reproduction & mutation
   CLOCKS.start(CLOCK_REPRODUCTION);
-  vector<Species*> speciesCopy = collectSpeciesCopy();
-  random_shuffle(std::begin(speciesCopy), std::end(speciesCopy));
+  vector<Creature*> creaturesCopy = collectCreaturesCopy();
+  random_shuffle(std::begin(creaturesCopy), std::end(creaturesCopy));
+
 
   int birthCount = 0, newSpecies=0;
-  vector<Species*>::iterator itSpeciesV;
-  for (itSpeciesV = speciesCopy.begin(); itSpeciesV != speciesCopy.end(); ++itSpeciesV) {
-    Species* s = (*itSpeciesV);
+  vector<Creature*>::iterator itCreatureV;
+  for (itCreatureV = creaturesCopy.begin(); itCreatureV != creaturesCopy.end(); ++itCreatureV) {
+    Creature* c = (*itCreatureV);
+    Species* s = &(c->species);
 
-    for (itCreature = s->creatures.begin(); itCreature != s->creatures.end(); ++itCreature) {
-      if (randDouble() < mutationRate){
-        if (evolve(s) != NULL) {
-          ++newSpecies;
-          ++birthCount;
-        }
+    if (randDouble() < mutationRate){
+      if (evolve(s) != NULL) {
+        ++newSpecies;
+        ++birthCount;
       }
-      if (randDouble() < reproductionRate){
-        if (reproduce(s, *itCreature) != NULL) ++birthCount;
-      }
+    }
+    if (randDouble() < reproductionRate){
+      if (reproduce(s, c) != NULL) ++birthCount;
     }
   }
   CLOCKS.pause(CLOCK_REPRODUCTION);
   if (DEBUG || OUT_SUMMARY) cout << birthCount << " new creatures." << endl;
 
-
   // growth
   CLOCKS.start(CLOCK_GROWTH);
-  vector<Creature*> creaturesCopy = collectCreaturesCopy();
-  random_shuffle(std::begin(creaturesCopy), std::end(creaturesCopy));
-
-  vector<Creature*>::iterator itCreatureV;
   for (itCreatureV = creaturesCopy.begin(); itCreatureV != creaturesCopy.end(); ++itCreatureV) {
     Creature* c = (*itCreatureV);
     c->grow();
   }
   CLOCKS.pause(CLOCK_GROWTH);
-  cycle++;
+  ++cycle;
 }
 
 vector<Creature*> World::collectCreaturesCopy(){

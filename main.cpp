@@ -30,13 +30,16 @@ struct Cube {
 };
 
 World world(100, 10, 0.1, 0.05);
-long UPDATE_UI_EVERY_CYCLES = 500;
-bool running = false;
+long UPDATE_UI_EVERY_CYCLES = 30;
 vector<Cube*>* cubes = new vector<Cube*>();
 vector<Cube*>* nextCubes = NULL;
 long START = time(0);
 bool DEBUG = false;
 bool OUT_SUMMARY = false;
+
+bool running = false;
+bool exitRequested = false;
+thread* playLifeThread;
 
 Clocks CLOCKS;
 int CLOCK_DEATH = 0;
@@ -97,10 +100,9 @@ void updateCubes(){
   nextCubes = tmpCubes;
 }
 
-
 void playLife(){
-  running = true;
-  while(running && world.species.size() > 0){
+  while (running && world.species.size() > 0){
+
     if (DEBUG || OUT_SUMMARY) cout << "===== Cycle "<<world.cycle<<" ====="<<endl;
     world.lifecycle();
 
@@ -115,7 +117,7 @@ void playLife(){
       CLOCKS.status(CLOCK_DEATH, msg);
       CLOCKS.reset(CLOCK_DEATH);
 
-      string msg2("Reproducion");
+      string msg2("Reproduction");
       CLOCKS.status(CLOCK_REPRODUCTION, msg2);
       CLOCKS.reset(CLOCK_REPRODUCTION);
 
@@ -172,26 +174,59 @@ void playLife(){
       }
     }
     if (DEBUG || OUT_SUMMARY) usleep(1000*500);
+
   }
 }
 
-void cleanupWorld(){
+void start(){
+  running = true;
+  playLifeThread = new thread(playLife);
+}
+
+void stop(){
   running = false;
-  cout << "Cleaning up" << endl;
+  playLifeThread->join();
+  delete playLifeThread;
+}
+
+void exitWorld(){
+  if (running) {
+    stop();
+  }
+  // TODO cleanup
+  cout << "Exiting." << endl;
+  exit(0);
+}
+
+
+
+void keyboard(unsigned char key, int mouseX, int mouseY) {
+  cout<<"Key pressed: "<<key<<endl;
+  switch ( key ) {
+    case ' ':
+      if (running) {
+        stop();
+      }else{
+        start();
+      }
+      break;
+    case 27: // esc
+      exitWorld();
+      break;
+    default:
+      break;
+  }
 }
 
 int main(int argc, char **argv) {
   world.infest(5,5);
   updateCubes();
 
+  start();
+
   glutInit(&argc, argv);
-  Rendering::initialize(drawWorld, cleanupWorld);
-
-  std::thread renderingThread(glutMainLoop);
-  std::thread playLifeThread(playLife);
-
-  renderingThread.join();
-  playLifeThread.join();
+  Rendering::initialize(drawWorld, keyboard);
+  glutMainLoop();
 
   return 0;
 }
