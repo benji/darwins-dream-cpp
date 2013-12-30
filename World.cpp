@@ -45,6 +45,9 @@ Species* World::evolve(Species* s){
 }
 
 void World::lifecycle(){
+  CLOCKS.start(CLOCK_LIFECYCLE);
+  if (DEBUG || OUT_SUMMARY) cout << "===== Cycle "<<world.cycle<<" ====="<<endl;
+
   std::list<Species*>::iterator itSpecies = species.begin();
   std::list<Creature*>::iterator itCreature;
   std::vector<Cell*>::iterator itCell;
@@ -127,6 +130,8 @@ void World::lifecycle(){
   }
   CLOCKS.pause(CLOCK_GROWTH);
   ++cycle;
+  
+  CLOCKS.pause(CLOCK_LIFECYCLE);
 }
 
 vector<Creature*> World::collectCreaturesCopy(){
