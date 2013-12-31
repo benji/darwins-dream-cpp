@@ -117,7 +117,7 @@ void updateUI(){
   CLOCKS.status(CLOCK_DEATH, msg);
   CLOCKS.reset(CLOCK_DEATH);
 
-  string msg2("Reproduction");
+  string msg2("Reproduction / Mutation");
   CLOCKS.status(CLOCK_REPRODUCTION, msg2);
   CLOCKS.reset(CLOCK_REPRODUCTION);
 

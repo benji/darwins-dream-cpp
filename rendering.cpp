@@ -12,6 +12,15 @@ static int width = 600;
 static int height = 400;
 static VoidFuncType drawFunc;
 
+void Rendering::resize(int w, int h){
+  width = w;
+  height = h;
+
+  glViewport(0, 0, width, height);
+  GLfloat aspect = (GLfloat) width / height;
+  gluPerspective(45, aspect, 1, 500);
+}
+
 void Rendering::drawCube(float x, float y, float z, float r, float g, float b) {
   glPushMatrix();
   glTranslatef(x, y, z);
@@ -62,8 +71,8 @@ void Rendering::drawCube(float x, float y, float z, float r, float g, float b) {
 }
 
 void Rendering::display() {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glLoadIdentity();
   //gluLookAt(20, -10, 20, 10, 0, 10, 0.0, 0.0, 1.0);
   gluLookAt(world.length*1.2, -world.length*.5, world.length*1, world.length/2, world.length/2, 0, 0.0, 0.0, 1.0);
 
@@ -99,25 +108,22 @@ void Rendering::display() {
 
   drawFunc();
 
-	glutSwapBuffers();
+  glutSwapBuffers();
 }
 
 
 void Rendering::initialize(VoidFuncType drawF, keyboardFuncType keyPressedF)  {
   drawFunc = drawF;
-	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );
-	glutInitWindowSize(width, height);
-	glutCreateWindow("Darwin's dream");
-	glutDisplayFunc(Rendering::display);
-	glutIdleFunc(Rendering::display);
+  glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );
+  glutInitWindowSize(width, height);
+  glutCreateWindow("Darwin's dream");
+  glutDisplayFunc(Rendering::display);
+  glutReshapeFunc(Rendering::resize);
+  glutIdleFunc(Rendering::display);
   glutKeyboardFunc(keyPressedF);
 
   glMatrixMode(GL_PROJECTION);
-  glViewport(0, 0, width, height);
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  GLfloat aspect = (GLfloat) width / height;
-  gluPerspective(45, aspect, 1, 500);
+  resize(600,400);
   glMatrixMode(GL_MODELVIEW);
   glShadeModel( GL_SMOOTH );
   glClearDepth( 1.0f );
