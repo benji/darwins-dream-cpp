@@ -61,7 +61,7 @@ void Creature::growNewCell(Cell* c, float* growthProbas){
 
 bool Creature::hasEnoughEnergy(){
   float totalEnergy = 0;
-  std::vector<Cell*>::iterator itCell;
+  vector<Cell*>::iterator itCell;
   for (itCell = cells.begin(); itCell != cells.end(); ++itCell) {
     Cell* cell = (*itCell);
     totalEnergy += cell->energy;
@@ -69,10 +69,9 @@ bool Creature::hasEnoughEnergy(){
   return totalEnergy >= (cells.size()-1)*world.minimumEnergyPerCell;
 }
 
-void Creature::die(){
-  std::vector<Cell*>::iterator itCell;
+Creature::~Creature(){
+  vector<Cell*>::iterator itCell;
   for (itCell = cells.begin(); itCell != cells.end(); ++itCell) {
-    Cell* cell = (*itCell);
-    delete cell;
+    delete (*itCell);
   }
 }

@@ -162,3 +162,10 @@ vector<Species*> World::collectSpeciesCopy(){
   return collected;
 }
 
+World::~World(){
+  cout << "Ending world." << endl;
+  list<Species*>::iterator itSpecies;
+  for (itSpecies = species.begin(); itSpecies != species.end(); ++itSpecies) {
+    delete (*itSpecies);
+  }
+}

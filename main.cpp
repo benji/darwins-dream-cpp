@@ -50,18 +50,19 @@ int CLOCK_REPRODUCTION = 1;
 int CLOCK_GROWTH = 2;
 int CLOCK_SUNSHINE = 4;
 
+void cleanupCubes(){
+  vector<Cube*>::iterator itCube;
+  for (itCube = cubes->begin(); itCube != cubes->end(); ++itCube) {
+    Cube* cube = (*itCube);
+    delete cube;
+  }
+  cubes->clear();
+  delete cubes;
+}
+
 void drawWorld(){
   if (nextCubes != NULL){ //swap requested
-    // cleanup
-    vector<Cube*>::iterator itCube;
-    for (itCube = cubes->begin(); itCube != cubes->end(); ++itCube) {
-      Cube* cube = (*itCube);
-      delete cube;
-    }
-    cubes->clear();
-    delete cubes;
-
-    // swap
+    cleanupCubes();
     cubes = nextCubes;
     nextCubes = NULL;
   }
@@ -169,7 +170,7 @@ void stop(){
 
 void exitWorld(){
   stop();
-  // TODO cleanup
+  cleanupCubes();
   cout << "Exiting." << endl;
   exit(0);
 }

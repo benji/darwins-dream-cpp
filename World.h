@@ -23,6 +23,7 @@ class World {
     Species* evolve(Species* s);
     vector<Creature*> collectCreaturesCopy();
     vector<Species*> collectSpeciesCopy();
+    ~World();
 };
 
 #endif

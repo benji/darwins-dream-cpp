@@ -17,9 +17,9 @@ class Creature {
     Creature(Species& species, int x, int y);
     void createCell(int x, int y, int z, bool registerCell);
     void grow();
-    void die();
     void growNewCell(Cell* c, float* growthProbas);
     bool hasEnoughEnergy();
+    ~Creature();
 };
 
 #endif

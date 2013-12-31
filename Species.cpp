@@ -43,7 +43,6 @@ int Species::killOldAndWeakCreatures(){
     Creature* c = (*itCreature);
     if (world.cycle - c->creationCycle > world.maxCells || !c->hasEnoughEnergy()){
       if (DEBUG) cout << "Creature dies." <<endl;
-      c->die();
       delete c;
       itCreature = creatures.erase(itCreature);
       ++deathCount;
@@ -62,6 +61,11 @@ Creature* Species::reproduce(int x, int y){
 }
 
 Species::~Species(){
+  list<Creature*>::iterator itCreature;
+  for (itCreature = creatures.begin(); itCreature != creatures.end(); ++itCreature) {
+    delete (*itCreature);
+  }
+
   vector<DNA*>::iterator itDNA;
   for (itDNA = dna.begin(); itDNA != dna.end(); ++itDNA) {
     delete (*itDNA);
