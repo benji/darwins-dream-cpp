@@ -29,7 +29,7 @@ struct Cube {
     float r,g,b;
 };
 
-World world(100, 100, 0.1, 0.001);
+World world(100, 100, 0.1, 0.01);
 
 bool running = false;
 thread* playLifeThread;
@@ -37,8 +37,11 @@ long START = time(0);
 
 long UPDATE_UI_EVERY_CYCLES = 100;
 long lastRenderingCycle = -1;
-vector<Cube*>* cubes = new vector<Cube*>();
-vector<Cube*>* nextCubes = NULL;
+
+vector<Cube*>* worldCubes = new vector<Cube*>();
+vector<Cube*>* nextWorldCubes = NULL;
+vector<Cube*>* dominantSpeciesCubes = new vector<Cube*>();
+vector<Cube*>* nextDominantSpeciesCubes = NULL;
 
 bool DEBUG = false;
 bool OUT_SUMMARY = false;
@@ -50,7 +53,7 @@ int CLOCK_REPRODUCTION = 1;
 int CLOCK_GROWTH = 2;
 int CLOCK_SUNSHINE = 4;
 
-void cleanupCubes(){
+void cleanupCubes(vector<Cube*>* cubes){
   vector<Cube*>::iterator itCube;
   for (itCube = cubes->begin(); itCube != cubes->end(); ++itCube) {
     Cube* cube = (*itCube);
@@ -60,13 +63,7 @@ void cleanupCubes(){
   delete cubes;
 }
 
-void drawWorld(){
-  if (nextCubes != NULL){ //swap requested
-    cleanupCubes();
-    cubes = nextCubes;
-    nextCubes = NULL;
-  }
-
+void drawCubes(vector<Cube*>* cubes){
   vector<Cube*>::iterator itCube;
   for (itCube = cubes->begin(); itCube != cubes->end(); ++itCube) {
     Cube* cube = (*itCube);
@@ -74,40 +71,115 @@ void drawWorld(){
   }
 }
 
-void updateCubes(){
-  if (nextCubes != NULL) return;
+void drawDominantSpecies(){
+  if (nextDominantSpeciesCubes != NULL){ //swap requested
+    cleanupCubes(dominantSpeciesCubes);
+    dominantSpeciesCubes = nextDominantSpeciesCubes;
+    nextDominantSpeciesCubes = NULL;
+  }
+  drawCubes(dominantSpeciesCubes);
+}
 
-  vector<Cube*>* tmpCubes = new vector<Cube*>();
+void drawWorld(){
+  if (nextWorldCubes != NULL){ //swap requested
+    cleanupCubes(worldCubes);
+    worldCubes = nextWorldCubes;
+    nextWorldCubes = NULL;
+  }
+  drawCubes(worldCubes);
+}
 
-  list<Species*>::iterator itSpecies;
+Cube* createCube(int x, int y, int z, Species* s){
+  Cube* c = new Cube();
+  c->x = x;
+  c->y = y;
+  c->z = z;
+  c->r = s->r;
+  c->g = s->g;
+  c->b = s->b;
+  return c;
+}
+
+void addSpeciesCubes(vector<Cube*>* destination, Species* s){
   list<Creature*>::iterator itCreature;
   vector<Cell*>::iterator itCell;
-  
+
+  for (itCreature = s->creatures.begin(); itCreature != s->creatures.end(); ++itCreature) {
+    Creature* c = (*itCreature);
+    for (itCell = c->cells.begin(); itCell != c->cells.end(); ++itCell) {
+      Cell* cell = (*itCell);
+      destination->push_back(createCube(cell->x, cell->y, cell->z, s));
+    }
+  }
+}
+
+void updateWorldCubes(){
+  if (nextWorldCubes != NULL) return;
+
+  vector<Cube*>* tmpCubes = new vector<Cube*>();
+  list<Species*>::iterator itSpecies;
+
   for (itSpecies = world.species.begin(); itSpecies != world.species.end(); ++itSpecies) {
     Species* s = (*itSpecies);
-    for (itCreature = s->creatures.begin(); itCreature != s->creatures.end(); ++itCreature) {
-      Creature* c = (*itCreature);
-      for (itCell = c->cells.begin(); itCell != c->cells.end(); ++itCell) {
-        Cell* cell = (*itCell);
-        Cube* c = new Cube();
-        c->x = cell->x;
-        c->y = cell->y;
-        c->z = cell->z;
-        c->r = s->r;
-        c->g = s->g;
-        c->b = s->b;
-        tmpCubes->push_back(c);
-      }
+    addSpeciesCubes(tmpCubes, s);
+  }
+
+  nextWorldCubes = tmpCubes;
+}
+
+void updateDominantSpeciesCubes(){
+  if (nextDominantSpeciesCubes != NULL) return;
+
+  vector<Cube*>* tmpCubes = new vector<Cube*>();
+  list<Species*>::iterator itSpecies;
+  Species* dominantSpecies = NULL;
+
+  for (itSpecies = world.species.begin(); itSpecies != world.species.end(); ++itSpecies) {
+    Species* s = (*itSpecies);
+    if (dominantSpecies == NULL || s->creatures.size() > dominantSpecies->creatures.size()){
+      dominantSpecies = s;
     }
   }
 
-  nextCubes = tmpCubes;
+  if (dominantSpecies != NULL){
+    int x=0, y=0, z=0;
+    tmpCubes->push_back(createCube(x, y, z, dominantSpecies));
+    vector<DNA*>::iterator itDNA;
+    float max = 0, p;
+    int maxIdx;
+
+    for (itDNA = dominantSpecies->dna.begin(); itDNA != dominantSpecies->dna.end(); ++itDNA) {
+      DNA* dna = (*itDNA);
+      max = 0;
+      for (int i=0; i<6; ++i){
+        p = dna->probas[i];
+        if (max<p) {
+          max = p;
+          maxIdx = i;
+        }
+      }
+
+      if      (maxIdx==0) ++x;
+      else if (maxIdx==1) --x;
+      else if (maxIdx==2) ++y;
+      else if (maxIdx==3) --y;
+      else if (maxIdx==4) ++z;
+      else if (maxIdx==5) --z;
+
+      tmpCubes->push_back(createCube(x, y, z, dominantSpecies));
+    }
+
+    nextDominantSpeciesCubes = tmpCubes;
+  }else{
+    cout << "No dominance" << endl;
+  }
 }
 
 void updateUI(){
   if (world.cycle == lastRenderingCycle) return;
 
-  updateCubes();
+  updateWorldCubes();
+  updateDominantSpeciesCubes();
 
   string msg4("Sunshine");
   CLOCKS.status(CLOCK_SUNSHINE, msg4);
@@ -170,7 +242,8 @@ void stop(){
 
 void exitWorld(){
   stop();
-  cleanupCubes();
+  cleanupCubes(worldCubes);
+  cleanupCubes(dominantSpeciesCubes);
   cout << "Exiting." << endl;
   exit(0);
 }
@@ -220,12 +293,12 @@ void keyboard(unsigned char key, int mouseX, int mouseY) {
 
 int main(int argc, char **argv) {
   world.infest(5,5);
-  updateCubes();
+  updateWorldCubes();
 
   start();
 
   glutInit(&argc, argv);
-  Rendering::initialize(drawWorld, keyboard);
+  Rendering::initialize(drawWorld, drawDominantSpecies, keyboard);
   glutMainLoop();
 
   return 0;

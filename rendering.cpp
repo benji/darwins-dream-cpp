@@ -8,9 +8,10 @@
 
 using namespace std;
 
-static int width = 600;
+static int width = 800;
 static int height = 400;
-static VoidFuncType drawFunc;
+static VoidFuncType drawWorldFunc;
+static VoidFuncType drawDominantSpeciesFunc;
 
 void Rendering::resize(int w, int h){
   width = w;
@@ -70,26 +71,8 @@ void Rendering::drawCube(float x, float y, float z, float r, float g, float b) {
   glPopMatrix();
 }
 
-void Rendering::display() {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glLoadIdentity();
-  //gluLookAt(20, -10, 20, 10, 0, 10, 0.0, 0.0, 1.0);
-  gluLookAt(world.length*1.2, -world.length*.5, world.length*1, world.length/2, world.length/2, 0, 0.0, 0.0, 1.0);
-
-  // GRID
-  glColor3f(1.0f, 1.0f, 1.0f);
-  for (int i=1; i<100; i++) {
-    glBegin(GL_LINES);
-      glVertex3f(i,   0, 0);
-      glVertex3f(i, 100, 0);
-    glEnd();
-    glBegin(GL_LINES);
-      glVertex3f(0,   i, 0);
-      glVertex3f(100, i, 0);
-    glEnd();
-  }
-
-  // AXIS
+void Rendering::drawAxis(){
+  // axis
   glColor3f(1, 0, 0);
   glBegin(GL_LINES);
     glVertex3f(0, 0, 0);
@@ -105,15 +88,57 @@ void Rendering::display() {
     glVertex3f(0, 0, 0);
     glVertex3f(0, 0, 100);
   glEnd();
+}
 
-  drawFunc();
+void Rendering::prepareView(int x, int y, int dx, int dy){
+  glViewport(x, y, dx, dy);
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+
+  GLfloat aspect = (GLfloat) dx / dy;
+  gluPerspective(45, aspect, 1, 500);
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+}
+
+void Rendering::display() {
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+  // WORLD VIEW
+  prepareView(0, 0, 2*width/3, height);
+  gluLookAt(world.length*1.2, -world.length*.5, world.length*1, world.length/2, world.length/2, 0, 0.0, 0.0, 1.0);
+
+  // grid
+  glColor3f(1.0f, 1.0f, 1.0f);
+  for (int i=1; i<100; i++) {
+    glBegin(GL_LINES);
+      glVertex3f(i,   0, 0);
+      glVertex3f(i, 100, 0);
+    glEnd();
+    glBegin(GL_LINES);
+      glVertex3f(0,   i, 0);
+      glVertex3f(100, i, 0);
+    glEnd();
+  }
+
+  drawAxis();
+  drawWorldFunc();
+
+  // DOMINANT SPECIES VIEW
+  prepareView(2*width/3, 0, width/3, height);
+  gluLookAt(world.maxCells*.2, -world.maxCells*.3, world.maxCells/3, 5, 0, world.maxCells/9, 0.0, 0.0, 1.0);
+
+  drawAxis();
+  drawDominantSpeciesFunc();
 
   glutSwapBuffers();
 }
 
 
-void Rendering::initialize(VoidFuncType drawF, keyboardFuncType keyPressedF)  {
-  drawFunc = drawF;
+void Rendering::initialize(VoidFuncType drawWorldF, VoidFuncType drawDominantSpeciesF, keyboardFuncType keyPressedF)  {
+  drawWorldFunc = drawWorldF;
+  drawDominantSpeciesFunc = drawDominantSpeciesF;
+
   glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );
   glutInitWindowSize(width, height);
   glutCreateWindow("Darwin's dream");
