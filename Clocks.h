@@ -13,7 +13,7 @@ class Timer {
     long count;
 
     Timer();
-    long long now();
+    static long long now();
     void start();
     void pause();
     void reset();

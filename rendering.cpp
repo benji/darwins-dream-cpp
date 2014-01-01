@@ -2,9 +2,12 @@
 #include <iostream>
 #include <GL/gl.h>
 #include <GL/glut.h>
+#include <ctime>
+#include <unistd.h>
 #include "rendering.h"
 #include "common.h"
 #include "World.h"
+#include "Clocks.h"
 
 using namespace std;
 
@@ -12,6 +15,7 @@ static int width = 800;
 static int height = 400;
 static VoidFuncType drawWorldFunc;
 static VoidFuncType drawDominantSpeciesFunc;
+static float angle = 0;
 
 void Rendering::resize(int w, int h){
   width = w;
@@ -126,10 +130,15 @@ void Rendering::display() {
 
   // DOMINANT SPECIES VIEW
   prepareView(2*width/3, 0, width/3, height);
-  gluLookAt(world.maxCells*.2, -world.maxCells*.3, world.maxCells/3, 5, 0, world.maxCells/9, 0.0, 0.0, 1.0);
+  gluLookAt(world.maxCells*.3, -world.maxCells*.4, world.maxCells/3, 0, 0, world.maxCells/9, 0.0, 0.0, 1.0);
 
-  drawAxis();
-  drawDominantSpeciesFunc();
+  glPushMatrix();
+    long t = time(0);
+    float delta = (t-t%10) - Timer::now()/1000000.;
+    glRotatef(- delta*36, 0, 0, 1);
+    drawAxis();
+    drawDominantSpeciesFunc();
+  glPopMatrix();
 
   glutSwapBuffers();
 }
