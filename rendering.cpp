@@ -20,10 +20,6 @@ static float angle = 0;
 void Rendering::resize(int w, int h){
   width = w;
   height = h;
-
-  glViewport(0, 0, width, height);
-  GLfloat aspect = (GLfloat) width / height;
-  gluPerspective(45, aspect, 1, 500);
 }
 
 void Rendering::drawCube(float x, float y, float z, float r, float g, float b) {
@@ -100,7 +96,7 @@ void Rendering::prepareView(int x, int y, int dx, int dy){
   glLoadIdentity();
 
   GLfloat aspect = (GLfloat) dx / dy;
-  gluPerspective(45, aspect, 1, 500);
+  gluPerspective(45, aspect, 1, 5*world.length);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 }
@@ -130,7 +126,7 @@ void Rendering::display() {
 
   // DOMINANT SPECIES VIEW
   prepareView(2*width/3, 0, width/3, height);
-  gluLookAt(world.maxCells*.3, -world.maxCells*.4, world.maxCells/3, 0, 0, world.maxCells/9, 0.0, 0.0, 1.0);
+  gluLookAt(20, -15, 20, 0, 0, 3, 0.0, 0.0, 1.0);
 
   glPushMatrix();
     long t = time(0);
