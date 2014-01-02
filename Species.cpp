@@ -20,8 +20,8 @@ Species::Species(Species* originalSpecies){
     this->dna[randIdx] = new DNA(NULL);
   }
   // TODO HSL
-  //HSVtoRGB( &this->r, &this->g, &this->b, randDouble(), 1, .45 );
-  setColor(randDouble(),randDouble(),randDouble());
+  HSVtoRGB( &(this->r), &(this->g), &(this->b), randDouble(), 1, .65 );
+  //setColor(randDouble(),randDouble(),randDouble());
 }
 
 DNA* Species::getDNA(int idx) {

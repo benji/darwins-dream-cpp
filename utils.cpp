@@ -40,6 +40,7 @@ void indexToPos(int* pos, int length, int index){
 }
 
 void HSVtoRGB( float *r, float *g, float *b, float h, float s, float v ){
+  h*=360.;
 	int i;
 	float f, p, q, t;
 	if( s == 0 ) {
