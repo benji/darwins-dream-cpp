@@ -66,7 +66,10 @@ long long Clocks::elapsed(int id){
   return 0LL;
 }
 
-Clocks::~Clocks(){
-  // TODO delete timers!
+Clocks::~Clocks(){std::map<std::string, std::string>::iterator iter;
+  map<int, Timer*>::iterator it;
+  for (it = timers.begin(); it != timers.end(); ++it) {
+    delete it->second;
+  }
 }
 
