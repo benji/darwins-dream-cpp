@@ -13,7 +13,7 @@ class Creature {
     Species& species;
     int x,y;
     long creationCycle;
-    vector<Cell*> cells; // TODO : use a vector, only additions here
+    vector<Cell*> cells;
     Creature(Species& species, int x, int y);
     void createCell(int x, int y, int z, bool registerCell);
     void grow();
