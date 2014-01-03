@@ -76,4 +76,5 @@ DNA::DNA(DNA* from){
   for (int i=0;i<6;i++) {
     this->probas[i] = (from!=NULL) ? from->probas[i] : randDouble();
   }
+  growthDirection = from!=NULL ? from->growthDirection:randInt(6);
 }

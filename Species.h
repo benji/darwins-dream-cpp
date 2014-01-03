@@ -10,6 +10,7 @@ class Creature;
 
 class DNA {
   public:
+    int growthDirection;
     float probas[6];
     DNA(DNA* from);
 };

@@ -29,7 +29,7 @@ struct Cube {
     float r,g,b;
 };
 
-World world(100, 100, 0.1, 0.01);
+World world(100, 30, 0.1, 0.01);
 
 bool running = false;
 thread* playLifeThread;
@@ -292,6 +292,7 @@ void keyboard(unsigned char key, int mouseX, int mouseY) {
 }
 
 int main(int argc, char **argv) {
+  world.minimumEnergyPerCell = .5;
   world.infest(5,5);
   updateWorldCubes();
 

@@ -15,16 +15,44 @@ void Creature::createCell(int x, int y, int z, bool registerCell){
 
 void Creature::grow(){
   int idx = this->cells.size()-1;
-  float* probas = this->species.getDNA(idx)->probas;
-  growNewCell(this->cells.at(idx), probas);
+  DNA* dna = this->species.getDNA(idx);
+  growNewCell(this->cells.at(idx), dna->probas, dna->growthDirection);
 }
 
-void Creature::growNewCell(Cell* c, float* growthProbas){
+void Creature::growNewCell(Cell* c, float* growthProbas, int growthDirection){
   int x=c->x, y=c->y, z=c->z;
 
   if (z==0){
     z=1; // RULE_SEEDS_Z0
+    //TODO: ERROR: what if there is a cell there??
+    //TODO: key to trigger sanity check?
   } else {
+
+    if (false){ // experimental
+      if (growthDirection == 0) {
+        ++x;
+        if (x > world.length-1) return;
+      } else if (growthDirection == 1) {
+        --x;
+        if (x < 0) return;
+      } else if (growthDirection == 2) {
+        ++y;
+        if (y > world.length-1) return;
+      } else if (growthDirection == 3) {
+        --y;
+        if (y < 0) return;
+      } else if (growthDirection == 4) {
+        ++z;
+      } else if (growthDirection == 5) {
+        --z;
+        if (z < 1) return;
+      }
+
+      if (world.registry.registryXYZ[x][y][z] == NULL) {
+        createCell(x,y,z, true);
+      }
+      return;
+    }
 
     bool canGrow[6] = {
       x < world.length-1 && world.registry.registryXYZ[x+1][y][z] == NULL, // x+1
@@ -45,18 +73,18 @@ void Creature::growNewCell(Cell* c, float* growthProbas){
     float p = randDouble()*sumProbasCanGrow;
 
     float sumPrevProbas = 0;
-    if      (canGrow[0] && p<(sumPrevProbas+=growthProbas[0])) x+=1;
-    else if (canGrow[1] && p<(sumPrevProbas+=growthProbas[1])) x-=1;
-    else if (canGrow[2] && p<(sumPrevProbas+=growthProbas[2])) y+=1;
-    else if (canGrow[3] && p<(sumPrevProbas+=growthProbas[3])) y-=1;
-    else if (canGrow[4] && p<(sumPrevProbas+=growthProbas[4])) z+=1;
-    else if (canGrow[5])                                       z-=1;
+    if      (canGrow[0] && p<(sumPrevProbas+=growthProbas[0])) ++x;
+    else if (canGrow[1] && p<(sumPrevProbas+=growthProbas[1])) --x;
+    else if (canGrow[2] && p<(sumPrevProbas+=growthProbas[2])) ++y;
+    else if (canGrow[3] && p<(sumPrevProbas+=growthProbas[3])) --y;
+    else if (canGrow[4] && p<(sumPrevProbas+=growthProbas[4])) ++z;
+    else if (canGrow[5])                                       --z;
     else {
       //cout << "Cell has no room to grow" << endl;
       return;
     }
   }
-  createCell(x,y,z, true);
+  return createCell(x,y,z, true);
 }
 
 bool Creature::hasEnoughEnergy(){
