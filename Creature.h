@@ -15,9 +15,9 @@ class Creature {
     long creationCycle;
     vector<Cell*> cells;
     Creature(Species& species, int x, int y);
-    void createCell(int x, int y, int z, bool registerCell);
-    void grow();
-    void growNewCell(Cell* c, float* growthProbas, int growthDirection);
+    Cell* createCell(int x, int y, int z, bool registerCell);
+    Cell* grow();
+    Cell* growNewCell(Cell* c, float* growthProbas, int growthDirection);
     bool hasEnoughEnergy();
     ~Creature();
 };

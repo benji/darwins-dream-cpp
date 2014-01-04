@@ -20,3 +20,7 @@ TODO:
 - Multi threading
 
 - incorporate some kind of gravity constraint to have creatures a bit less linear? Maybe allow to grow from any existing cell, not only the head?
+
+- key to trigger sanity check? multiple cells at same position
+
+- don't allow species with impossible shape (z<0 or collision with self), that will remove a few useless checks.

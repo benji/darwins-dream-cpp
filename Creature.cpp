@@ -8,51 +8,32 @@ Creature::Creature(Species& species, int x, int y):species(species),x(x),y(y){
   creationCycle = world.cycle;
 }
 
-void Creature::createCell(int x, int y, int z, bool registerCell){
+Cell* Creature::createCell(int x, int y, int z, bool registerCell){
   Cell* c = new Cell(x,y,z,registerCell);
   this->cells.push_back(c);
+  return c;
 }
 
-void Creature::grow(){
+Cell* Creature::grow(){
   int idx = this->cells.size()-1;
   DNA* dna = this->species.getDNA(idx);
-  growNewCell(this->cells.at(idx), dna->probas, dna->growthDirection);
+  return growNewCell(this->cells.at(idx), dna->probas, dna->growthDirection);
 }
 
-void Creature::growNewCell(Cell* c, float* growthProbas, int growthDirection){
+Cell* Creature::growNewCell(Cell* c, float* growthProbas, int growthDirection){
   int x=c->x, y=c->y, z=c->z;
 
   if (z==0){
     z=1; // RULE_SEEDS_Z0
-    //TODO: ERROR: what if there is a cell there??
-    //TODO: key to trigger sanity check?
-  } else {
-
-    if (false){ // experimental
-      if (growthDirection == 0) {
-        ++x;
-        if (x > world.length-1) return;
-      } else if (growthDirection == 1) {
-        --x;
-        if (x < 0) return;
-      } else if (growthDirection == 2) {
-        ++y;
-        if (y > world.length-1) return;
-      } else if (growthDirection == 3) {
-        --y;
-        if (y < 0) return;
-      } else if (growthDirection == 4) {
-        ++z;
-      } else if (growthDirection == 5) {
-        --z;
-        if (z < 1) return;
-      }
-
-      if (world.registry.registryXYZ[x][y][z] == NULL) {
-        createCell(x,y,z, true);
-      }
-      return;
+    if (world.registry.registryXYZ[x][y][z+1] != NULL){
+      return NULL;
     }
+    return createCell(x,y,z, true);
+  }
+
+  if (VARIABLE_GROWTH){
+
+    // tries to find a path
 
     bool canGrow[6] = {
       x < world.length-1 && world.registry.registryXYZ[x+1][y][z] == NULL, // x+1
@@ -81,10 +62,38 @@ void Creature::growNewCell(Cell* c, float* growthProbas, int growthDirection){
     else if (canGrow[5])                                       --z;
     else {
       //cout << "Cell has no room to grow" << endl;
-      return;
+      return NULL;
     }
+    return createCell(x,y,z, true);
+
+  } else {
+
+    // static growth
+
+    if (growthDirection == 0) {
+      ++x;
+      if (x > world.length-1) return NULL;
+    } else if (growthDirection == 1) {
+      --x;
+      if (x < 0) return NULL;
+    } else if (growthDirection == 2) {
+      ++y;
+      if (y > world.length-1) return NULL;
+    } else if (growthDirection == 3) {
+      --y;
+      if (y < 0) return NULL;
+    } else if (growthDirection == 4) {
+      ++z;
+    } else if (growthDirection == 5) {
+      --z;
+      if (z < 1) return NULL;
+    }
+
+    if (world.registry.registryXYZ[x][y][z] == NULL) {
+      return createCell(x,y,z, true);
+    }
+    return NULL;
   }
-  return createCell(x,y,z, true);
 }
 
 bool Creature::hasEnoughEnergy(){

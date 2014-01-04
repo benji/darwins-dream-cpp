@@ -126,7 +126,9 @@ void World::lifecycle(){
   CLOCKS.start(CLOCK_GROWTH);
   for (itCreatureV = creaturesCopy.begin(); itCreatureV != creaturesCopy.end(); ++itCreatureV) {
     Creature* c = (*itCreatureV);
-    c->grow();
+    if (c->grow() == NULL && GROW_OR_DIE) {
+      c->species.kill(c);
+    }
   }
   CLOCKS.pause(CLOCK_GROWTH);
   ++cycle;

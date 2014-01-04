@@ -1,6 +1,7 @@
 #include "common.h"
 #include "World.h"
 #include "Species.h"
+#include <algorithm>
 
 static long idGen = 0;
 
@@ -33,6 +34,16 @@ DNA* Species::getDNA(int idx) {
 
 void Species::setColor(float r, float g, float b){
   this->r=r; this->g=g; this->b=b;
+}
+
+void Species::kill(Creature* c){
+  list<Creature*>::iterator it = find(creatures.begin(), creatures.end(), c);
+  if (it == creatures.end()){
+    cout<<"Cannot kill creature: not found!"<<endl;
+  }else{
+    delete *it;
+    creatures.erase(it);
+  }
 }
 
 int Species::killOldAndWeakCreatures(){

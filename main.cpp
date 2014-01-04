@@ -29,7 +29,8 @@ struct Cube {
     float r,g,b;
 };
 
-World world(100, 30, 0.1, 0.01);
+
+World world(200, 30, 0.1, 0.01);
 
 bool running = false;
 thread* playLifeThread;
@@ -146,25 +147,32 @@ void updateDominantSpeciesCubes(){
     tmpCubes->push_back(createCube(x, y, z, dominantSpecies));
     vector<DNA*>::iterator itDNA;
     float max = 0, p;
-    int maxIdx;
+    int maxIdx, directionIdx;
 
     for (itDNA = dominantSpecies->dna.begin(); itDNA != dominantSpecies->dna.end(); ++itDNA) {
       DNA* dna = (*itDNA);
-      max = 0;
-      for (int i=0; i<6; ++i){
-        p = dna->probas[i];
-        if (max<p) {
-          max = p;
-          maxIdx = i;
+
+      if (VARIABLE_GROWTH){
+        max = 0;
+        for (int i=0; i<6; ++i){
+          p = dna->probas[i];
+          if (max<p) {
+            max = p;
+            maxIdx = i;
+          }
         }
+        directionIdx = maxIdx;
+
+      } else {
+        directionIdx = dna->growthDirection;
       }
 
-      if      (maxIdx==0) ++x;
-      else if (maxIdx==1) --x;
-      else if (maxIdx==2) ++y;
-      else if (maxIdx==3) --y;
-      else if (maxIdx==4) ++z;
-      else if (maxIdx==5) --z;
+      if      (directionIdx==0) ++x;
+      else if (directionIdx==1) --x;
+      else if (directionIdx==2) ++y;
+      else if (directionIdx==3) --y;
+      else if (directionIdx==4) ++z;
+      else if (directionIdx==5) --z;
 
       tmpCubes->push_back(createCube(x, y, z, dominantSpecies));
     }
@@ -222,6 +230,11 @@ void playLife(){
 
     if (DEBUG || OUT_SUMMARY || world.cycle % UPDATE_UI_EVERY_CYCLES == 0) updateUI();
     if (DEBUG || OUT_SUMMARY) usleep(1000*500);
+  }
+  running = false;
+  if (world.species.size() == 0){
+    cout << "No creature survived." << endl;
+    updateUI();
   }
 }
 
@@ -292,14 +305,14 @@ void keyboard(unsigned char key, int mouseX, int mouseY) {
 }
 
 int main(int argc, char **argv) {
+  glutInit(&argc, argv);
+  Rendering::initialize(drawWorld, drawDominantSpecies, keyboard);
+
   world.minimumEnergyPerCell = .5;
   world.infest(5,5);
   updateWorldCubes();
 
   start();
-
-  glutInit(&argc, argv);
-  Rendering::initialize(drawWorld, drawDominantSpecies, keyboard);
   glutMainLoop();
 
   return 0;

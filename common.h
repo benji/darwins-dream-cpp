@@ -25,3 +25,6 @@ extern int CLOCK_DEATH;
 extern int CLOCK_REPRODUCTION;
 extern int CLOCK_GROWTH;
 extern int CLOCK_SUNSHINE;
+
+#define GROW_OR_DIE true
+#define VARIABLE_GROWTH false
