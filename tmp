@@ -1,0 +1,40 @@
+
+    for (int i=0; i<world.maxCells; i++){
+      int pos[world.maxCells][3];
+      pos[0][0] = 0;
+      pos[0][1] = 0;
+      pos[0][2] = 0;
+      vector<int> takenDirs;
+      for (int i=1; i<world.maxCells; ++i){
+        takenDirs.clear();
+        for (int j=0; j<i; ++j){
+          if (pos[j][0] == pos[i][0]+1 && pos[j][1] == pos[i][1] && pos[j][2] == pos[i][2]){
+            takenDirs.push_back(0);
+          }
+          if (pos[j][0] == pos[i][0]-1 && pos[j][1] == pos[i][1] && pos[j][2] == pos[i][2]){
+            takenDirs.push_back(1);
+          }
+          if (pos[j][0] == pos[i][0] && pos[j][1]+1 == pos[i][1] && pos[j][2] == pos[i][2]){
+            takenDirs.push_back(2);
+          }
+          if (pos[j][0] == pos[i][0] && pos[j][1]-1 == pos[i][1] && pos[j][2] == pos[i][2]){
+            takenDirs.push_back(3);
+          }
+          if (pos[j][0] == pos[i][0] && pos[j][1] == pos[i][1] && pos[j][2]+1 == pos[i][2]){
+            takenDirs.push_back(4);
+          }
+          if (pos[j][0] == pos[i][0] && pos[j][1] == pos[i][1] && pos[j][2]-1 == pos[i][2]){
+            takenDirs.push_back(5);
+          }
+        }
+        int direction = randInt(6-takenDirs.size());
+        for (int k=0; k<takenDirs.size(); ++k){
+          if (direction >= takenDirs[k]){
+            ++direction;
+          }
+        }
+        DNA* d = new DNA(NULL);
+        d->growthDirection = direction;
+        this->dna.push_back(d);
+      }
+      
