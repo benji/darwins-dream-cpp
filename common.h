@@ -1,3 +1,12 @@
+#ifndef COMMON_H
+#define COMMON_H
+
+#define GROW_OR_DIE true
+#define VARIABLE_GROWTH false
+#define WORLD_LENGTH 30
+const int WINDOW_WIDTH = 800;
+const int WINDOW_HEIGHT = 400;
+
 #include <iostream>
 #include <list>
 #include <string>
@@ -26,6 +35,4 @@ extern int CLOCK_REPRODUCTION;
 extern int CLOCK_GROWTH;
 extern int CLOCK_SUNSHINE;
 
-#define GROW_OR_DIE true
-#define VARIABLE_GROWTH false
-#define WORLD_LENGTH 30
+#endif

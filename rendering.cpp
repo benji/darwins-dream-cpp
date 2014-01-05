@@ -11,8 +11,8 @@
 
 using namespace std;
 
-static int width = 800;
-static int height = 400;
+static int width = WINDOW_WIDTH;
+static int height = WINDOW_HEIGHT;
 static VoidFuncType drawWorldFunc;
 static VoidFuncType drawDominantSpeciesFunc;
 

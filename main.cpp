@@ -1,19 +1,7 @@
 #include <iostream>
 #include <stdio.h>
-#include <list>
 #include <thread>
-#include <ctime>
-#include <unistd.h>
-#include <GL/gl.h>
 #include <GL/glut.h>
-
-#ifdef _WIN32
-#	include <windows.h>
-#else
-#	include <sys/time.h>
-#endif
-
-using namespace std;
 
 #include "rendering.h"
 #include "World.h"
@@ -22,6 +10,9 @@ using namespace std;
 #include "Cell.h"
 #include "Clocks.h"
 #include "utils.h"
+#include "common.h"
+
+using namespace std;
 
 struct Cube {
   public:
@@ -29,12 +20,12 @@ struct Cube {
     float r,g,b;
 };
 
-
 World world(200, WORLD_LENGTH, 0.1, 0.01);
 
 bool running = false;
 thread* playLifeThread;
 long START = time(0);
+bool fullscreen = false;
 
 long UPDATE_UI_EVERY_CYCLES = 100;
 long lastRenderingCycle = -1;
@@ -293,6 +284,16 @@ void keyboard(unsigned char key, int mouseX, int mouseY) {
         stop();
       }else{
         start();
+      }
+      break;
+    case 'f': // Fullscreen
+      if (fullscreen){
+        glutReshapeWindow(WINDOW_WIDTH, WINDOW_HEIGHT);
+        glutPositionWindow(0,0);
+        fullscreen = false;
+      }else{
+        glutFullScreen();
+        fullscreen = true;
       }
       break;
     case 27: // exit
