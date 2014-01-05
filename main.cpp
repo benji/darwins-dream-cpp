@@ -24,7 +24,6 @@ World world(WORLD_LENGTH, MAX_CELLS, 0.1, 0.01);
 
 bool running = false;
 thread* playLifeThread;
-long START = time(0);
 bool fullscreen = false;
 
 long UPDATE_UI_EVERY_CYCLES = 100;

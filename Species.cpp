@@ -67,7 +67,7 @@ bool Species::generateDna(){
     d->growthDirection = direction;
     this->dna.push_back(d);
 
-    if (direction == 0)      ++pos[i][0];
+    if      (direction == 0) ++pos[i][0];
     else if (direction == 1) --pos[i][0];
     else if (direction == 2) ++pos[i][1];
     else if (direction == 3) --pos[i][1];
