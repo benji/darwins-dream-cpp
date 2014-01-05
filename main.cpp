@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <thread>
 #include <GL/glut.h>
+#include <algorithm>
 
 #include "rendering.h"
 #include "World.h"
@@ -253,7 +254,8 @@ void exitWorld(){
 }
 
 void printSummary(){
-  stop();
+  bool wasRunning = running;
+  if (wasRunning) stop();
 
   cout << "Summary:" << endl;
   list<Species*>::iterator itSpecies = world.species.begin();
@@ -262,13 +264,45 @@ void printSummary(){
     Species* s = (*itSpecies);
     cout << "\tSpecies "<< s->id <<" with "<< s->creatures.size() << " creatures." << endl;
     cout << "\t\t";
-    for (int j=0;j<s->dna.size();j++) cout<<s->dna[j]->growthDirection<<" ";
+    for (unsigned int j=0;j<s->dna.size();j++) cout<<s->dna[j]->growthDirection<<" ";
     cout<<endl;
     ++itSpecies;
   }
   cout << "----------" << endl;
 
-  start();
+  if (wasRunning) start();
+}
+
+void checkConsistency(){
+  bool wasRunning = running;
+  if (wasRunning) stop();
+
+  vector<int> takenIndexes;
+  list<Species*>::iterator itSpecies;
+  list<Creature*>::iterator itCreature;
+  vector<Cell*>::iterator itCell;
+  for (itSpecies = world.species.begin(); itSpecies != world.species.end(); ++itSpecies) {
+    Species* s = (*itSpecies);
+
+    for (itCreature = s->creatures.begin(); itCreature != s->creatures.end(); ++itCreature) {
+      Creature* c = (*itCreature);
+      
+      for (itCell = c->cells.begin(); itCell != c->cells.end(); ++itCell) {
+        Cell* cell = (*itCell);
+        int index = world.length*world.length*cell->z + world.length*cell->y + cell->x;
+        vector<int>::iterator it = find(takenIndexes.begin(), takenIndexes.end(), index);
+        if (it == takenIndexes.end()){
+          takenIndexes.push_back(index);
+        } else {
+          cout << "Duplicate cell found at " << cell->x << ", " << cell->y << ", " << cell->z << endl;
+          exit(4);
+        }
+      }
+    }
+  }
+  
+
+  if (wasRunning) start();
 }
 
 void keyboard(unsigned char key, int mouseX, int mouseY) {
@@ -308,9 +342,22 @@ void keyboard(unsigned char key, int mouseX, int mouseY) {
   }
 }
 
+void specialKeyboard(int key, int mouseX, int mouseY) {
+  switch ( key ) {
+    case GLUT_KEY_F1 : // consistency check
+      checkConsistency();
+      break;
+    default:
+      cout<<"Unbound key: "<<key<<endl;
+      break;
+  }
+}
+
 int main(int argc, char **argv) {
   glutInit(&argc, argv);
-  Rendering::initialize(drawWorld, drawDominantSpecies, keyboard);
+  Rendering::initialize(drawWorld, drawDominantSpecies);
+  glutKeyboardFunc(keyboard);
+  glutSpecialFunc(specialKeyboard);
 
   world.minimumEnergyPerCell = .5;
   world.infest(5,5);

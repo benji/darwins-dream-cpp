@@ -139,7 +139,7 @@ void Rendering::display() {
 }
 
 
-void Rendering::initialize(VoidFuncType drawWorldF, VoidFuncType drawDominantSpeciesF, keyboardFuncType keyPressedF)  {
+void Rendering::initialize(VoidFuncType drawWorldF, VoidFuncType drawDominantSpeciesF)  {
   drawWorldFunc = drawWorldF;
   drawDominantSpeciesFunc = drawDominantSpeciesF;
 
@@ -149,7 +149,6 @@ void Rendering::initialize(VoidFuncType drawWorldF, VoidFuncType drawDominantSpe
   glutDisplayFunc(Rendering::display);
   glutReshapeFunc(Rendering::resize);
   glutIdleFunc(Rendering::display);
-  glutKeyboardFunc(keyPressedF);
 
   glMatrixMode(GL_PROJECTION);
   resize(600,400);

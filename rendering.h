@@ -12,7 +12,7 @@ class Rendering {
     static void display();
     static void resize(int w, int h);
     static void keyboard ( unsigned char key, int mouseX, int mouseY );
-    static void initialize(VoidFuncType drawWorldF, VoidFuncType drawDominantSpeciesF, keyboardFuncType keyboardF);
+    static void initialize(VoidFuncType drawWorldF, VoidFuncType drawDominantSpeciesF);
 };
 
 #endif
