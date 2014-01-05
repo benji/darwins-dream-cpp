@@ -9,8 +9,10 @@ Species::Species(Species* originalSpecies){
   id = idGen++;
 
   if (originalSpecies == NULL){
+    // completely new species
     while (!generateDna()) ;
   }else{
+    // evolution of an existing species
     vector<DNA*>::iterator itDNA;
     for (itDNA = originalSpecies->dna.begin(); itDNA != originalSpecies->dna.end(); ++itDNA) {
       DNA* from = (*itDNA);
@@ -21,11 +23,11 @@ Species::Species(Species* originalSpecies){
     delete this->dna[randIdx];
     this->dna[randIdx] = new DNA(NULL);
   }
-  // TODO HSL
+
   HSVtoRGB( &(this->r), &(this->g), &(this->b), randDouble(), 1, .65 );
-  //setColor(randDouble(),randDouble(),randDouble());
 }
 
+// Don't allow species with impossible shape (z<1 or collision with self)
 bool Species::generateDna(){
   clearDna();
 
