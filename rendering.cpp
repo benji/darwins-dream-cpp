@@ -15,7 +15,6 @@ static int width = 800;
 static int height = 400;
 static VoidFuncType drawWorldFunc;
 static VoidFuncType drawDominantSpeciesFunc;
-static float angle = 0;
 
 void Rendering::resize(int w, int h){
   width = w;

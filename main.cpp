@@ -30,7 +30,7 @@ struct Cube {
 };
 
 
-World world(200, 30, 0.1, 0.01);
+World world(200, WORLD_LENGTH, 0.1, 0.01);
 
 bool running = false;
 thread* playLifeThread;

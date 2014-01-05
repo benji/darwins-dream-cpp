@@ -28,6 +28,8 @@ class Species {
     void kill(Creature* c);
     int killOldAndWeakCreatures();
     Creature* reproduce(int x, int y);
+    bool generateDna();
+    void clearDna();
     ~Species();
 };
 

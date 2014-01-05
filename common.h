@@ -28,3 +28,4 @@ extern int CLOCK_SUNSHINE;
 
 #define GROW_OR_DIE true
 #define VARIABLE_GROWTH false
+#define WORLD_LENGTH 30
