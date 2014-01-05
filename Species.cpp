@@ -31,12 +31,19 @@ Species::Species(Species* originalSpecies){
 bool Species::generateDna(){
   clearDna();
 
+  DNA* d = new DNA(NULL);
+  d->growthDirection = 4; // first cell has to go up
+  this->dna.push_back(d);
+
   int pos[MAX_CELLS][3];
   pos[0][0] = pos[0][1] = pos[0][2] = 0;
-  vector<int> takenDirs;
+  pos[1][0] = pos[1][1] = 0;
+  pos[1][2] = 1;
 
-  for (int i=1; i<world.maxCells; ++i){
-    int x = pos[i][0] = pos[i-1][0], y = pos[i][1] = pos[i-1][1], z = pos[i][2] = pos[i-1][2];
+  vector<int> takenDirs;
+  for (int i=2; i<world.maxCells; ++i){
+    int x = pos[i-1][0], y = pos[i-1][1], z = pos[i-1][2];
+
     takenDirs.clear();
 
     for (int j=0; j<i-1; ++j){
@@ -57,6 +64,9 @@ bool Species::generateDna(){
     // the only position available is downwards but Z=0 is disallowed:
     if (canGoDown && takenDirs.size() == 5 && z<=1) return false;
 
+    // don't allow Z=0
+    if (canGoDown && z == 1) takenDirs.push_back(5);
+
     int direction = randInt(6 - takenDirs.size());
     for (unsigned int k=0; k<takenDirs.size(); ++k){
       if (direction >= takenDirs[k]){
@@ -67,22 +77,19 @@ bool Species::generateDna(){
     d->growthDirection = direction;
     this->dna.push_back(d);
 
-    if      (direction == 0) ++pos[i][0];
-    else if (direction == 1) --pos[i][0];
-    else if (direction == 2) ++pos[i][1];
-    else if (direction == 3) --pos[i][1];
-    else if (direction == 4) ++pos[i][2];
-    else if (direction == 5) --pos[i][2];
+    pos[i][0] = x;
+    pos[i][1] = y;
+    pos[i][2] = z;
+
+    if      (direction == 0) pos[i][0] = x+1;
+    else if (direction == 1) pos[i][0] = x-1;
+    else if (direction == 2) pos[i][1] = y+1;
+    else if (direction == 3) pos[i][1] = y-1;
+    else if (direction == 4) pos[i][2] = z+1;
+    else if (direction == 5) pos[i][2] = z-1;
   }
 
   return true;
-}
-
-DNA* Species::getDNA(int idx) {
-  while (idx >= (int)dna.size()){
-    dna.push_back(new DNA(NULL));
-  }
-  return dna[idx];
 }
 
 void Species::setColor(float r, float g, float b){
@@ -105,7 +112,9 @@ int Species::killOldAndWeakCreatures(){
   int deathCount = 0;
   while (itCreature != creatures.end()){
     Creature* c = (*itCreature);
-    if (world.cycle - c->creationCycle > world.maxCells || !c->hasEnoughEnergy()){
+    if (c->cells.size() >= world.maxCells 
+        || world.cycle - c->creationCycle >= world.maxCells 
+        || !c->hasEnoughEnergy()){
       if (DEBUG) cout << "Creature dies." <<endl;
       delete c;
       itCreature = creatures.erase(itCreature);
@@ -129,6 +138,7 @@ void Species::clearDna(){
   for (itDNA = dna.begin(); itDNA != dna.end(); ++itDNA) {
     delete (*itDNA);
   }
+  this->dna.clear();
 }
 
 Species::~Species(){

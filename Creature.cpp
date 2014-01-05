@@ -16,7 +16,7 @@ Cell* Creature::createCell(int x, int y, int z, bool registerCell){
 
 Cell* Creature::grow(){
   int idx = this->cells.size()-1;
-  DNA* dna = this->species.getDNA(idx);
+  DNA* dna = this->species.dna[idx];
   return growNewCell(this->cells.at(idx), dna->probas, dna->growthDirection);
 }
 
@@ -26,6 +26,7 @@ Cell* Creature::growNewCell(Cell* c, float* growthProbas, int growthDirection){
   if (z==0){
     z=1; // RULE_SEEDS_Z0
     if (world.registry.registryXYZ[x][y][z+1] != NULL){
+      //cout << "Second cell is blocked" << endl;
       return NULL;
     }
     return createCell(x,y,z, true);
@@ -87,6 +88,9 @@ Cell* Creature::growNewCell(Cell* c, float* growthProbas, int growthDirection){
     } else if (growthDirection == 5) {
       --z;
       if (z < 1) return NULL;
+    } else {
+      cout << "Invalid growth direction: "<<growthDirection<<endl;
+      exit(2);
     }
 
     if (world.registry.registryXYZ[x][y][z] == NULL) {

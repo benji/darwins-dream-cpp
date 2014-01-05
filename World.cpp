@@ -95,7 +95,6 @@ void World::lifecycle(){
     }
   }
   CLOCKS.pause(CLOCK_DEATH);
-  if (DEBUG || OUT_SUMMARY) cout << deathCount << " creatures died." << endl;
 
   // reproduction & mutation
   CLOCKS.start(CLOCK_REPRODUCTION);
@@ -128,9 +127,13 @@ void World::lifecycle(){
     Creature* c = (*itCreatureV);
     if (c->grow() == NULL && GROW_OR_DIE) {
       c->species.kill(c);
+      ++deathCount;
     }
   }
   CLOCKS.pause(CLOCK_GROWTH);
+
+  if (DEBUG || OUT_SUMMARY) cout << deathCount << " creatures died." << endl;
+
   ++cycle;
   
   CLOCKS.pause(CLOCK_LIFECYCLE);

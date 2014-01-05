@@ -245,8 +245,9 @@ void stop(){
 
 void exitWorld(){
   stop();
-  cleanupCubes(worldCubes);
-  cleanupCubes(dominantSpeciesCubes);
+  // might still be used...
+  //cleanupCubes(worldCubes);
+  //cleanupCubes(dominantSpeciesCubes);
   cout << "Exiting." << endl;
   exit(0);
 }
@@ -260,6 +261,9 @@ void printSummary(){
   while (i<=5 && itSpecies != world.species.end()){
     Species* s = (*itSpecies);
     cout << "\tSpecies "<< s->id <<" with "<< s->creatures.size() << " creatures." << endl;
+    cout << "\t\t";
+    for (int j=0;j<s->dna.size();j++) cout<<s->dna[j]->growthDirection<<" ";
+    cout<<endl;
     ++itSpecies;
   }
   cout << "----------" << endl;

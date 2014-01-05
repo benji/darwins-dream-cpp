@@ -24,7 +24,6 @@ class Species {
 
     Species(Species* originalSpecies);
     void setColor(float r, float g, float b);
-    DNA* getDNA(int idx);
     void kill(Creature* c);
     int killOldAndWeakCreatures();
     Creature* reproduce(int x, int y);
