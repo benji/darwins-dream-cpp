@@ -31,7 +31,7 @@ Species::Species(Species* originalSpecies){
 bool Species::generateDna(){
   clearDna();
 
-  int pos[WORLD_LENGTH][3];
+  int pos[MAX_CELLS][3];
   pos[0][0] = pos[0][1] = pos[0][2] = 0;
   vector<int> takenDirs;
 

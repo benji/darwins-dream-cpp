@@ -20,7 +20,7 @@ struct Cube {
     float r,g,b;
 };
 
-World world(200, WORLD_LENGTH, 0.1, 0.01);
+World world(WORLD_LENGTH, MAX_CELLS, 0.1, 0.01);
 
 bool running = false;
 thread* playLifeThread;

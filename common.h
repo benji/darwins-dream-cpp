@@ -3,7 +3,8 @@
 
 #define GROW_OR_DIE true
 #define VARIABLE_GROWTH false
-#define WORLD_LENGTH 30
+#define WORLD_LENGTH 200
+#define MAX_CELLS 30
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 400;
 
