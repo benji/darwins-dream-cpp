@@ -112,7 +112,7 @@ int Species::killOldAndWeakCreatures(){
   int deathCount = 0;
   while (itCreature != creatures.end()){
     Creature* c = (*itCreature);
-    if (c->cells.size() >= world.maxCells 
+    if (c->cells.size() >= (unsigned int)world.maxCells 
         || world.cycle - c->creationCycle >= world.maxCells 
         || !c->hasEnoughEnergy()){
       if (DEBUG) cout << "Creature dies." <<endl;
