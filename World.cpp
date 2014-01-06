@@ -88,6 +88,17 @@ void World::lifecycle(){
 
     if (s->creatures.size() == 0){
       if (DEBUG) cout << "Species goes extinct." <<endl;
+
+      // rewiring species ancestors
+      std::list<Species*>::iterator descendantIt;
+      for (descendantIt = species.begin(); descendantIt != species.end(); ++descendantIt){
+        Species* descendant = (*descendantIt);
+        if (descendant->ancestor == s){
+          descendant->ancestor = s->ancestor;
+          descendant->distanceToAncestor += s->distanceToAncestor;
+        }
+      }
+
       delete s;
       itSpecies = species.erase(itSpecies);
     }else{

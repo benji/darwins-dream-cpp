@@ -21,6 +21,8 @@ class Species {
     vector<DNA*> dna;
     list<Creature*> creatures;
     long id;
+    Species* ancestor;
+    int distanceToAncestor;
 
     Species(Species* originalSpecies);
     void setColor(float r, float g, float b);

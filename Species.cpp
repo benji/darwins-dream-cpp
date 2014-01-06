@@ -7,12 +7,16 @@ static long idGen = 0;
 
 Species::Species(Species* originalSpecies){
   id = idGen++;
+  distanceToAncestor = 1;
 
   if (originalSpecies == NULL){
     // completely new species
+    ancestor = NULL;
     while (!generateDna()) ;
   }else{
     // evolution of an existing species
+    ancestor = originalSpecies;
+
     vector<DNA*>::iterator itDNA;
     for (itDNA = originalSpecies->dna.begin(); itDNA != originalSpecies->dna.end(); ++itDNA) {
       DNA* from = (*itDNA);

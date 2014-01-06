@@ -273,6 +273,16 @@ void printSummary(){
     Species* s = (*itSpecies);
     if (s->creatures.size() >= threshold){
       cout << "\tSpecies "<< s->id <<" with "<< s->creatures.size() << " creatures. ";
+      int generation = 0;
+      Species* cur = s;
+      while (cur != NULL){
+        generation += cur->distanceToAncestor;
+        cur = cur->ancestor;
+      }
+      cout << "Ancestor of generation "<< generation <<", ancestor is ";
+      if (s->ancestor != NULL) cout<<s->ancestor->id;
+      else                     cout<<"ROOT";
+      cout<<". ";
       for (unsigned int j=0;j<s->dna.size();j++) cout<<s->dna[j]->growthDirection<<" ";
       cout<<endl;
     }
