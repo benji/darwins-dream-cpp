@@ -76,6 +76,10 @@ bool Species::generateDna(){
     if (takenDirs.size() >6) {
       cout << "ERROR: more than 6 taken dirs!" <<endl;
       for (unsigned int p=0;p<takenDirs.size();p++) cout<<takenDirs[p]<<" "<<endl;
+      cout<<"relative creature position so far:"<<endl;
+      for (int e=0; e<i; ++e){
+        cout<<"\t" << pos[e][0] << ", " << pos[e][1] << ", " << pos[e][2] <<endl;
+      }
     }
 
     int direction = randInt(6 - takenDirs.size());
@@ -115,6 +119,7 @@ void Species::kill(Creature* c){
   list<Creature*>::iterator it = find(creatures.begin(), creatures.end(), c);
   if (it == creatures.end()){
     cout<<"Cannot kill creature: not found!"<<endl;
+    exit(5);
   }else{
     delete *it;
     creatures.erase(it);

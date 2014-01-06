@@ -81,19 +81,9 @@ void World::lifecycle(){
   // death
   CLOCKS.start(CLOCK_DEATH);
   int deathCount = 0;
-  itSpecies = species.begin();
-  while (itSpecies != species.end()) {
+  for (itSpecies = species.begin(); itSpecies != species.end(); ++itSpecies) {
     Species* s = (*itSpecies);
     deathCount += s->killOldAndWeakCreatures();
-
-    if (s->creatures.size() == 0){
-      if (DEBUG) cout << "Species goes extinct." <<endl;
-//      prepareSpeciesForDelete(s);
-      delete s;
-      itSpecies = species.erase(itSpecies);
-    }else{
-      ++itSpecies;
-    }
   }
   CLOCKS.pause(CLOCK_DEATH);
 
@@ -128,18 +118,30 @@ void World::lifecycle(){
     Creature* c = (*itCreatureV);
     if (c->grow() == NULL && GROW_OR_DIE) {
       c->species.kill(c);
-// TODO!
-//      if (c->species.creatures.size() == 0){
-//        Species* s = &(c->species);
-//        prepareSpeciesForDelete(s);
-//        world.species.erase( find(world.species.begin(), world.species.end(), s) );
-//      }
       ++deathCount;
     }
   }
   CLOCKS.pause(CLOCK_GROWTH);
 
   if (DEBUG || OUT_SUMMARY) cout << deathCount << " creatures died." << endl;
+
+  // cleanup species with no creatures
+  int nbExtinctSpecies = 0;
+  itSpecies = species.begin();
+  while (itSpecies != species.end()) {
+    Species* s = (*itSpecies);
+    if (s->creatures.size() == 0){
+      if (DEBUG) cout << "Species goes extinct." <<endl;
+      prepareSpeciesForDelete(s);
+      delete s;
+      itSpecies = species.erase(itSpecies);
+      ++nbExtinctSpecies;
+    }else{
+      ++itSpecies;
+    }
+  }
+
+  if (DEBUG || OUT_SUMMARY) cout << nbExtinctSpecies << " species go extinct." << endl;
 
   ++cycle;
   
