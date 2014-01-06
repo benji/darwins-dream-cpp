@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall -std=c++0x -pthread -pedantic -I/usr/include/GL
+CFLAGS=-Wall -Ofast -std=c++0x -pthread -pedantic -I/usr/include/GL
 LDFLAGS=-lGL -lGLU -lglut
 SOURCES=main.cpp utils.cpp rendering.cpp Cell.cpp Creature.cpp Species.cpp CellsRegistry.cpp World.cpp Clocks.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
