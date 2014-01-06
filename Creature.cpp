@@ -25,7 +25,7 @@ Cell* Creature::growNewCell(Cell* c, float* growthProbas, int growthDirection){
 
   if (z==0){
     z=1; // RULE_SEEDS_Z0
-    if (world.registry.registryXYZ[x][y][z+1] != NULL){
+    if (world.registry.registryXYZ[x][y][z] != NULL){
       //cout << "Second cell is blocked" << endl;
       return NULL;
     }
