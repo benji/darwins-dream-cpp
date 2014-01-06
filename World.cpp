@@ -53,17 +53,6 @@ void World::lifecycle(){
   std::vector<Cell*>::iterator itCell;
 
   // sunshine
-  CLOCKS.start(CLOCK_SUNSHINE);
-  for (itSpecies = species.begin(); itSpecies != species.end(); ++itSpecies) {
-    Species* s = (*itSpecies);
-    for (itCreature = s->creatures.begin(); itCreature != s->creatures.end(); ++itCreature) {
-      Creature* c = (*itCreature);
-      for (itCell = c->cells.begin(); itCell != c->cells.end(); ++itCell) {
-        (*itCell)->energy = 0;
-      }
-    }
-  }
-
   for (int i=0; i<world.length; ++i){
     for (int j=0; j<world.length; ++j){
       float energyFromSun = 1;

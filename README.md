@@ -17,4 +17,8 @@ TODO:
 
 - Multi threading
 
-- incorporate some kind of gravity constraint to have creatures a bit less linear? Maybe allow to grow from any existing cell, not only the head?
+- a bit less linear? Maybe allow to grow from any existing cell, not only the head?
+
+- Ideas of constraints to add:
+  * some kind of gravity to have creatures a bit more balanced
+  * for fun we could try to kill creatures whose head touches another creature, and see what shapes derive from it?
