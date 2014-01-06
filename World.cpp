@@ -53,6 +53,7 @@ void World::lifecycle(){
   std::vector<Cell*>::iterator itCell;
 
   // sunshine
+  CLOCKS.start(CLOCK_SUNSHINE);
   for (int i=0; i<world.length; ++i){
     for (int j=0; j<world.length; ++j){
       float energyFromSun = 1;

@@ -253,9 +253,15 @@ void exitWorld(){
   exit(0);
 }
 
+bool compByCreatures(const Species* a, const Species* b) {
+  return a->creatures.size() > b->creatures.size();
+}
+
 void printSummary(){
   bool wasRunning = running;
   if (wasRunning) stop();
+
+  world.species.sort(compByCreatures);
 
   cout << "Summary:" << endl;
   list<Species*>::iterator itSpecies = world.species.begin();
