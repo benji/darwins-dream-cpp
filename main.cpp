@@ -259,15 +259,25 @@ void printSummary(){
 
   cout << "Summary:" << endl;
   list<Species*>::iterator itSpecies = world.species.begin();
-  int i = 0;
-  while (i<=5 && itSpecies != world.species.end()){
-    Species* s = (*itSpecies);
-    cout << "\tSpecies "<< s->id <<" with "<< s->creatures.size() << " creatures." << endl;
-    cout << "\t\t";
-    for (unsigned int j=0;j<s->dna.size();j++) cout<<s->dna[j]->growthDirection<<" ";
-    cout<<endl;
-    ++itSpecies;
+  int population = 0;
+
+  for (itSpecies = world.species.begin(); itSpecies != world.species.end(); ++itSpecies){
+    population += (*itSpecies)->creatures.size();
   }
+
+  unsigned int threshold = population/100;
+  cout<<"Total population: "<< population<<endl;
+  cout<<"Species with more than 1% ("<<threshold<<") creatures:"<<endl;
+
+  for (itSpecies = world.species.begin(); itSpecies != world.species.end(); ++itSpecies){
+    Species* s = (*itSpecies);
+    if (s->creatures.size() >= threshold){
+      cout << "\tSpecies "<< s->id <<" with "<< s->creatures.size() << " creatures. ";
+      for (unsigned int j=0;j<s->dna.size();j++) cout<<s->dna[j]->growthDirection<<" ";
+      cout<<endl;
+    }
+  }
+
   cout << "----------" << endl;
 
   if (wasRunning) start();
