@@ -279,7 +279,7 @@ void printSummary(){
         generation += cur->distanceToAncestor;
         cur = cur->ancestor;
       }
-      cout << "Ancestor of generation "<< generation <<", ancestor is ";
+      cout << "Generation "<< generation <<", ancestor is ";
       if (s->ancestor != NULL) cout<<s->ancestor->id;
       else                     cout<<"ROOT";
       cout<<". ";
@@ -297,30 +297,7 @@ void checkConsistency(){
   bool wasRunning = running;
   if (wasRunning) stop();
 
-  vector<int> takenIndexes;
-  list<Species*>::iterator itSpecies;
-  list<Creature*>::iterator itCreature;
-  vector<Cell*>::iterator itCell;
-  for (itSpecies = world.species.begin(); itSpecies != world.species.end(); ++itSpecies) {
-    Species* s = (*itSpecies);
-
-    for (itCreature = s->creatures.begin(); itCreature != s->creatures.end(); ++itCreature) {
-      Creature* c = (*itCreature);
-      
-      for (itCell = c->cells.begin(); itCell != c->cells.end(); ++itCell) {
-        Cell* cell = (*itCell);
-        int index = world.length*world.length*cell->z + world.length*cell->y + cell->x;
-        vector<int>::iterator it = find(takenIndexes.begin(), takenIndexes.end(), index);
-        if (it == takenIndexes.end()){
-          takenIndexes.push_back(index);
-        } else {
-          cout << "Duplicate cell found at " << cell->x << ", " << cell->y << ", " << cell->z << endl;
-          exit(4);
-        }
-      }
-    }
-  }
-  
+  world.checkConsistency();
 
   if (wasRunning) start();
 }
@@ -380,7 +357,10 @@ int main(int argc, char **argv) {
   glutSpecialFunc(specialKeyboard);
 
   world.minimumEnergyPerCell = .5;
-  world.infest(5,5);
+
+  int nbSpeciesToCreate = WORLD_LENGTH/5;
+
+  world.infest(nbSpeciesToCreate,5);
   updateWorldCubes();
 
   start();

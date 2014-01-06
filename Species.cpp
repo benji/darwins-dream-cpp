@@ -33,6 +33,7 @@ Species::Species(Species* originalSpecies){
 
 // Don't allow species with impossible shape (z<1 or collision with self)
 bool Species::generateDna(){
+//cout<<"generate"<<endl;
   clearDna();
 
   DNA* d = new DNA(NULL);
@@ -44,11 +45,11 @@ bool Species::generateDna(){
   pos[1][0] = pos[1][1] = 0;
   pos[1][2] = 1;
 
-  vector<int> takenDirs;
-  for (int i=2; i<world.maxCells; ++i){
+  for (int i=2; i<world.maxCells; ++i){ // (i-1) -> i
     int x = pos[i-1][0], y = pos[i-1][1], z = pos[i-1][2];
 
-    takenDirs.clear();
+    vector<int> takenDirs;
+    bool canGoDown = true;
 
     for (int j=0; j<i-1; ++j){
       int prevX = pos[j][0], prevY = pos[j][1], prevZ = pos[j][2];
@@ -57,26 +58,35 @@ bool Species::generateDna(){
       if (prevX == x   && prevY == y+1 && prevZ == z)   takenDirs.push_back(2);
       if (prevX == x   && prevY == y-1 && prevZ == z)   takenDirs.push_back(3);
       if (prevX == x   && prevY == y   && prevZ == z+1) takenDirs.push_back(4);
-      if (prevX == x   && prevY == y   && prevZ == z-1) takenDirs.push_back(5);
+      if (prevX == x   && prevY == y   && prevZ == z-1) {
+        takenDirs.push_back(5);
+        canGoDown = false;
+      }
     }
-
-    // all positions around are already taken:
-    if (takenDirs.size() == 6) return false;
-
-    bool canGoDown = find(takenDirs.begin(), takenDirs.end(), 5) == takenDirs.end();
 
     // the only position available is downwards but Z=0 is disallowed:
     if (canGoDown && takenDirs.size() == 5 && z<=1) return false;
 
+    // all positions around are already taken:
+    if (takenDirs.size() == 6) return false;
+
     // don't allow Z=0
     if (canGoDown && z == 1) takenDirs.push_back(5);
 
+    if (takenDirs.size() >6) {
+      cout << "ERROR: more than 6 taken dirs!" <<endl;
+      for (unsigned int p=0;p<takenDirs.size();p++) cout<<takenDirs[p]<<" "<<endl;
+    }
+
     int direction = randInt(6 - takenDirs.size());
     for (unsigned int k=0; k<takenDirs.size(); ++k){
-      if (direction >= takenDirs[k]){
+      if (takenDirs[k] <= direction){
         ++direction;
       }
     }
+
+//cout << "new direction="<< direction << endl;
+
     DNA* d = new DNA(NULL);
     d->growthDirection = direction;
     this->dna.push_back(d);
@@ -91,6 +101,7 @@ bool Species::generateDna(){
     else if (direction == 3) pos[i][1] = y-1;
     else if (direction == 4) pos[i][2] = z+1;
     else if (direction == 5) pos[i][2] = z-1;
+//    cout<<"pos="<<pos[i][0]<<", "<<pos[i][1]<<", "<<pos[i][2]<<endl;
   }
 
   return true;

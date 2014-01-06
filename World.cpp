@@ -88,17 +88,7 @@ void World::lifecycle(){
 
     if (s->creatures.size() == 0){
       if (DEBUG) cout << "Species goes extinct." <<endl;
-
-      // rewiring species ancestors
-      std::list<Species*>::iterator descendantIt;
-      for (descendantIt = species.begin(); descendantIt != species.end(); ++descendantIt){
-        Species* descendant = (*descendantIt);
-        if (descendant->ancestor == s){
-          descendant->ancestor = s->ancestor;
-          descendant->distanceToAncestor += s->distanceToAncestor;
-        }
-      }
-
+//      prepareSpeciesForDelete(s);
       delete s;
       itSpecies = species.erase(itSpecies);
     }else{
@@ -138,6 +128,12 @@ void World::lifecycle(){
     Creature* c = (*itCreatureV);
     if (c->grow() == NULL && GROW_OR_DIE) {
       c->species.kill(c);
+// TODO!
+//      if (c->species.creatures.size() == 0){
+//        Species* s = &(c->species);
+//        prepareSpeciesForDelete(s);
+//        world.species.erase( find(world.species.begin(), world.species.end(), s) );
+//      }
       ++deathCount;
     }
   }
@@ -176,6 +172,44 @@ vector<Species*> World::collectSpeciesCopy(){
   }
 
   return collected;
+}
+
+void World::prepareSpeciesForDelete(Species* s){
+  // rewiring species ancestors
+  std::list<Species*>::iterator iter;
+  for (iter = world.species.begin(); iter != world.species.end(); ++iter){
+    Species* current = (*iter);
+    if (current->ancestor == s){
+      current->ancestor = s->ancestor;
+      current->distanceToAncestor += s->distanceToAncestor;
+    }
+  }
+}
+
+void World::checkConsistency(){
+  vector<int> takenIndexes;
+  list<Species*>::iterator itSpecies;
+  list<Creature*>::iterator itCreature;
+  vector<Cell*>::iterator itCell;
+  for (itSpecies = species.begin(); itSpecies != species.end(); ++itSpecies) {
+    Species* s = (*itSpecies);
+
+    for (itCreature = s->creatures.begin(); itCreature != s->creatures.end(); ++itCreature) {
+      Creature* c = (*itCreature);
+      
+      for (itCell = c->cells.begin(); itCell != c->cells.end(); ++itCell) {
+        Cell* cell = (*itCell);
+        int index = world.length*world.length*cell->z + world.length*cell->y + cell->x;
+        vector<int>::iterator it = find(takenIndexes.begin(), takenIndexes.end(), index);
+        if (it == takenIndexes.end()){
+          takenIndexes.push_back(index);
+        } else {
+          cout << "Duplicate cell found at " << cell->x << ", " << cell->y << ", " << cell->z << endl;
+          exit(4);
+        }
+      }
+    }
+  } 
 }
 
 World::~World(){
