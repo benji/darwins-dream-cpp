@@ -75,17 +75,17 @@ void Rendering::drawAxis(){
   glColor3f(1, 0, 0);
   glBegin(GL_LINES);
     glVertex3f(0, 0, 0);
-    glVertex3f(100, 0, 0);
+    glVertex3f(10000, 0, 0);
   glEnd();
   glColor3f(0, 1, 0);
   glBegin(GL_LINES);
     glVertex3f(0, 0, 0);
-    glVertex3f(0, 100, 0);
+    glVertex3f(0, 10000, 0);
   glEnd();
   glColor3f(0, 0, 1);
   glBegin(GL_LINES);
     glVertex3f(0, 0, 0);
-    glVertex3f(0, 0, 100);
+    glVertex3f(0, 0, 10000);
   glEnd();
 }
 
@@ -108,15 +108,15 @@ void Rendering::display() {
   gluLookAt(world.length*1.2, -world.length*.5, world.length*1, world.length/2, world.length/2, 0, 0.0, 0.0, 1.0);
 
   // grid
-  glColor3f(1.0f, 1.0f, 1.0f);
-  for (int i=1; i<100; i++) {
+  glColor3f(.3f, .3f, .3f);
+  for (int i=0; i<1000; i+=10) {
     glBegin(GL_LINES);
       glVertex3f(i,   0, 0);
-      glVertex3f(i, 100, 0);
+      glVertex3f(i, 1000, 0);
     glEnd();
     glBegin(GL_LINES);
       glVertex3f(0,   i, 0);
-      glVertex3f(100, i, 0);
+      glVertex3f(1000, i, 0);
     glEnd();
   }
 
@@ -125,7 +125,7 @@ void Rendering::display() {
 
   // DOMINANT SPECIES VIEW
   prepareView(2*width/3, 0, width/3, height);
-  gluLookAt(20, -15, 20, 0, 0, 3, 0.0, 0.0, 1.0);
+  gluLookAt(20, -15, 20, 0, 0, 6, 0.0, 0.0, 1.0);
 
   glPushMatrix();
     long t = time(0);
