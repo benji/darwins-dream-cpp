@@ -2,6 +2,7 @@
 #include "World.h"
 #include "Clocks.h"
 #include <algorithm>
+#include <thread>
 
 World::World(int length, int maxCells, float reproductionRate, float mutationRate):cycle(0),length(length),maxCells(maxCells),reproductionRate(reproductionRate),mutationRate(mutationRate),minimumEnergyPerCell(.5){}
 
@@ -44,17 +45,8 @@ Species* World::evolve(Species* s){
   return newSpecies;
 }
 
-void World::lifecycle(){
-  CLOCKS.start(CLOCK_LIFECYCLE);
-  if (DEBUG || OUT_SUMMARY) cout << "===== Cycle "<<world.cycle<<" ====="<<endl;
-
-  std::list<Species*>::iterator itSpecies = species.begin();
-  std::list<Creature*>::iterator itCreature;
-  std::vector<Cell*>::iterator itCell;
-
-  // sunshine
-  CLOCKS.start(CLOCK_SUNSHINE);
-  for (int i=0; i<world.length; ++i){
+void sunshine(int minX, int maxX){ // [minX; maxX]
+  for (int i=minX; i<=maxX; ++i){
     for (int j=0; j<world.length; ++j){
       float energyFromSun = 1;
       for (int k=world.maxCells-1; k>=0; --k){
@@ -65,6 +57,27 @@ void World::lifecycle(){
         }
       }
     }
+  }
+}
+
+void World::lifecycle(){
+  CLOCKS.start(CLOCK_LIFECYCLE);
+  if (DEBUG || OUT_SUMMARY) cout << "===== Cycle "<<world.cycle<<" ====="<<endl;
+
+  std::list<Species*>::iterator itSpecies = species.begin();
+  std::list<Creature*>::iterator itCreature;
+  std::vector<Cell*>::iterator itCell;
+
+  // sunshine
+  CLOCKS.start(CLOCK_SUNSHINE);
+  int nbThreads = NB_THREADS;
+  thread** threads = new thread*[nbThreads];
+  for (int i=0; i<nbThreads; i++){
+    threads[i] = new thread(sunshine,(i*length)/nbThreads,((i+1)*length)/nbThreads - 1);
+  }
+  for (int i=0; i<nbThreads; i++){
+    threads[i]->join();
+    delete threads[i];
   }
   CLOCKS.pause(CLOCK_SUNSHINE);
 

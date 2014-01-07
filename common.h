@@ -7,6 +7,7 @@
 #define MAX_CELLS 30
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 400;
+const int NB_THREADS = 3; // Tweak this according to your hardware
 
 #include <iostream>
 #include <list>
