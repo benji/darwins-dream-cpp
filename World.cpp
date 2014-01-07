@@ -24,11 +24,11 @@ Species* World::createSpecies(Species* originalSpecies){
 Creature* World::reproduce(Species* s, Creature* parent){
   int pos[2];
   int* ptr;
-  if (true){//if (parent == NULL){
-    ptr = registry.reserveRandomAvailableGroundPos(pos);
-  }else{
+  if (LOCAL_REPRODUCTION && parent != NULL){
     Cell* root = parent->cells[0];
     ptr = registry.reserveRandomAvailableGroundPosAround(pos, root->x, root->y, 5);
+  }else{
+    ptr = registry.reserveRandomAvailableGroundPos(pos);
   }
   if (ptr != NULL){
     Creature* c = s->reproduce( pos[0], pos[1] );
@@ -214,7 +214,8 @@ void World::checkConsistency(){
         }
       }
     }
-  } 
+  }
+  cout<<"World is OK: no duplicate found."<<endl;
 }
 
 World::~World(){

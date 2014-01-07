@@ -29,10 +29,6 @@ bool CellsRegistry::existsXYZ(int x, int y, int z){
 
 void CellsRegistry::registerCell(Cell* c){
   registryXYZ[c->x][c->y][c->z] = c;
-  if (c->z == 0){
-    cerr << "Disallowed cell with Z=0" << endl;
-    throw 1;
-  }
 }
 
 int* CellsRegistry::reserveRandomAvailableGroundPos(int* pos){
@@ -42,11 +38,9 @@ int* CellsRegistry::reserveRandomAvailableGroundPos(int* pos){
   int idx = randInt(availableGroundTiles.size());
   indexToPos(pos, world.length, availableGroundTiles[idx]);
   availableGroundTiles.erase(availableGroundTiles.begin()+idx);
-//  registryXYZ[pos[0]][pos[1]][0] = 
+  // registryXYZ[pos[0]][pos[1]][0] = 
   return pos;
 }
-
-
 
 int* CellsRegistry::reserveRandomAvailableGroundPosAround(int* returnPos, int parentX, int parentY, int sqrLen){
   int xMin = max(0, parentX-sqrLen);
@@ -59,10 +53,8 @@ int* CellsRegistry::reserveRandomAvailableGroundPosAround(int* returnPos, int pa
 
   for (int i=xMin; i<=xMax; ++i){
     for (int j=yMin; j<=yMax; ++j){
-      int idx = posToIndex(world.length, i, j);
-      vector<int>::iterator it = find(availableGroundTiles.begin(), availableGroundTiles.end(), idx);
-      if (it != availableGroundTiles.end()){
-        availablePos.push_back(new int[2]{i,j});
+      if (registryXYZ[i][j][0] == NULL){
+        availablePos.push_back(new int[2]{i,j}); // TODO cleanup
       }
     }
   }
@@ -72,17 +64,12 @@ int* CellsRegistry::reserveRandomAvailableGroundPosAround(int* returnPos, int pa
   returnPos[0] = availablePos[i][0];
   returnPos[1] = availablePos[i][1];
 
-  int idx = posToIndex(world.length, returnPos[0], returnPos[1]);
-
-  vector<int>::iterator it = find(availableGroundTiles.begin(), availableGroundTiles.end(), idx);
-  availableGroundTiles.erase(it);
-  
   return returnPos;
 }
 
 void CellsRegistry::unregisterCell(Cell* c){
   registryXYZ[c->x][c->y][c->z] = NULL;
-  if (c->z == 0){
+  if (!LOCAL_REPRODUCTION && c->z == 0){
     availableGroundTiles.push_back(c->x + c->y * world.length);
   }
 }

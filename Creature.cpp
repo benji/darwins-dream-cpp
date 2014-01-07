@@ -4,12 +4,12 @@
 #include "Clocks.h"
 
 Creature::Creature(Species& species, int x, int y):species(species),x(x),y(y){
-  this->createCell(x,y,0,false);
+  this->createCell(x,y,0);
   creationCycle = world.cycle;
 }
 
-Cell* Creature::createCell(int x, int y, int z, bool registerCell){
-  Cell* c = new Cell(x,y,z,registerCell);
+Cell* Creature::createCell(int x, int y, int z){
+  Cell* c = new Cell(x,y,z);
   this->cells.push_back(c);
   return c;
 }
@@ -29,7 +29,7 @@ Cell* Creature::growNewCell(Cell* c, float* growthProbas, int growthDirection){
       //cout << "Second cell is blocked" << endl;
       return NULL;
     }
-    return createCell(x,y,z, true);
+    return createCell(x,y,z);
   }
 
   if (VARIABLE_GROWTH){
@@ -65,7 +65,7 @@ Cell* Creature::growNewCell(Cell* c, float* growthProbas, int growthDirection){
       //cout << "Cell has no room to grow" << endl;
       return NULL;
     }
-    return createCell(x,y,z, true);
+    return createCell(x,y,z);
 
   } else {
 
@@ -94,7 +94,7 @@ Cell* Creature::growNewCell(Cell* c, float* growthProbas, int growthDirection){
     }
 
     if (world.registry.registryXYZ[x][y][z] == NULL) {
-      return createCell(x,y,z, true);
+      return createCell(x,y,z);
     }
     return NULL;
   }

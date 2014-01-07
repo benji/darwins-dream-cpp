@@ -5,6 +5,10 @@
 #define VARIABLE_GROWTH false
 #define WORLD_LENGTH 200
 #define MAX_CELLS 30
+
+#define LOCAL_REPRODUCTION false
+// local is buggy, duplicates appear!
+
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 400;
 const int NB_THREADS = 3; // Tweak this according to your hardware
