@@ -74,7 +74,7 @@ int* CellsRegistry::reserveRandomAvailableGroundPosAround(int* returnPos, int pa
 
 void CellsRegistry::unregisterCell(Cell* c){
   registryXYZ[c->x][c->y][c->z] = NULL;
-  if (!LOCAL_REPRODUCTION && c->z == 0){
+  if (!LOCALITY_ENABLED && c->z == 0){
     availableGroundTiles.push_back(c->x + c->y * world.length);
   }
 }

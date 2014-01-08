@@ -21,7 +21,7 @@ class World {
     void checkConsistency();
     Species* createSpecies(Species* originalSpecies);
     Creature* reproduce(Species* s, Creature* parent);
-    Species* evolve(Species* s);
+    Species* evolve(Species* s, Creature* c);
     vector<Creature*> collectCreaturesCopy();
     vector<Species*> collectSpeciesCopy();
     void prepareSpeciesForDelete(Species* s);

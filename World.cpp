@@ -24,7 +24,7 @@ Species* World::createSpecies(Species* originalSpecies){
 Creature* World::reproduce(Species* s, Creature* parent){
   int pos[2];
   int* ptr;
-  if (LOCAL_REPRODUCTION){
+  if (LOCALITY_ENABLED){
     int x,y;
     if (parent == NULL){
       x = randInt(length);
@@ -34,7 +34,7 @@ Creature* World::reproduce(Species* s, Creature* parent){
       x = root->x;
       y = root->y;
     }
-    ptr = registry.reserveRandomAvailableGroundPosAround(pos, x, y, LOCAL_REPRODUCTION_RADIUS);
+    ptr = registry.reserveRandomAvailableGroundPosAround(pos, x, y, LOCALITY_RADIUS);
   }else{
     ptr = registry.reserveRandomAvailableGroundPos(pos);
   }
@@ -46,10 +46,10 @@ Creature* World::reproduce(Species* s, Creature* parent){
   }
 }
 
-Species* World::evolve(Species* s){
+Species* World::evolve(Species* s, Creature* c){
   //cout<<"NEW SPECIES!!!"<<endl;
   Species* newSpecies = createSpecies(s);
-  reproduce(newSpecies, NULL);
+  reproduce(newSpecies, c);
   return newSpecies;
 }
 
@@ -111,7 +111,7 @@ void World::lifecycle(){
     Species* s = &(c->species);
 
     if (randDouble() < mutationRate){
-      if (evolve(s) != NULL) {
+      if (evolve(s, c) != NULL) {
         ++newSpecies;
         ++birthCount;
       }
