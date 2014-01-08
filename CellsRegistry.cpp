@@ -45,13 +45,14 @@ int* CellsRegistry::reserveRandomAvailableGroundPos(int* pos){
   return pos;
 }
 
+const int tmpArrLen = LOCALITY_RADIUS*2 + 1;
+const int tmpArrSize = tmpArrLen*tmpArrLen;
+
+// Created once for all for each thread
+// thread_local support is too recent yet
+__thread int availablePosTmp[tmpArrSize][2];
 
 int* CellsRegistry::reserveRandomAvailableGroundPosAround(int* returnPos, int parentX, int parentY, int sqrLen){
-  // TODO: dont instanciate this array every time, it's costly, we should create it once only for each thread
-  // make sure it's thread safe.
-  int tmpArrLen = LOCALITY_RADIUS*2 + 1;
-  int availablePosTmp[tmpArrLen*tmpArrLen][2];
-
   int xMin = max(0, parentX-sqrLen);
   int xMax = min(world.length-1, parentX+sqrLen);
 

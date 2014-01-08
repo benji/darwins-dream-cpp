@@ -16,7 +16,6 @@ const int NB_THREADS = 2; // Tweak this according to your hardware
 #define LOCALITY_ENABLED true
 const int LOCALITY_RADIUS = 8;
 
-
 #include <iostream>
 #include <list>
 #include <string>

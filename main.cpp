@@ -13,6 +13,10 @@
 #include "utils.h"
 #include "common.h"
 
+long UPDATE_UI_EVERY_CYCLES = 15;
+bool DEBUG = false;
+bool OUT_SUMMARY = false;
+
 using namespace std;
 
 struct Cube {
@@ -27,16 +31,12 @@ bool running = false;
 thread* playLifeThread;
 bool fullscreen = false;
 
-long UPDATE_UI_EVERY_CYCLES = 100;
 long lastRenderingCycle = -1;
 
 vector<Cube*>* worldCubes = new vector<Cube*>();
 vector<Cube*>* nextWorldCubes = NULL;
 vector<Cube*>* dominantSpeciesCubes = new vector<Cube*>();
 vector<Cube*>* nextDominantSpeciesCubes = NULL;
-
-bool DEBUG = false;
-bool OUT_SUMMARY = false;
 
 Clocks CLOCKS;
 int CLOCK_LIFECYCLE = 10;
