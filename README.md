@@ -15,7 +15,7 @@ TODO:
 
 - If possible show its lineage, at least generation in summary.
 
-- Multi threading
+- Multi threading for Local reproduction, benchmark
 
 - a bit less linear? Maybe allow to grow from any existing cell, not only the head?
 
@@ -25,3 +25,4 @@ TODO:
 
 - Code cleanup:
   * make sure registryXYZ is correct even for Z=0
+

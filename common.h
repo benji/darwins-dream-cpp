@@ -8,6 +8,7 @@
 
 #define LOCAL_REPRODUCTION false
 // local is buggy, duplicates appear!
+// but potentially way faster
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 400;
