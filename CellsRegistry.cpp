@@ -42,7 +42,6 @@ int* CellsRegistry::reserveRandomAvailableGroundPos(int* pos){
   int idx = randInt(availableGroundTiles.size());
   indexToPos(pos, world.length, availableGroundTiles[idx]);
   availableGroundTiles.erase(availableGroundTiles.begin()+idx);
-  // registryXYZ[pos[0]][pos[1]][0] = 
   return pos;
 }
 

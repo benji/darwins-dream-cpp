@@ -23,6 +23,3 @@ TODO:
   * some kind of gravity to have creatures a bit more balanced
   * for fun we could try to kill creatures whose head touches another creature, and see what shapes derive from it?
 
-- Code cleanup:
-  * make sure registryXYZ is correct even for Z=0
-

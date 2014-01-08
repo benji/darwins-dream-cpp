@@ -5,7 +5,10 @@
 
 class CellsRegistry {
   public:
-    Cell****registryXYZ; // /!\ unused for Z=0
+    // updated only with register() and unregister()
+    Cell****registryXYZ;
+
+    // used only for non-local reproduction
     int nbAvailableGroundTiles;
     vector<int> availableGroundTiles;
 
