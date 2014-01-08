@@ -68,6 +68,69 @@ void sunshine(int minX, int maxX){ // [minX; maxX]
   }
 }
 
+void World::reproduction_mutation(int minX, int maxX){ // [minX; maxX]
+  vector<Creature*> creatures;
+  for (int i=minX; i<=maxX; ++i){
+    for (int j=0; j<world.length; ++j){
+      Cell* c = registry.registryXYZ[i][j][0];
+      if (c != NULL){
+        creatures.push_back(c->creature);
+      }
+    }
+  }
+  
+  random_shuffle(std::begin(creatures), std::end(creatures));
+
+  int birthCount = 0, newSpecies=0;
+  vector<Creature*>::iterator itCreature;
+  for (itCreature = creatures.begin(); itCreature != creatures.end(); ++itCreature) {
+    Creature* c = (*itCreature);
+    Species* s = &(c->species);
+
+    if (randDouble() < mutationRate){
+      if (evolve(s, c) != NULL) {
+        ++newSpecies;
+        ++birthCount;
+      }
+    }
+    if (randDouble() < reproductionRate){
+      if (reproduce(s, c) != NULL) ++birthCount;
+    }
+  }
+}
+
+void World::reproduction_mutation_algorithm(){
+  int nbThreads = 1;//NB_THREADS;
+  thread** threads = new thread*[nbThreads];
+  for (int i=0; i<nbThreads; i++){
+    cout<<((i*length)      /(nbThreads))<<" to "<<(((2*i+1)*length)/(2*nbThreads) - 1)<<endl;
+    threads[i] = new thread(
+      &World::reproduction_mutation, 
+      this, 
+      (i*length)      /(nbThreads),
+      ((2*i+1)*length)/(2*nbThreads) - 1
+    );
+  }
+  for (int i=0; i<nbThreads; i++){
+    threads[i]->join();
+    delete threads[i];
+  }
+  for (int i=0; i<nbThreads; i++){
+    cout<<(((2*i+1)*length)/(2*nbThreads))<<" to "<<(((2*(i+1))*length)/(2*nbThreads) - 1)<<endl;
+    threads[i] = new thread(
+      &World::reproduction_mutation, 
+      this,
+      ((2*i+1)*length)/(2*nbThreads),
+      ((2*(i+1))*length)/(2*nbThreads) - 1
+    );
+  }
+  for (int i=0; i<nbThreads; i++){
+    threads[i]->join();
+    delete threads[i];
+  }
+  delete [] threads;
+}
+
 void World::lifecycle(){
   CLOCKS.start(CLOCK_LIFECYCLE);
   if (DEBUG || OUT_SUMMARY) cout << "===== Cycle "<<world.cycle<<" ====="<<endl;
@@ -100,28 +163,36 @@ void World::lifecycle(){
 
   // reproduction & mutation
   CLOCKS.start(CLOCK_REPRODUCTION);
-  vector<Creature*> creaturesCopy = collectCreaturesCopy();
-  random_shuffle(std::begin(creaturesCopy), std::end(creaturesCopy));
-
-
-  int birthCount = 0, newSpecies=0;
   vector<Creature*>::iterator itCreatureV;
-  for (itCreatureV = creaturesCopy.begin(); itCreatureV != creaturesCopy.end(); ++itCreatureV) {
-    Creature* c = (*itCreatureV);
-    Species* s = &(c->species);
+  vector<Creature*> creaturesCopy = collectCreaturesCopy();
 
-    if (randDouble() < mutationRate){
-      if (evolve(s, c) != NULL) {
-        ++newSpecies;
-        ++birthCount;
+  if (LOCALITY_ENABLED){
+    //reproduction_mutation_algorithm();
+    
+    reproduction_mutation(0,world.length-1);
+  } else {
+    //vector<Creature*> creaturesCopy = collectCreaturesCopy();
+    random_shuffle(std::begin(creaturesCopy), std::end(creaturesCopy));
+
+
+    int birthCount = 0, newSpecies=0;
+    for (itCreatureV = creaturesCopy.begin(); itCreatureV != creaturesCopy.end(); ++itCreatureV) {
+      Creature* c = (*itCreatureV);
+      Species* s = &(c->species);
+
+      if (randDouble() < mutationRate){
+        if (evolve(s, c) != NULL) {
+          ++newSpecies;
+          ++birthCount;
+        }
       }
-    }
-    if (randDouble() < reproductionRate){
-      if (reproduce(s, c) != NULL) ++birthCount;
+      if (randDouble() < reproductionRate){
+        if (reproduce(s, c) != NULL) ++birthCount;
+      }
     }
   }
   CLOCKS.pause(CLOCK_REPRODUCTION);
-  if (DEBUG || OUT_SUMMARY) cout << birthCount << " new creatures." << endl;
+  //if (DEBUG || OUT_SUMMARY) cout << birthCount << " new creatures." << endl;
 
   // growth
   CLOCKS.start(CLOCK_GROWTH);
@@ -129,12 +200,12 @@ void World::lifecycle(){
     Creature* c = (*itCreatureV);
     if (c->grow() == NULL && GROW_OR_DIE) {
       c->species.kill(c);
-      ++deathCount;
+      //++deathCount;
     }
   }
   CLOCKS.pause(CLOCK_GROWTH);
 
-  if (DEBUG || OUT_SUMMARY) cout << deathCount << " creatures died." << endl;
+  //if (DEBUG || OUT_SUMMARY) cout << deathCount << " creatures died." << endl;
 
   // cleanup species with no creatures
   int nbExtinctSpecies = 0;

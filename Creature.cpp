@@ -9,7 +9,7 @@ Creature::Creature(Species& species, int x, int y):species(species),x(x),y(y){
 }
 
 Cell* Creature::createCell(int x, int y, int z){
-  Cell* c = new Cell(x,y,z);
+  Cell* c = new Cell(this, x, y, z);
   this->cells.push_back(c);
   return c;
 }

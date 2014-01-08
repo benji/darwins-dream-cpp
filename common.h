@@ -3,7 +3,7 @@
 
 #define GROW_OR_DIE true
 #define VARIABLE_GROWTH false
-#define WORLD_LENGTH 200
+#define WORLD_LENGTH 400
 #define MAX_CELLS 30
 
 // For reproduction and mutation

@@ -5,9 +5,10 @@
 
 class Cell {
   public:
+    Creature* creature;
     int x,y,z;
     float energy;
-    Cell(int x, int y, int z);
+    Cell(Creature* creature, int x, int y, int z);
     ~Cell();
 };
 
