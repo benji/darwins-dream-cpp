@@ -28,6 +28,10 @@ bool CellsRegistry::existsXYZ(int x, int y, int z){
 }
 
 void CellsRegistry::registerCell(Cell* c){
+  if (registryXYZ[c->x][c->y][c->z] != NULL) {
+    cout<<"ERROR: Position "<<c->x<<","<<c->y<<","<<c->z<<" has already been taken!";
+    exit(8);
+  }
   registryXYZ[c->x][c->y][c->z] = c;
 }
 
@@ -58,6 +62,8 @@ int* CellsRegistry::reserveRandomAvailableGroundPosAround(int* returnPos, int pa
       }
     }
   }
+
+  if (availablePos.size() == 0) return NULL;
 
   int i = randInt(availablePos.size());
   

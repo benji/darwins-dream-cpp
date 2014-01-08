@@ -24,9 +24,17 @@ Species* World::createSpecies(Species* originalSpecies){
 Creature* World::reproduce(Species* s, Creature* parent){
   int pos[2];
   int* ptr;
-  if (LOCAL_REPRODUCTION && parent != NULL){
-    Cell* root = parent->cells[0];
-    ptr = registry.reserveRandomAvailableGroundPosAround(pos, root->x, root->y, 5);
+  if (LOCAL_REPRODUCTION){
+    int x,y;
+    if (parent == NULL){
+      x = randInt(length);
+      y = randInt(length);
+    }else{
+      Cell* root = parent->cells[0];
+      x = root->x;
+      y = root->y;
+    }
+    ptr = registry.reserveRandomAvailableGroundPosAround(pos, x, y, LOCAL_REPRODUCTION_RADIUS);
   }else{
     ptr = registry.reserveRandomAvailableGroundPos(pos);
   }

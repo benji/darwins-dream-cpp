@@ -6,9 +6,10 @@
 #define WORLD_LENGTH 200
 #define MAX_CELLS 30
 
-#define LOCAL_REPRODUCTION false
+#define LOCAL_REPRODUCTION true
 // local is buggy, duplicates appear!
 // but potentially way faster
+const int LOCAL_REPRODUCTION_RADIUS = 8;
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 400;
