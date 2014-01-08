@@ -45,6 +45,8 @@ int* CellsRegistry::reserveRandomAvailableGroundPos(int* pos){
   return pos;
 }
 
+int availablePosTmp[WORLD_LENGTH][2];
+
 int* CellsRegistry::reserveRandomAvailableGroundPosAround(int* returnPos, int parentX, int parentY, int sqrLen){
   int xMin = max(0, parentX-sqrLen);
   int xMax = min(world.length-1, parentX+sqrLen);
@@ -52,22 +54,23 @@ int* CellsRegistry::reserveRandomAvailableGroundPosAround(int* returnPos, int pa
   int yMin = max(0, parentY-sqrLen);
   int yMax = min(world.length-1, parentY+sqrLen);
 
-  vector<int*> availablePos;
-
+  int nbAvailablePos = 0;
   for (int i=xMin; i<=xMax; ++i){
     for (int j=yMin; j<=yMax; ++j){
       if (registryXYZ[i][j][0] == NULL){
-        availablePos.push_back(new int[2]{i,j}); // TODO cleanup
+        availablePosTmp[nbAvailablePos][0] = i;
+        availablePosTmp[nbAvailablePos][1] = j;
+        ++nbAvailablePos;
       }
     }
   }
 
-  if (availablePos.size() == 0) return NULL;
+  if (nbAvailablePos == 0) return NULL;
 
-  int i = randInt(availablePos.size());
+  int i = randInt(nbAvailablePos);
   
-  returnPos[0] = availablePos[i][0];
-  returnPos[1] = availablePos[i][1];
+  returnPos[0] = availablePosTmp[i][0];
+  returnPos[1] = availablePosTmp[i][1];
 
   return returnPos;
 }

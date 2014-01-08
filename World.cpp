@@ -103,7 +103,7 @@ void World::reproduction_mutation_algorithm(){
   int nbThreads = 1;//NB_THREADS;
   thread** threads = new thread*[nbThreads];
   for (int i=0; i<nbThreads; i++){
-    cout<<((i*length)      /(nbThreads))<<" to "<<(((2*i+1)*length)/(2*nbThreads) - 1)<<endl;
+    //cout<<((i*length)      /(nbThreads))<<" to "<<(((2*i+1)*length)/(2*nbThreads) - 1)<<endl;
     threads[i] = new thread(
       &World::reproduction_mutation, 
       this, 
@@ -116,7 +116,7 @@ void World::reproduction_mutation_algorithm(){
     delete threads[i];
   }
   for (int i=0; i<nbThreads; i++){
-    cout<<(((2*i+1)*length)/(2*nbThreads))<<" to "<<(((2*(i+1))*length)/(2*nbThreads) - 1)<<endl;
+    //cout<<(((2*i+1)*length)/(2*nbThreads))<<" to "<<(((2*(i+1))*length)/(2*nbThreads) - 1)<<endl;
     threads[i] = new thread(
       &World::reproduction_mutation, 
       this,
@@ -167,9 +167,9 @@ void World::lifecycle(){
   vector<Creature*> creaturesCopy = collectCreaturesCopy();
 
   if (LOCALITY_ENABLED){
-    //reproduction_mutation_algorithm();
+    reproduction_mutation_algorithm();
     
-    reproduction_mutation(0,world.length-1);
+    //reproduction_mutation(0,world.length-1);
   } else {
     //vector<Creature*> creaturesCopy = collectCreaturesCopy();
     random_shuffle(std::begin(creaturesCopy), std::end(creaturesCopy));
