@@ -357,6 +357,15 @@ void specialKeyboard(int key, int mouseX, int mouseY) {
 }
 
 int main(int argc, char **argv) {
+  if (LOCALITY_ENABLED){
+    if (WORLD_LENGTH/(2*NB_THREADS) < (MAX_CELLS-1)*2){
+      cout<<"ERROR: Incompatible number of threads of the world size/max cells combination:"<<endl;
+      cout<<"World length="<<WORLD_LENGTH<<", Nb Threads="<<NB_THREADS<<", maxCells="<<MAX_CELLS<<endl;
+      cout<<"Thread slices length="<<(WORLD_LENGTH/(2*NB_THREADS))<<", Creature overreach="<<((MAX_CELLS-1)*2)<<endl;
+      exit(9);
+    }
+  }
+
   glutInit(&argc, argv);
   Rendering::initialize(drawWorld, drawDominantSpecies);
   glutKeyboardFunc(keyboard);
