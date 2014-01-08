@@ -21,6 +21,7 @@ const int LOCALITY_RADIUS = 8;
 #include <list>
 #include <string>
 #include <vector>
+#include <mutex>
 
 #include "utils.h"
 

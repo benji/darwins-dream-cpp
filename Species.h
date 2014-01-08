@@ -23,6 +23,7 @@ class Species {
     long id;
     Species* ancestor;
     int distanceToAncestor;
+    mutex creaturesCollectionMutex;
 
     Species(Species* originalSpecies);
     void setColor(float r, float g, float b);

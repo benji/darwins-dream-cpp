@@ -14,6 +14,7 @@ class World {
     int length, maxCells;
     float reproductionRate, mutationRate, minimumEnergyPerCell;
     CellsRegistry registry;
+    mutex speciesCollectionMutex;
 
     World(int length, int maxCells, float reproductionRate, float mutationRate);
     void infest(int nbSpecies, int nbCreaturesPerSpecies);

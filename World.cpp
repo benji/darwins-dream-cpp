@@ -17,7 +17,9 @@ void World::infest(int nbSpecies, int nbCreaturesPerSpecies){
 
 Species* World::createSpecies(Species* originalSpecies){
   Species* s = new Species(originalSpecies);
+  speciesCollectionMutex.lock();
   species.push_back(s);
+  speciesCollectionMutex.unlock();
   return s;
 }
 
@@ -185,9 +187,9 @@ void World::lifecycle(){
         if (reproduce(s, c) != NULL) ++birthCount;
       }
     }
+    if (DEBUG || OUT_SUMMARY) cout << birthCount << " new creatures." << endl;
   }
   CLOCKS.pause(CLOCK_REPRODUCTION);
-  //if (DEBUG || OUT_SUMMARY) cout << birthCount << " new creatures." << endl;
 
   // growth
   CLOCKS.start(CLOCK_GROWTH);

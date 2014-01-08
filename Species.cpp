@@ -143,7 +143,9 @@ int Species::killOldAndWeakCreatures(){
 
 Creature* Species::reproduce(int x, int y){
   Creature* c = new Creature( (*this), x, y );
+  creaturesCollectionMutex.lock();
   creatures.push_back(c);
+  creaturesCollectionMutex.unlock();
   return c;
 }
 
