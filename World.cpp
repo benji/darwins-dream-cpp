@@ -47,9 +47,9 @@ Creature* World::reproduce(Species* s, Creature* parent){
 }
 
 Species* World::evolve(Species* s, Creature* c){
-  //cout<<"NEW SPECIES!!!"<<endl;
   Species* newSpecies = createSpecies(s);
   reproduce(newSpecies, c);
+  //cout<<"Reproduced evolved species from "<<c->x<<","<<c->y<<" to "<<(*(newSpecies->creatures.begin()))->x<<","<<(*(newSpecies->creatures.begin()))->y<<endl;
   return newSpecies;
 }
 
@@ -99,29 +99,22 @@ void World::reproduction_mutation(int minX, int maxX){ // [minX; maxX]
   }
 }
 
-void World::reproduction_mutation_algorithm(){
-  int nbThreads = 1;//NB_THREADS;
+// Threads need to treat distant areas on the map to avoid thread concurrency problems (registry)
+// Slices are subdivisions of the X axis into NB_THREADS*2 parts:
+// 1 | 2 | 3 | ... | n
+// odd:  1 3 ... n-1
+// even: 2 4 ... n
+void World::applyLocalReproductionMutationOnSlices(int odd){
+  int offset = odd?1:0;
+  int nbThreads = NB_THREADS;
   thread** threads = new thread*[nbThreads];
   for (int i=0; i<nbThreads; i++){
-    //cout<<((i*length)      /(nbThreads))<<" to "<<(((2*i+1)*length)/(2*nbThreads) - 1)<<endl;
+    //cout<<(((2*i+offset  )*length)  /(2*nbThreads))<<" to "<<(((2*i+offset+1)*length)  /(2*nbThreads) - 1)<<endl;
     threads[i] = new thread(
       &World::reproduction_mutation, 
       this, 
-      (i*length)      /(nbThreads),
-      ((2*i+1)*length)/(2*nbThreads) - 1
-    );
-  }
-  for (int i=0; i<nbThreads; i++){
-    threads[i]->join();
-    delete threads[i];
-  }
-  for (int i=0; i<nbThreads; i++){
-    //cout<<(((2*i+1)*length)/(2*nbThreads))<<" to "<<(((2*(i+1))*length)/(2*nbThreads) - 1)<<endl;
-    threads[i] = new thread(
-      &World::reproduction_mutation, 
-      this,
-      ((2*i+1)*length)/(2*nbThreads),
-      ((2*(i+1))*length)/(2*nbThreads) - 1
+      ((2*i+offset  )*length)  /(2*nbThreads),
+      ((2*i+offset+1)*length)  /(2*nbThreads) - 1
     );
   }
   for (int i=0; i<nbThreads; i++){
@@ -167,8 +160,10 @@ void World::lifecycle(){
   vector<Creature*> creaturesCopy = collectCreaturesCopy();
 
   if (LOCALITY_ENABLED){
-    reproduction_mutation_algorithm();
-    
+    bool b = cycle % 2 == 0;
+    applyLocalReproductionMutationOnSlices(b);
+    applyLocalReproductionMutationOnSlices(!b);
+
     //reproduction_mutation(0,world.length-1);
   } else {
     //vector<Creature*> creaturesCopy = collectCreaturesCopy();

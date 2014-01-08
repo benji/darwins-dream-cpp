@@ -1,9 +1,14 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+const int WINDOW_WIDTH = 800;
+const int WINDOW_HEIGHT = 400;
+
+const int NB_THREADS = 2; // Tweak this according to your hardware
+
 #define GROW_OR_DIE true
 #define VARIABLE_GROWTH false
-#define WORLD_LENGTH 400
+#define WORLD_LENGTH 300
 #define MAX_CELLS 30
 
 // For reproduction and mutation
@@ -11,9 +16,6 @@
 #define LOCALITY_ENABLED true
 const int LOCALITY_RADIUS = 8;
 
-const int WINDOW_WIDTH = 800;
-const int WINDOW_HEIGHT = 400;
-const int NB_THREADS = 3; // Tweak this according to your hardware
 
 #include <iostream>
 #include <list>

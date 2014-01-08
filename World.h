@@ -25,8 +25,8 @@ class World {
     vector<Creature*> collectCreaturesCopy();
     vector<Species*> collectSpeciesCopy();
     void prepareSpeciesForDelete(Species* s);
+    void applyLocalReproductionMutationOnSlices(int odd);
     void reproduction_mutation(int minX, int maxX);
-    void reproduction_mutation_algorithm();
     ~World();
 };
 
