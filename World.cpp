@@ -1,8 +1,6 @@
 #include "common.h"
 #include "World.h"
 #include "Clocks.h"
-#include <algorithm>
-#include <thread>
 
 World::World(int length, int maxCells, float reproductionRate, float mutationRate):cycle(0),length(length),maxCells(maxCells){}
 

@@ -3,7 +3,6 @@
 #include "Cell.h"
 #include "World.h"
 #include "Clocks.h"
-#include <algorithm>
 
 CellsRegistry::CellsRegistry(){
   registryXYZ = new Cell***[world.length];

@@ -1,7 +1,6 @@
 #include "common.h"
 #include "World.h"
 #include "Species.h"
-#include <algorithm>
 
 static long idGen = 0;
 
