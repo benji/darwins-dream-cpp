@@ -126,8 +126,8 @@ int Species::killOldAndWeakCreatures(){
   while (itCreature != creatures.end()){
     Creature* c = (*itCreature);
     if (c->cells.size() >= (unsigned int)world.maxCells 
-        || world.cycle - c->creationCycle >= world.maxCells 
-        || !c->hasEnoughEnergy()
+        || world.cycle - c->creationCycle >= MAX_CREATURE_AGE
+        || (CONTRAINT_NEED_SUN && !c->hasEnoughEnergy())
         || (CONSTRAINT_BALANCING && !c->isBalanced())){
       if (DEBUG) cout << "Creature dies." <<endl;
       delete c;
