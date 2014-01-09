@@ -4,6 +4,13 @@ darwins-dream-cpp
 An attempt to create digital species derived from simple natural selection rules.
 
 
+The program generates some initial species with random DNA, and creates a few creatures.
+Each creature is composed of several Cells.
+The DNA dictates the growth direction for each Cell.
+The program will launch a window that will display a 3D view of the World on the left, and the shape of the dominant species on the right, rotating.
+
+Please see common.h for settings/customizations/performance.
+
 
 RULE_SEEDS_Z0 :
 The Z=0 plan is underground and reserved for new seeds (first cell of new creatures).

@@ -7,14 +7,14 @@ const int WINDOW_HEIGHT = 400;
 const bool GROW_OR_DIE = true;
 const bool VARIABLE_GROWTH = false;
 const bool CONTRAINT_NEED_SUN = true;
-const bool CONSTRAINT_BALANCING = true;
+const bool CONSTRAINT_BALANCING = false;
 const bool LOCALITY_ENABLED = true;
 
 const int WORLD_LENGTH = 200;
 const int MAX_CELLS = 30;
 const float REPRODUCTION_RATE = 0.1;
 const float MUTATION_RATE = 0.01;
-const float MIN_ENERGY_PER_CELL = .7;
+const float MIN_ENERGY_PER_CELL = .5;
 const int NB_THREADS = 3;
 const int BALANCING_THRESHOLD = 30;
 const int MAX_CREATURE_AGE = 30;

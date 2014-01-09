@@ -2,7 +2,8 @@
 #include "World.h"
 #include "Clocks.h"
 
-World::World(int length, int maxCells, float reproductionRate, float mutationRate):cycle(0),length(length),maxCells(maxCells){}
+World::World(int length, int maxCells, float reproductionRate, float mutationRate):
+  cycle(0),length(length),maxCells(maxCells){}
 
 void World::infest(int nbSpecies, int nbCreaturesPerSpecies){
   for (int i=0; i<nbSpecies; i++){
@@ -53,7 +54,7 @@ Species* World::evolve(Species* s, Creature* c){
   return newSpecies;
 }
 
-void sunshine(int minX, int maxX){ // [minX; maxX]
+void World::sunshineOnSlice(int minX, int maxX){ // [minX; maxX]
   for (int i=minX; i<=maxX; ++i){
     for (int j=0; j<world.length; ++j){
       float energyFromSun = 1;
@@ -68,7 +69,21 @@ void sunshine(int minX, int maxX){ // [minX; maxX]
   }
 }
 
-void World::reproduction_mutation(int minX, int maxX){ // [minX; maxX]
+void World::reproductionMutationOnCreature(Creature* c){
+  Species* s = &(c->species);
+
+  if (randDouble() < MUTATION_RATE){
+    if (evolve(s, c) != NULL) {
+      ++cycleNewSpeciesCount;
+      ++cycleBirthCount;
+    }
+  }
+  if (randDouble() < REPRODUCTION_RATE){
+    if (reproduce(s, c) != NULL) ++cycleBirthCount;
+  }
+}
+
+void World::reproductionMutationOnSlice(int minX, int maxX){ // [minX; maxX]
   vector<Creature*> creatures;
   for (int i=minX; i<=maxX; ++i){
     for (int j=0; j<world.length; ++j){
@@ -81,21 +96,10 @@ void World::reproduction_mutation(int minX, int maxX){ // [minX; maxX]
   
   random_shuffle(std::begin(creatures), std::end(creatures));
 
-  int birthCount = 0, newSpecies=0;
   vector<Creature*>::iterator itCreature;
   for (itCreature = creatures.begin(); itCreature != creatures.end(); ++itCreature) {
     Creature* c = (*itCreature);
-    Species* s = &(c->species);
-
-    if (randDouble() < MUTATION_RATE){
-      if (evolve(s, c) != NULL) {
-        ++newSpecies;
-        ++birthCount;
-      }
-    }
-    if (randDouble() < REPRODUCTION_RATE){
-      if (reproduce(s, c) != NULL) ++birthCount;
-    }
+    reproductionMutationOnCreature(c);
   }
 }
 
@@ -111,7 +115,7 @@ void World::applyLocalReproductionMutationOnSlices(int odd){
   for (int i=0; i<nbThreads; i++){
     //cout<<(((2*i+offset  )*length)  /(2*nbThreads))<<" to "<<(((2*i+offset+1)*length)  /(2*nbThreads) - 1)<<endl;
     threads[i] = new thread(
-      &World::reproduction_mutation, 
+      &World::reproductionMutationOnSlice, 
       this, 
       ((2*i+offset  )*length)  /(2*nbThreads),
       ((2*i+offset+1)*length)  /(2*nbThreads) - 1
@@ -126,31 +130,37 @@ void World::applyLocalReproductionMutationOnSlices(int odd){
 
 void World::lifecycle(){
   CLOCKS.start(CLOCK_LIFECYCLE);
-  if (DEBUG || OUT_SUMMARY) cout << "===== Cycle "<<world.cycle<<" ====="<<endl;
+  if (DEBUG || OUT_SUMMARY) cout << "===== Cycle " << cycle << " =====" << endl;
 
-  std::list<Species*>::iterator itSpecies = species.begin();
+  std::list<Species*>::iterator itSpecies;
   std::list<Creature*>::iterator itCreature;
   std::vector<Cell*>::iterator itCell;
+  cycleBirthCount = 0;
+  cycleDeathCount = 0;
+  cycleNewSpeciesCount = 0;
 
   // sunshine
   CLOCKS.start(CLOCK_SUNSHINE);
   int nbThreads = NB_THREADS;
   thread** threads = new thread*[nbThreads];
   for (int i=0; i<nbThreads; i++){
-    threads[i] = new thread(sunshine,(i*length)/nbThreads,((i+1)*length)/nbThreads - 1);
+    threads[i] = new thread(
+      &World::sunshineOnSlice, this,
+      (i*length)/nbThreads, ((i+1)*length)/nbThreads - 1
+    );
   }
   for (int i=0; i<nbThreads; i++){
     threads[i]->join();
     delete threads[i];
   }
+  delete [] threads;
   CLOCKS.pause(CLOCK_SUNSHINE);
 
   // death
   CLOCKS.start(CLOCK_DEATH);
-  int deathCount = 0;
   for (itSpecies = species.begin(); itSpecies != species.end(); ++itSpecies) {
     Species* s = (*itSpecies);
-    deathCount += s->killOldAndWeakCreatures();
+    cycleDeathCount += s->killOldAndWeakCreatures();
   }
   CLOCKS.pause(CLOCK_DEATH);
 
@@ -158,31 +168,22 @@ void World::lifecycle(){
   CLOCKS.start(CLOCK_REPRODUCTION);
   vector<Creature*>::iterator itCreatureV;
   vector<Creature*> creaturesCopy = collectCreaturesCopy();
+  random_shuffle(std::begin(creaturesCopy), std::end(creaturesCopy));
 
   if (LOCALITY_ENABLED){
     bool b = cycle % 2 == 0;
     applyLocalReproductionMutationOnSlices(b);
     applyLocalReproductionMutationOnSlices(!b);
   } else {
-    random_shuffle(std::begin(creaturesCopy), std::end(creaturesCopy));
 
-
-    int birthCount = 0, newSpecies=0;
     for (itCreatureV = creaturesCopy.begin(); itCreatureV != creaturesCopy.end(); ++itCreatureV) {
       Creature* c = (*itCreatureV);
-      Species* s = &(c->species);
-
-      if (randDouble() < MUTATION_RATE){
-        if (evolve(s, c) != NULL) {
-          ++newSpecies;
-          ++birthCount;
-        }
-      }
-      if (randDouble() < REPRODUCTION_RATE){
-        if (reproduce(s, c) != NULL) ++birthCount;
-      }
+      reproductionMutationOnCreature(c);
     }
-    if (DEBUG || OUT_SUMMARY) cout << birthCount << " new creatures." << endl;
+  }
+  if (DEBUG || OUT_SUMMARY) {
+    cout << cycleBirthCount << " new creatures." << endl;
+    cout << cycleNewSpeciesCount << " new species." << endl;
   }
   CLOCKS.pause(CLOCK_REPRODUCTION);
 
@@ -192,12 +193,12 @@ void World::lifecycle(){
     Creature* c = (*itCreatureV);
     if (c->grow() == NULL && GROW_OR_DIE) {
       c->species.kill(c);
-      //++deathCount;
+      ++cycleDeathCount;
     }
   }
   CLOCKS.pause(CLOCK_GROWTH);
 
-  //if (DEBUG || OUT_SUMMARY) cout << deathCount << " creatures died." << endl;
+  if (DEBUG || OUT_SUMMARY) cout << cycleDeathCount << " creatures died." << endl;
 
   // cleanup species with no creatures
   int nbExtinctSpecies = 0;
@@ -238,18 +239,6 @@ vector<Creature*> World::collectCreaturesCopy(){
   return collected;
 }
 
-vector<Species*> World::collectSpeciesCopy(){
-  vector<Species*> collected;
-  list<Species*>::iterator itSpecies;
-
-  for (itSpecies = species.begin(); itSpecies != species.end(); ++itSpecies) {
-    Species* s = (*itSpecies);
-    collected.push_back(s);
-  }
-
-  return collected;
-}
-
 void World::prepareSpeciesForDelete(Species* s){
   // rewiring species ancestors
   std::list<Species*>::iterator iter;
@@ -262,6 +251,8 @@ void World::prepareSpeciesForDelete(Species* s){
   }
 }
 
+// Makes sure that 2 cells have not been assigned the same position (x, y, z)
+// For debug purposes only as it should never happen.
 void World::checkConsistency(){
   vector<int> takenIndexes;
   list<Species*>::iterator itSpecies;
