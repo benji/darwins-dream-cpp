@@ -26,6 +26,8 @@ TODO:
 
 - Think about the benefits of using a more subtle way than to kill the creature when it doesn't fit the constraint.
   Maybe it can just be a slower growth or a limited growth.
+  For example it's a problem with the gravity constraint because none of the species randomly generated will respect that so all the species will die right away.
+  There should be allowed to grow at least up to the point where they would fall and just stay like that until a mutation makes their DNA better fit for the contraint.
 
 REFERENCES:
 
