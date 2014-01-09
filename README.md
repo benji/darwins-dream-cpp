@@ -29,6 +29,27 @@ TODO:
   For example it's a problem with the gravity constraint because none of the species randomly generated will respect that so all the species will die right away.
   There should be allowed to grow at least up to the point where they would fall and just stay like that until a mutation makes their DNA better fit for the contraint.
 
+Idea:
+we start with 1 Species with 1 DNA (cell go up).
+A mutation will either change an existing DNA strand (but never the first) OR add a new DNA strand to the species.
+After every mutation, a check should be performed to verify the constraint of BALANCING and to check that the structure doesn't conflict with itself.
+-> faster because the gravity constraint will onl be checked on the creation of a new species, instead of at every growth.
+
+
 REFERENCES:
 
 - mutex: http://www.cplusplus.com/reference/mutex/mutex/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
