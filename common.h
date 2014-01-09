@@ -7,8 +7,6 @@ const int WINDOW_HEIGHT = 400;
 const bool GROW_OR_DIE = true;
 const bool VARIABLE_GROWTH = false;
 const bool CONSTRAINT_BALANCING = true;
-// For reproduction and mutation
-// potentially way faster
 const bool LOCALITY_ENABLED = true;
 
 const int WORLD_LENGTH = 200;
@@ -16,17 +14,23 @@ const int MAX_CELLS = 30;
 const float REPRODUCTION_RATE = 0.1;
 const float MUTATION_RATE = 0.01;
 const float MIN_ENERGY_PER_CELL = .7;
-
-// Tweak this according to your hardware
 const int NB_THREADS = 3;
 const int BALANCING_THRESHOLD = 30;
 const int LOCALITY_RADIUS = 8;
 
+const bool DEBUG = false;
+const bool OUT_SUMMARY = false;
+
+const long UPDATE_UI_EVERY_CYCLES = 100;
+
 #include <iostream>
-#include <list>
+#include <stdio.h>
 #include <string>
 #include <vector>
+#include <list>
+#include <thread>
 #include <mutex>
+#include <algorithm>
 
 #include "utils.h"
 
@@ -41,14 +45,12 @@ class Timer;
 class Clocks;
 
 extern World world;
-extern bool DEBUG;
-extern bool OUT_SUMMARY;
-
 extern Clocks CLOCKS;
-extern int CLOCK_LIFECYCLE;
-extern int CLOCK_DEATH;
-extern int CLOCK_REPRODUCTION;
-extern int CLOCK_GROWTH;
-extern int CLOCK_SUNSHINE;
+
+const int CLOCK_LIFECYCLE = 10;
+const int CLOCK_DEATH = 0;
+const int CLOCK_REPRODUCTION = 1;
+const int CLOCK_GROWTH = 2;
+const int CLOCK_SUNSHINE = 4;
 
 #endif

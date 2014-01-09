@@ -8,6 +8,7 @@ class Cell {
     Creature* creature;
     int x,y,z;
     float energy;
+
     Cell(Creature* creature, int x, int y, int z);
     ~Cell();
 };

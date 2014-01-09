@@ -20,8 +20,7 @@ double randDouble(){
   return 1.*(rand() % 100000) / 100000.;
 }
 
-// [0;max[
-int randInt(int max){
+int randInt(int max){ // [0;max[
   if (max <= 0){
     cerr << "randInt: Invalid max: "<<max << endl;
     exit(-1);

@@ -165,10 +165,7 @@ void World::lifecycle(){
     bool b = cycle % 2 == 0;
     applyLocalReproductionMutationOnSlices(b);
     applyLocalReproductionMutationOnSlices(!b);
-
-    //reproduction_mutation(0,world.length-1);
   } else {
-    //vector<Creature*> creaturesCopy = collectCreaturesCopy();
     random_shuffle(std::begin(creaturesCopy), std::end(creaturesCopy));
 
 

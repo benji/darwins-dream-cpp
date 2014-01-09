@@ -1,8 +1,4 @@
-#include <iostream>
-#include <stdio.h>
-#include <thread>
 #include <GL/glut.h>
-#include <algorithm>
 
 #include "rendering.h"
 #include "World.h"
@@ -12,12 +8,6 @@
 #include "Clocks.h"
 #include "utils.h"
 #include "common.h"
-
-long UPDATE_UI_EVERY_CYCLES = 100;
-bool DEBUG = false;
-bool OUT_SUMMARY = false;
-
-using namespace std;
 
 struct Cube {
   public:
@@ -39,11 +29,6 @@ vector<Cube*>* dominantSpeciesCubes = new vector<Cube*>();
 vector<Cube*>* nextDominantSpeciesCubes = NULL;
 
 Clocks CLOCKS;
-int CLOCK_LIFECYCLE = 10;
-int CLOCK_DEATH = 0;
-int CLOCK_REPRODUCTION = 1;
-int CLOCK_GROWTH = 2;
-int CLOCK_SUNSHINE = 4;
 
 void cleanupCubes(vector<Cube*>* cubes){
   vector<Cube*>::iterator itCube;
@@ -153,7 +138,6 @@ void updateDominantSpeciesCubes(){
           }
         }
         directionIdx = maxIdx;
-
       } else {
         directionIdx = dna->growthDirection;
       }

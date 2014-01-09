@@ -5,8 +5,8 @@
 
 class CellsRegistry {
   public:
-    // updated only with register() and unregister()
-    Cell****registryXYZ;
+    // updated only by register() and unregister()
+    Cell**** registryXYZ;
 
     // used only for non-local reproduction
     int nbAvailableGroundTiles;
@@ -16,9 +16,9 @@ class CellsRegistry {
     void registerCell(Cell* c);
     void unregisterCell(Cell* c);
     bool existsXYZ(int x, int y, int z);
-    ~CellsRegistry();
     int* reserveRandomAvailableGroundPos(int* pos);
     int* reserveRandomAvailableGroundPosAround(int* returnPos, int parentX, int parentY, int sqrLen);
+    ~CellsRegistry();
 };
 
 #endif

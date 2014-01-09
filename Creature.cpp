@@ -26,7 +26,6 @@ Cell* Creature::growNewCell(Cell* c, float* growthProbas, int growthDirection){
   if (z==0){
     z=1; // RULE_SEEDS_Z0
     if (world.registry.registryXYZ[x][y][z] != NULL){
-      //cout << "Second cell is blocked" << endl;
       return NULL;
     }
     return createCell(x,y,z);
@@ -115,12 +114,9 @@ bool Creature::isBalanced(){
   vector<Cell*>::iterator itCell;
   for (itCell = cells.begin(); itCell != cells.end(); ++itCell) {
     Cell* cell = (*itCell);
-    //cout<<"adding: "<< (cell->x - x)<<", "<<(cell->y - y)<<endl;
     dx += cell->x - x;
     dy += cell->y - y;
   }
-  //cout<< dx<<", "<<dy<<endl;
-  //cout<< dx*dx+dy*dy<<endl;
   return dx*dx+dy*dy < BALANCING_THRESHOLD;
 }
 
