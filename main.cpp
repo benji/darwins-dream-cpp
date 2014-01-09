@@ -13,7 +13,7 @@
 #include "utils.h"
 #include "common.h"
 
-long UPDATE_UI_EVERY_CYCLES = 15;
+long UPDATE_UI_EVERY_CYCLES = 50;
 bool DEBUG = false;
 bool OUT_SUMMARY = false;
 

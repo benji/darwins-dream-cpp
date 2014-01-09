@@ -19,6 +19,7 @@ class Creature {
     Cell* grow();
     Cell* growNewCell(Cell* c, float* growthProbas, int growthDirection);
     bool hasEnoughEnergy();
+    bool isBalanced();
     ~Creature();
 };
 

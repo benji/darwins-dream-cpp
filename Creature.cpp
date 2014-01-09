@@ -110,6 +110,20 @@ bool Creature::hasEnoughEnergy(){
   return totalEnergy >= (cells.size()-1)*world.minimumEnergyPerCell;
 }
 
+bool Creature::isBalanced(){
+  int dx=0, dy=0;
+  vector<Cell*>::iterator itCell;
+  for (itCell = cells.begin(); itCell != cells.end(); ++itCell) {
+    Cell* cell = (*itCell);
+    //cout<<"adding: "<< (cell->x - x)<<", "<<(cell->y - y)<<endl;
+    dx += cell->x - x;
+    dy += cell->y - y;
+  }
+  //cout<< dx<<", "<<dy<<endl;
+  //cout<< dx*dx+dy*dy<<endl;
+  return dx*dx+dy*dy < BALANCING_THRESHOLD;
+}
+
 Creature::~Creature(){
   vector<Cell*>::iterator itCell;
   for (itCell = cells.begin(); itCell != cells.end(); ++itCell) {

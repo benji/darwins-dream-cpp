@@ -24,6 +24,8 @@ TODO:
   * some kind of gravity to have creatures a bit more balanced
   * for fun we could try to kill creatures whose head touches another creature, and see what shapes derive from it?
 
+- Think about the benefits of using a more subtle way than to kill the creature when it doesn't fit the constraint.
+  Maybe it can just be a slower growth or a limited growth.
 
 REFERENCES:
 

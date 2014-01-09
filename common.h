@@ -4,12 +4,14 @@
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 400;
 
-const int NB_THREADS = 2; // Tweak this according to your hardware
+const int NB_THREADS = 6; // Tweak this according to your hardware
 
 #define GROW_OR_DIE true
 #define VARIABLE_GROWTH false
-#define WORLD_LENGTH 300
+#define WORLD_LENGTH 1000
 #define MAX_CELLS 30
+
+const int BALANCING_THRESHOLD = 30;
 
 // For reproduction and mutation
 // potentially way faster
