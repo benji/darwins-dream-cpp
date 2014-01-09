@@ -373,8 +373,6 @@ int main(int argc, char **argv) {
   glutKeyboardFunc(keyboard);
   glutSpecialFunc(specialKeyboard);
 
-  world.minimumEnergyPerCell = .5;
-
   int nbSpeciesToCreate = WORLD_LENGTH/5;
 
   world.infest(nbSpeciesToCreate,5);

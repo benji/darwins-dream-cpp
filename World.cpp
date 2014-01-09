@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <thread>
 
-World::World(int length, int maxCells, float reproductionRate, float mutationRate):cycle(0),length(length),maxCells(maxCells),reproductionRate(reproductionRate),mutationRate(mutationRate),minimumEnergyPerCell(.5){}
+World::World(int length, int maxCells, float reproductionRate, float mutationRate):cycle(0),length(length),maxCells(maxCells){}
 
 void World::infest(int nbSpecies, int nbCreaturesPerSpecies){
   for (int i=0; i<nbSpecies; i++){
@@ -89,13 +89,13 @@ void World::reproduction_mutation(int minX, int maxX){ // [minX; maxX]
     Creature* c = (*itCreature);
     Species* s = &(c->species);
 
-    if (randDouble() < mutationRate){
+    if (randDouble() < MUTATION_RATE){
       if (evolve(s, c) != NULL) {
         ++newSpecies;
         ++birthCount;
       }
     }
-    if (randDouble() < reproductionRate){
+    if (randDouble() < REPRODUCTION_RATE){
       if (reproduce(s, c) != NULL) ++birthCount;
     }
   }
@@ -177,13 +177,13 @@ void World::lifecycle(){
       Creature* c = (*itCreatureV);
       Species* s = &(c->species);
 
-      if (randDouble() < mutationRate){
+      if (randDouble() < MUTATION_RATE){
         if (evolve(s, c) != NULL) {
           ++newSpecies;
           ++birthCount;
         }
       }
-      if (randDouble() < reproductionRate){
+      if (randDouble() < REPRODUCTION_RATE){
         if (reproduce(s, c) != NULL) ++birthCount;
       }
     }

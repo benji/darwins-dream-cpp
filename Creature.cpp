@@ -107,7 +107,7 @@ bool Creature::hasEnoughEnergy(){
     Cell* cell = (*itCell);
     totalEnergy += cell->energy;
   }
-  return totalEnergy >= (cells.size()-1)*world.minimumEnergyPerCell;
+  return totalEnergy >= (cells.size()-1)*MIN_ENERGY_PER_CELL;
 }
 
 bool Creature::isBalanced(){

@@ -12,7 +12,6 @@ class World {
     list<Species*> species;
     long cycle;
     int length, maxCells;
-    float reproductionRate, mutationRate, minimumEnergyPerCell;
     CellsRegistry registry;
     mutex speciesCollectionMutex;
 

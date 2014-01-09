@@ -4,15 +4,19 @@
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 400;
 
-#define GROW_OR_DIE true
-#define VARIABLE_GROWTH false
-#define CONSTRAINT_BALANCING true
+const bool GROW_OR_DIE = true;
+const bool VARIABLE_GROWTH = false;
+const bool CONSTRAINT_BALANCING = true;
 // For reproduction and mutation
 // potentially way faster
-#define LOCALITY_ENABLED true
+const bool LOCALITY_ENABLED = true;
 
-#define WORLD_LENGTH 200
-#define MAX_CELLS 30
+const int WORLD_LENGTH = 200;
+const int MAX_CELLS = 30;
+const float REPRODUCTION_RATE = 0.1;
+const float MUTATION_RATE = 0.01;
+const float MIN_ENERGY_PER_CELL = .7;
+
 // Tweak this according to your hardware
 const int NB_THREADS = 3;
 const int BALANCING_THRESHOLD = 30;
