@@ -13,7 +13,7 @@
 #include "utils.h"
 #include "common.h"
 
-long UPDATE_UI_EVERY_CYCLES = 50;
+long UPDATE_UI_EVERY_CYCLES = 100;
 bool DEBUG = false;
 bool OUT_SUMMARY = false;
 
@@ -358,10 +358,12 @@ void specialKeyboard(int key, int mouseX, int mouseY) {
 
 int main(int argc, char **argv) {
   if (LOCALITY_ENABLED){
-    if (WORLD_LENGTH/(2*NB_THREADS) < (MAX_CELLS-1+LOCALITY_RADIUS)*2){
+    int sliceWidth = WORLD_LENGTH/(2*NB_THREADS);
+    int overreach = LOCALITY_RADIUS*2;
+    if (sliceWidth < overreach){
       cout<<"ERROR: Incompatible number of threads of the world size/max cells/locality radius combination:"<<endl;
       cout<<"World length="<<WORLD_LENGTH<<", Nb Threads="<<NB_THREADS<<", maxCells="<<MAX_CELLS<<", locality radius="<< LOCALITY_RADIUS <<endl;
-      cout<<"Thread slices length="<<(WORLD_LENGTH/(2*NB_THREADS))<<", Creature overreach="<<((MAX_CELLS-1+LOCALITY_RADIUS)*2)<<endl;
+      cout<<"Thread slices width="<<sliceWidth<<", Creature overreach="<<overreach<<endl;
       exit(9);
     }
   }

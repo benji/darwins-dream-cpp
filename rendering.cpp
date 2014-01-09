@@ -109,7 +109,7 @@ void Rendering::display() {
 
   // grid
   glColor3f(.3f, .3f, .3f);
-  for (int i=0; i<1000; i+=10) {
+  for (int i=10; i<=1000; i+=10) {
     glBegin(GL_LINES);
       glVertex3f(i,   0, 0);
       glVertex3f(i, 1000, 0);

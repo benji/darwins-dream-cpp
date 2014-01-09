@@ -129,7 +129,7 @@ int Species::killOldAndWeakCreatures(){
     if (c->cells.size() >= (unsigned int)world.maxCells 
         || world.cycle - c->creationCycle >= world.maxCells 
         || !c->hasEnoughEnergy()
-        || !c->isBalanced()){
+        || (CONSTRAINT_BALANCING && !c->isBalanced())){
       if (DEBUG) cout << "Creature dies." <<endl;
       delete c;
       itCreature = creatures.erase(itCreature);
