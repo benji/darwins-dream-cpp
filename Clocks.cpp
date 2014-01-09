@@ -66,6 +66,11 @@ long long Clocks::elapsed(int id){
   return 0LL;
 }
 
+void Clocks::printAndReset(int id, string title){
+  CLOCKS.status(id, title);
+  CLOCKS.reset(id);
+}
+
 Clocks::~Clocks(){std::map<std::string, std::string>::iterator iter;
   map<int, Timer*>::iterator it;
   for (it = timers.begin(); it != timers.end(); ++it) {

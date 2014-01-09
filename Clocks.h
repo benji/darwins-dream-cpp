@@ -30,6 +30,7 @@ class Clocks {
     void pause(int id);
     void status(int id, string msg);
     long long elapsed(int id);
+    void printAndReset(int id, string title);
     ~Clocks();
 };
 

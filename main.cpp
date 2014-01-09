@@ -1,6 +1,7 @@
 #include <GL/glut.h>
 
 #include "rendering.h"
+#include "viewer.h"
 #include "World.h"
 #include "Species.h"
 #include "Creature.h"
@@ -9,11 +10,7 @@
 #include "utils.h"
 #include "common.h"
 
-struct Cube {
-  public:
-    int x,y,z;
-    float r,g,b;
-};
+using namespace std;
 
 World world(WORLD_LENGTH, MAX_CELLS, 0.1, 0.01);
 
@@ -23,163 +20,16 @@ bool fullscreen = false;
 
 long lastRenderingCycle = -1;
 
-vector<Cube*>* worldCubes = new vector<Cube*>();
-vector<Cube*>* nextWorldCubes = NULL;
-vector<Cube*>* dominantSpeciesCubes = new vector<Cube*>();
-vector<Cube*>* nextDominantSpeciesCubes = NULL;
-
 Clocks CLOCKS;
-
-void cleanupCubes(vector<Cube*>* cubes){
-  vector<Cube*>::iterator itCube;
-  for (itCube = cubes->begin(); itCube != cubes->end(); ++itCube) {
-    Cube* cube = (*itCube);
-    delete cube;
-  }
-  cubes->clear();
-  delete cubes;
-}
-
-void drawCubes(vector<Cube*>* cubes){
-  vector<Cube*>::iterator itCube;
-  for (itCube = cubes->begin(); itCube != cubes->end(); ++itCube) {
-    Cube* cube = (*itCube);
-    Rendering::drawCube( cube->x, cube->y, cube->z, cube->r, cube->g, cube->b );
-  }
-}
-
-void drawDominantSpecies(){
-  if (nextDominantSpeciesCubes != NULL){ //swap requested
-    cleanupCubes(dominantSpeciesCubes);
-    dominantSpeciesCubes = nextDominantSpeciesCubes;
-    nextDominantSpeciesCubes = NULL;
-  }
-  drawCubes(dominantSpeciesCubes);
-}
-
-void drawWorld(){
-  if (nextWorldCubes != NULL){ //swap requested
-    cleanupCubes(worldCubes);
-    worldCubes = nextWorldCubes;
-    nextWorldCubes = NULL;
-  }
-  drawCubes(worldCubes);
-}
-
-Cube* createCube(int x, int y, int z, Species* s){
-  Cube* c = new Cube();
-  c->x = x;
-  c->y = y;
-  c->z = z;
-  c->r = s->r;
-  c->g = s->g;
-  c->b = s->b;
-  return c;
-}
-
-void addSpeciesCubes(vector<Cube*>* destination, Species* s){
-  list<Creature*>::iterator itCreature;
-  vector<Cell*>::iterator itCell;
-
-  for (itCreature = s->creatures.begin(); itCreature != s->creatures.end(); ++itCreature) {
-    Creature* c = (*itCreature);
-    for (itCell = c->cells.begin(); itCell != c->cells.end(); ++itCell) {
-      Cell* cell = (*itCell);
-      destination->push_back(createCube(cell->x, cell->y, cell->z, s));
-    }
-  }
-}
-
-void updateWorldCubes(){
-  if (nextWorldCubes != NULL) return;
-
-  vector<Cube*>* tmpCubes = new vector<Cube*>();
-  list<Species*>::iterator itSpecies;
-
-  for (itSpecies = world.species.begin(); itSpecies != world.species.end(); ++itSpecies) {
-    Species* s = (*itSpecies);
-    addSpeciesCubes(tmpCubes, s);
-  }
-
-  nextWorldCubes = tmpCubes;
-}
-
-void updateDominantSpeciesCubes(){
-  if (nextDominantSpeciesCubes != NULL) return;
-
-  vector<Cube*>* tmpCubes = new vector<Cube*>();
-  list<Species*>::iterator itSpecies;
-  Species* dominantSpecies = NULL;
-
-  for (itSpecies = world.species.begin(); itSpecies != world.species.end(); ++itSpecies) {
-    Species* s = (*itSpecies);
-    if (dominantSpecies == NULL || s->creatures.size() > dominantSpecies->creatures.size()){
-      dominantSpecies = s;
-    }
-  }
-
-  if (dominantSpecies != NULL){
-    int x=0, y=0, z=0;
-    tmpCubes->push_back(createCube(x, y, z, dominantSpecies));
-    vector<DNA*>::iterator itDNA;
-    float max = 0, p;
-    int maxIdx, directionIdx;
-
-    for (itDNA = dominantSpecies->dna.begin(); itDNA != dominantSpecies->dna.end(); ++itDNA) {
-      DNA* dna = (*itDNA);
-
-      if (VARIABLE_GROWTH){
-        max = 0;
-        for (int i=0; i<6; ++i){
-          p = dna->probas[i];
-          if (max<p) {
-            max = p;
-            maxIdx = i;
-          }
-        }
-        directionIdx = maxIdx;
-      } else {
-        directionIdx = dna->growthDirection;
-      }
-
-      if      (directionIdx==0) ++x;
-      else if (directionIdx==1) --x;
-      else if (directionIdx==2) ++y;
-      else if (directionIdx==3) --y;
-      else if (directionIdx==4) ++z;
-      else if (directionIdx==5) --z;
-
-      tmpCubes->push_back(createCube(x, y, z, dominantSpecies));
-    }
-
-    nextDominantSpeciesCubes = tmpCubes;
-  }else{
-    cout << "No dominance" << endl;
-  }
-}
+Viewer viewer;
 
 void updateUI(){
   if (world.cycle == lastRenderingCycle) return;
 
-  updateWorldCubes();
-  updateDominantSpeciesCubes();
+  viewer.updateWorldCubes();
+  viewer.updateDominantSpeciesCubes();
 
-  string msg4("Sunshine");
-  CLOCKS.status(CLOCK_SUNSHINE, msg4);
-  CLOCKS.reset(CLOCK_SUNSHINE);
-
-  string msg("Death");
-  CLOCKS.status(CLOCK_DEATH, msg);
-  CLOCKS.reset(CLOCK_DEATH);
-
-  string msg2("Reproduction / Mutation");
-  CLOCKS.status(CLOCK_REPRODUCTION, msg2);
-  CLOCKS.reset(CLOCK_REPRODUCTION);
-
-  string msg3("Growth");
-  CLOCKS.status(CLOCK_GROWTH, msg3);
-  CLOCKS.reset(CLOCK_GROWTH);
-
+  // Stats
   list<Species*>::iterator itSpecies;
   long nbSpecies = 0,nbCreatures = 0, nbSpeciesWithMoreThanOneCreature=0;
   for (itSpecies = world.species.begin(); itSpecies != world.species.end(); ++itSpecies) {
@@ -190,11 +40,17 @@ void updateUI(){
   }
   cout << "Ending cycle "<<world.cycle<<" with "<<nbSpecies<<" species("<<nbSpeciesWithMoreThanOneCreature<<") and "<<nbCreatures<<" creatures."<<endl;
 
+  // Clocks
+  CLOCKS.printAndReset(CLOCK_SUNSHINE, "Sunshine");
+  CLOCKS.printAndReset(CLOCK_DEATH, "Death");
+  CLOCKS.printAndReset(CLOCK_REPRODUCTION, "Reproduction / Mutation");
+  CLOCKS.printAndReset(CLOCK_GROWTH, "Growth");
+
   float elapsed = CLOCKS.timers[CLOCK_LIFECYCLE]->elapsed/1000000.;
   if (elapsed >0){
-    float cyclesPerSecs = world.cycle/elapsed;
-    cout<<"Elapsed "<<elapsed<<" seconds, "<<cyclesPerSecs<<" cycles/s."<<endl;
+    cout<<"Elapsed "<<elapsed<<" seconds, "<< (world.cycle/elapsed) <<" cycles/s."<<endl;
   }
+  cout<<endl;
 
   lastRenderingCycle = world.cycle;
 }
@@ -230,9 +86,6 @@ void stop(){
 
 void exitWorld(){
   stop();
-  // might still be used...
-  //cleanupCubes(worldCubes);
-  //cleanupCubes(dominantSpeciesCubes);
   cout << "Exiting." << endl;
   exit(0);
 }
@@ -353,14 +206,14 @@ int main(int argc, char **argv) {
   }
 
   glutInit(&argc, argv);
-  Rendering::initialize(drawWorld, drawDominantSpecies);
+  viewer.initialize();
   glutKeyboardFunc(keyboard);
   glutSpecialFunc(specialKeyboard);
 
   int nbSpeciesToCreate = WORLD_LENGTH/5;
 
   world.infest(nbSpeciesToCreate,5);
-  updateWorldCubes();
+  viewer.updateWorldCubes();
 
   start();
   glutMainLoop();

@@ -1,3 +1,12 @@
+#include <iostream>
+#include <stdio.h>
+#include <string>
+#include <vector>
+#include <list>
+#include <thread>
+#include <mutex>
+#include <algorithm>
+
 #ifndef COMMON_H
 #define COMMON_H
 
@@ -24,15 +33,6 @@ const bool DEBUG = false;
 const bool OUT_SUMMARY = false;
 
 const long UPDATE_UI_EVERY_CYCLES = 100;
-
-#include <iostream>
-#include <stdio.h>
-#include <string>
-#include <vector>
-#include <list>
-#include <thread>
-#include <mutex>
-#include <algorithm>
 
 #include "utils.h"
 

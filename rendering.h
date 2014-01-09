@@ -7,6 +7,7 @@ typedef void (*keyboardFuncType)(unsigned char key, int mouseX, int mouseY);
 class Rendering {
   public:
     static void drawAxis();
+    static void drawGrid();
     static void drawCube(float x, float y, float z, float r, float g, float b);
     static void prepareView(int x, int y, int dx, int dy);
     static void display();
