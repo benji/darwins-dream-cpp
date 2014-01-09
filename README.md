@@ -11,6 +11,13 @@ The program will launch a window that will display a 3D view of the World on the
 
 Please see common.h for settings/customizations/performance.
 
+Commands:
+  * F - Fullscreen
+  * S - pring Summary of the current species
+  * <SPACE> - pause/resume simulation
+  * N - when paused, run a single cycle
+  * F1 - perform a consitency check on the cells (debug)
+  * <ESC> - exit
 
 RULE_SEEDS_Z0 :
 The Z=0 plan is underground and reserved for new seeds (first cell of new creatures).
