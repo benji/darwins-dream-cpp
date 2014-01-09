@@ -19,6 +19,10 @@ TODO:
 
 - a bit less linear? Maybe allow to grow from any existing cell, not only the head?
 
+One way would be to have a DNA model being vector<int[2]> containing for every strand:
+- the position of the cell to grow
+- the direction of growth
+
 
 - Ideas of constraints to add:
   * some kind of gravity to have creatures a bit more balanced
