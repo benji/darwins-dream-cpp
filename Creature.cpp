@@ -16,6 +16,10 @@ Cell* Creature::createCell(int x, int y, int z){
 
 Cell* Creature::grow(){
   int idx = this->cells.size()-1;
+  int dnaSize = species.dna.size();
+  if (idx == dnaSize){ // fully grown
+    return NULL;
+  }
   DNA* dna = this->species.dna[idx];
   return growNewCell(this->cells.at(idx), dna->probas, dna->growthDirection);
 }

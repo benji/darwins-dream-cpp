@@ -11,8 +11,15 @@ Species::Species(Species* originalSpecies){
   if (originalSpecies == NULL){
     // completely new species
     ancestor = NULL;
-    while (!generateDna()) ;
-  }else{
+
+    if (PROGRESSIVE_DNA){
+      DNA* dna = new DNA(NULL);
+      dna->growthDirection = 4; // UP
+      this->dna.push_back(dna);
+    } else {
+      while (!generateDna()) ;
+    }
+  } else {
     // evolution of an existing species
     ancestor = originalSpecies;
 
@@ -21,10 +28,33 @@ Species::Species(Species* originalSpecies){
       DNA* from = (*itDNA);
       this->dna.push_back(new DNA(from));
     }
+
     // mutation:
-    int randIdx = randInt(dna.size());
-    delete this->dna[randIdx];
-    this->dna[randIdx] = new DNA(NULL);
+    if (PROGRESSIVE_DNA) {
+      int dnaSize = dna.size();
+      int randSize = min(dnaSize, MAX_CELLS - 2);
+      int randIdx = randInt(randSize) + 1; // 0 is excluded
+
+      if (randIdx <= 0 || randIdx > dnaSize || randIdx >= MAX_CELLS-1){
+        cout<<"Invalid randIdx for species mutation"<<endl;
+        exit(10);
+      }
+
+      bool newDnaStrand = (randIdx == dnaSize);
+      if (!newDnaStrand) delete this->dna[randIdx];
+      DNA* dna = new DNA(NULL);
+      dna->cellIdx = randInt(randIdx) + 1;
+      if (newDnaStrand) {
+        this->dna.push_back(dna);
+        //cout<<"DNA extended! "<<this->dna.size()<<endl;
+      } else {
+        this->dna[randIdx] = dna;
+      }
+    } else{
+      int randIdx = randInt(dna.size() - 1) + 1; // 0 is excluded
+      delete this->dna[randIdx];
+      this->dna[randIdx] = new DNA(NULL);
+    }
   }
 
   HSVtoRGB( &(this->r), &(this->g), &(this->b), randDouble(), 1, .65 );
@@ -170,5 +200,6 @@ DNA::DNA(DNA* from){
   for (int i=0;i<6;i++) {
     this->probas[i] = (from!=NULL) ? from->probas[i] : randDouble();
   }
-  growthDirection = from!=NULL ? from->growthDirection:randInt(6);
+  growthDirection = from!=NULL ? from->growthDirection : randInt(6);
+  cellIdx = from != NULL ? from->cellIdx : -1;
 }

@@ -18,6 +18,7 @@ const bool VARIABLE_GROWTH = false;
 const bool CONTRAINT_NEED_SUN = true;
 const bool CONSTRAINT_BALANCING = false;
 const bool LOCALITY_ENABLED = true;
+const bool PROGRESSIVE_DNA = true;
 
 const int WORLD_LENGTH = 200;
 const int MAX_CELLS = 30;

@@ -191,7 +191,7 @@ void World::lifecycle(){
   CLOCKS.start(CLOCK_GROWTH);
   for (itCreatureV = creaturesCopy.begin(); itCreatureV != creaturesCopy.end(); ++itCreatureV) {
     Creature* c = (*itCreatureV);
-    if (c->grow() == NULL && GROW_OR_DIE) {
+    if (c->grow() == NULL && !PROGRESSIVE_DNA && GROW_OR_DIE) {
       c->species.kill(c);
       ++cycleDeathCount;
     }
