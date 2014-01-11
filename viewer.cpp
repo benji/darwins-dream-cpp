@@ -105,25 +105,12 @@ void Viewer::updateDominantSpeciesCubes(){
     int x=0, y=0, z=0;
     tmpCubes->push_back(createCube(x, y, z, dominantSpecies));
     vector<DNA*>::iterator itDNA;
-    float max = 0, p;
-    int maxIdx, directionIdx;
+    int directionIdx;
 
     for (itDNA = dominantSpecies->dna.begin(); itDNA != dominantSpecies->dna.end(); ++itDNA) {
       DNA* dna = (*itDNA);
-
-      if (VARIABLE_GROWTH){
-        max = 0;
-        for (int i=0; i<6; ++i){
-          p = dna->probas[i];
-          if (max<p) {
-            max = p;
-            maxIdx = i;
-          }
-        }
-        directionIdx = maxIdx;
-      } else {
-        directionIdx = dna->growthDirection;
-      }
+      
+      directionIdx = dna->growthDirection;
 
       if      (directionIdx==0) ++x;
       else if (directionIdx==1) --x;

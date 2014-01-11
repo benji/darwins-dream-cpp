@@ -13,7 +13,7 @@ class Creature {
     Creature(Species& species, int x, int y);
     Cell* createCell(int x, int y, int z);
     Cell* grow();
-    Cell* growNewCell(Cell* c, float* growthProbas, int growthDirection);
+    Cell* growNewCell(Cell* c, int growthDirection);
     bool hasEnoughEnergy();
     bool isBalanced();
     ~Creature();

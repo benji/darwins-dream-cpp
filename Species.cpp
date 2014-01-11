@@ -50,7 +50,7 @@ Species::Species(Species* originalSpecies){
       } else {
         this->dna[randIdx] = dna;
       }
-    } else{
+    } else {
       int randIdx = randInt(dna.size() - 1) + 1; // 0 is excluded
       delete this->dna[randIdx];
       this->dna[randIdx] = new DNA(NULL);
@@ -197,9 +197,6 @@ Species::~Species(){
 }
 
 DNA::DNA(DNA* from){
-  for (int i=0;i<6;i++) {
-    this->probas[i] = (from!=NULL) ? from->probas[i] : randDouble();
-  }
-  growthDirection = from!=NULL ? from->growthDirection : randInt(6);
+  growthDirection = from != NULL ? from->growthDirection : randInt(6);
   cellIdx = from != NULL ? from->cellIdx : -1;
 }

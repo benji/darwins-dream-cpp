@@ -12,7 +12,6 @@ class DNA {
   public:
     int cellIdx;
     int growthDirection;
-    float probas[6];
 
     DNA(DNA* from);
 };

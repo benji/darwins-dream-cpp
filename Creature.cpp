@@ -21,10 +21,10 @@ Cell* Creature::grow(){
     return NULL;
   }
   DNA* dna = this->species.dna[idx];
-  return growNewCell(this->cells.at(idx), dna->probas, dna->growthDirection);
+  return growNewCell(this->cells.at(idx), dna->growthDirection);
 }
 
-Cell* Creature::growNewCell(Cell* c, float* growthProbas, int growthDirection){
+Cell* Creature::growNewCell(Cell* c, int growthDirection){
   int x=c->x, y=c->y, z=c->z;
 
   if (z==0){
@@ -35,72 +35,33 @@ Cell* Creature::growNewCell(Cell* c, float* growthProbas, int growthDirection){
     return createCell(x,y,z);
   }
 
-  if (VARIABLE_GROWTH){
-
-    // tries to find a path
-
-    bool canGrow[6] = {
-      x < world.length-1 && world.registry.registryXYZ[x+1][y][z] == NULL, // x+1
-      x > 0              && world.registry.registryXYZ[x-1][y][z] == NULL, // x-1
-      y < world.length-1 && world.registry.registryXYZ[x][y+1][z] == NULL, // y+1
-      y > 0              && world.registry.registryXYZ[x][y-1][z] == NULL, // y-1
-      true               && world.registry.registryXYZ[x][y][z+1] == NULL, // z+1
-      z > 1              && world.registry.registryXYZ[x][y][z-1] == NULL  // z-1
-    };
-
-    float sumProbasCanGrow = 0;
-    for (int i=0;i<6;i++){
-      if (canGrow[i]) {
-        sumProbasCanGrow += growthProbas[i];
-      }
-    }
-
-    float p = randDouble()*sumProbasCanGrow;
-
-    float sumPrevProbas = 0;
-    if      (canGrow[0] && p<(sumPrevProbas+=growthProbas[0])) ++x;
-    else if (canGrow[1] && p<(sumPrevProbas+=growthProbas[1])) --x;
-    else if (canGrow[2] && p<(sumPrevProbas+=growthProbas[2])) ++y;
-    else if (canGrow[3] && p<(sumPrevProbas+=growthProbas[3])) --y;
-    else if (canGrow[4] && p<(sumPrevProbas+=growthProbas[4])) ++z;
-    else if (canGrow[5])                                       --z;
-    else {
-      //cout << "Cell has no room to grow" << endl;
-      return NULL;
-    }
-    return createCell(x,y,z);
-
+  if (growthDirection == 0) {
+    ++x;
+    if (x > world.length-1) return NULL;
+  } else if (growthDirection == 1) {
+    --x;
+    if (x < 0) return NULL;
+  } else if (growthDirection == 2) {
+    ++y;
+    if (y > world.length-1) return NULL;
+  } else if (growthDirection == 3) {
+    --y;
+    if (y < 0) return NULL;
+  } else if (growthDirection == 4) {
+    ++z;
+  } else if (growthDirection == 5) {
+    --z;
+    if (z < 1) return NULL;
   } else {
-
-    // static growth
-
-    if (growthDirection == 0) {
-      ++x;
-      if (x > world.length-1) return NULL;
-    } else if (growthDirection == 1) {
-      --x;
-      if (x < 0) return NULL;
-    } else if (growthDirection == 2) {
-      ++y;
-      if (y > world.length-1) return NULL;
-    } else if (growthDirection == 3) {
-      --y;
-      if (y < 0) return NULL;
-    } else if (growthDirection == 4) {
-      ++z;
-    } else if (growthDirection == 5) {
-      --z;
-      if (z < 1) return NULL;
-    } else {
-      cout << "Invalid growth direction: "<<growthDirection<<endl;
-      exit(2);
-    }
-
-    if (world.registry.registryXYZ[x][y][z] == NULL) {
-      return createCell(x,y,z);
-    }
-    return NULL;
+    cout << "Invalid growth direction: "<<growthDirection<<endl;
+    exit(2);
   }
+
+  if (world.registry.registryXYZ[x][y][z] == NULL) {
+    return createCell(x,y,z);
+  }
+
+  return NULL;
 }
 
 bool Creature::hasEnoughEnergy(){
