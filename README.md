@@ -9,6 +9,8 @@ Each creature is composed of several Cells.
 The DNA dictates the growth direction for each Cell.
 The program will launch a window that will display a 3D view of the World on the left, and the shape of the dominant species on the right, rotating.
 
+![](https://raw.github.com/benji/darwins-dream-cpp/master/docs/screenshot-1.png)
+
 Please see common.h for settings/customizations/performance.
 
 Commands:
