@@ -74,7 +74,7 @@ bool Creature::hasEnoughEnergy(){
   return totalEnergy >= (cells.size()-1)*MIN_ENERGY_PER_CELL;
 }
 
-bool Creature::isBalanced(){
+int Creature::getBalance(){
   int dx=0, dy=0;
   vector<Cell*>::iterator itCell;
   for (itCell = cells.begin(); itCell != cells.end(); ++itCell) {
@@ -82,7 +82,11 @@ bool Creature::isBalanced(){
     dx += cell->x - x;
     dy += cell->y - y;
   }
-  return dx*dx+dy*dy < BALANCING_THRESHOLD;
+  return dx*dx+dy*dy;
+}
+
+bool Creature::isBalanced(){
+  return getBalance() < BALANCING_THRESHOLD;
 }
 
 Creature::~Creature(){

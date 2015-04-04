@@ -17,6 +17,7 @@ World world(WORLD_LENGTH, MAX_CELLS, 0.1, 0.01);
 bool running = false;
 thread* playLifeThread;
 bool fullscreen = false;
+bool showBiggestCreatureOrTypical = true;
 
 long lastRenderingCycle = -1;
 
@@ -27,7 +28,7 @@ void updateUI(){
   if (world.cycle == lastRenderingCycle) return;
 
   viewer.updateWorldCubes();
-  viewer.updateDominantSpeciesCubes();
+  viewer.updateDominantSpeciesCubes(showBiggestCreatureOrTypical);
 
   // Stats
   list<Species*>::iterator itSpecies;
@@ -80,6 +81,8 @@ void stop(){
   if (running){
     running = false;
     playLifeThread->join();
+    updateUI();
+    
     delete playLifeThread;
   }
 }
@@ -173,7 +176,14 @@ void keyboard(unsigned char key, int mouseX, int mouseY) {
         fullscreen = true;
       }
       break;
+    case '=':
+      cout<<"Switching creature view to ";
+      if (showBiggestCreatureOrTypical) cout<<"Biggest Creature" <<endl;
+      else cout<<"Typical DNA" <<endl;
+      showBiggestCreatureOrTypical = !showBiggestCreatureOrTypical;
+      break;
     case 27: // exit
+    case 'q':
       exitWorld();
       break;
     default:

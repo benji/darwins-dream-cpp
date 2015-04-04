@@ -26,6 +26,14 @@ class Species {
     int distanceToAncestor;
     mutex creaturesCollectionMutex;
 
+    // statistics
+    long deathsByLackOfEnergy;
+    long deathsByLackOfBalance;
+    long deathsByOverGrowth;
+    long deathsByOldAge;
+    long deathsByCantGrow;
+    bool noRoomForNewSpecies;
+
     Species(Species* originalSpecies);
     void setColor(float r, float g, float b);
     void kill(Creature* c);

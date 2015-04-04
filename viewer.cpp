@@ -87,7 +87,7 @@ void Viewer::updateWorldCubes(){
   nextWorldCubes = tmpCubes;
 }
 
-void Viewer::updateDominantSpeciesCubes(){
+void Viewer::updateDominantSpeciesCubes(bool showBiggestCreatureOrTypical){
   if (nextDominantSpeciesCubes != NULL) return;
 
   vector<Cube*>* tmpCubes = new vector<Cube*>();
@@ -101,9 +101,44 @@ void Viewer::updateDominantSpeciesCubes(){
     }
   }
 
-  if (dominantSpecies != NULL){
-    int x=0, y=0, z=0;
-    tmpCubes->push_back(createCube(x, y, z, dominantSpecies));
+  if (dominantSpecies == NULL) {
+    cout << "No dominant species found, is anybody alive?" << endl;
+    return;
+  }
+
+  //Creature* c = dominantSpecies->creatures.front();
+  //int balance = c->getBalance();
+  //cout << "dominant species balance=" << balance <<endl;
+
+  int x=0, y=0, z=0;
+  tmpCubes->push_back(createCube(x, y, z, dominantSpecies));
+
+  if (showBiggestCreatureOrTypical) { // show biggest creature
+    cout<<"Showing biggest creature of dominant species."<<endl;
+
+    list<Creature*>::iterator itCreature;
+    vector<Cell*>::iterator itCell;
+    unsigned int maxCellsCount = 0;
+    Creature* biggest = NULL;
+
+    for (itCreature = dominantSpecies->creatures.begin(); itCreature != dominantSpecies->creatures.end(); ++itCreature) {
+      Creature* c = (*itCreature);
+      if (c->cells.size() > maxCellsCount) {
+        maxCellsCount = c->cells.size();
+        biggest = c;
+      }
+    }
+    for (itCell = biggest->cells.begin(); itCell != biggest->cells.end(); ++itCell) {
+      Cell* cell = (*itCell);
+      x = cell->x - biggest->x;
+      y = cell->y - biggest->y;
+      z = cell->z;
+      
+      tmpCubes->push_back(createCube(x, y, z, dominantSpecies));
+    }
+  } else { // show DNA creature
+    cout<<"Showing Typical DNA creature."<<endl;
+
     vector<DNA*>::iterator itDNA;
     int directionIdx;
 
@@ -121,11 +156,9 @@ void Viewer::updateDominantSpeciesCubes(){
 
       tmpCubes->push_back(createCube(x, y, z, dominantSpecies));
     }
-
-    nextDominantSpeciesCubes = tmpCubes;
-  }else{
-    cout << "No dominance" << endl;
   }
+
+  nextDominantSpeciesCubes = tmpCubes;
 }
 
 // TODO : call this method! when is glutmainloop over?

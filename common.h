@@ -15,7 +15,7 @@ const int WINDOW_HEIGHT = 400;
 
 const bool GROW_OR_DIE = true;
 const bool CONTRAINT_NEED_SUN = true;
-const bool CONSTRAINT_BALANCING = false;
+const bool CONSTRAINT_BALANCING = true;
 const bool LOCALITY_ENABLED = true;
 const bool PROGRESSIVE_DNA = false;
 
@@ -25,14 +25,15 @@ const float REPRODUCTION_RATE = 0.1;
 const float MUTATION_RATE = 0.01;
 const float MIN_ENERGY_PER_CELL = .5;
 const int NB_THREADS = 3;
-const int BALANCING_THRESHOLD = 30;
+const int BALANCING_THRESHOLD = 6*6;
 const int MAX_CREATURE_AGE = 30;
 const int LOCALITY_RADIUS = 8;
 
 const bool DEBUG = false;
 const bool OUT_SUMMARY = false;
+const bool LOG_SPECIES_EXTINCTION_CAUSES = false;
 
-const long UPDATE_UI_EVERY_CYCLES = 100;
+const long UPDATE_UI_EVERY_CYCLES = 300;
 
 #include "utils.h"
 

@@ -93,6 +93,9 @@ void Rendering::drawCube(float x, float y, float z, float r, float g, float b) {
   glPushMatrix();
   glTranslatef(x, y, z);
 
+  // wireframe rendering can be activated with:
+  // glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+
   glBegin(GL_QUADS);
 
   glColor3f(r, g, b);

@@ -49,7 +49,7 @@ Creature* World::reproduce(Species* s, Creature* parent){
 
 Species* World::evolve(Species* s, Creature* c){
   Species* newSpecies = createSpecies(s);
-  reproduce(newSpecies, c);
+  if (reproduce(newSpecies, c) == NULL) newSpecies->noRoomForNewSpecies = true;
   //cout<<"Reproduced evolved species from "<<c->x<<","<<c->y<<" to "<<(*(newSpecies->creatures.begin()))->x<<","<<(*(newSpecies->creatures.begin()))->y<<endl;
   return newSpecies;
 }
@@ -62,7 +62,7 @@ void World::sunshineOnSlice(int minX, int maxX){ // [minX; maxX]
         Cell* c = world.registry.registryXYZ[i][j][k];
         if (c != NULL){
           c->energy = energyFromSun;
-          energyFromSun/=2.;
+          energyFromSun/=10.;
         }
       }
     }
@@ -192,6 +192,7 @@ void World::lifecycle(){
   for (itCreatureV = creaturesCopy.begin(); itCreatureV != creaturesCopy.end(); ++itCreatureV) {
     Creature* c = (*itCreatureV);
     if (c->grow() == NULL && !PROGRESSIVE_DNA && GROW_OR_DIE) {
+      c->species.deathsByCantGrow++;
       c->species.kill(c);
       ++cycleDeathCount;
     }
@@ -206,7 +207,16 @@ void World::lifecycle(){
   while (itSpecies != species.end()) {
     Species* s = (*itSpecies);
     if (s->creatures.size() == 0){
-      if (DEBUG) cout << "Species goes extinct." <<endl;
+      if (LOG_SPECIES_EXTINCTION_CAUSES) {
+        cout << "Species goes extinct (";
+        if (s->deathsByLackOfEnergy>0) cout << " noenergy=" << s->deathsByLackOfEnergy;
+        if (s->deathsByLackOfBalance>0) cout << " nobalance=" << s->deathsByLackOfBalance;
+        if (s->deathsByOverGrowth>0) cout << " overgrowth=" << s->deathsByOverGrowth;
+        if (s->deathsByOldAge>0) cout << " tooold=" << s->deathsByOldAge;
+        if (s->deathsByCantGrow>0) cout << " cantgrow=" << s->deathsByCantGrow;
+        if (s->noRoomForNewSpecies) cout << " noroomforfirst";
+        cout << " )" << endl;
+      }
       prepareSpeciesForDelete(s);
       delete s;
       itSpecies = species.erase(itSpecies);

@@ -7,6 +7,12 @@ static long idGen = 0;
 Species::Species(Species* originalSpecies){
   id = idGen++;
   distanceToAncestor = 1;
+  deathsByLackOfEnergy = 0;
+  deathsByLackOfBalance = 0;
+  deathsByOverGrowth = 0;
+  deathsByOldAge = 0;
+  deathsByCantGrow = 0;
+  noRoomForNewSpecies = false;
 
   if (originalSpecies == NULL){
     // completely new species
@@ -79,6 +85,7 @@ bool Species::generateDna(){
     vector<int> takenDirs;
     bool canGoDown = true;
 
+    // Figuring out the positions about x,y,z that are already occupied
     for (int j=0; j<i-1; ++j){
       int prevX = pos[j][0], prevY = pos[j][1], prevZ = pos[j][2];
 
@@ -96,13 +103,13 @@ bool Species::generateDna(){
     // the only position available is downwards but Z=0 is disallowed:
     if (canGoDown && takenDirs.size() == 5 && z<=1) return false;
 
-    // all positions around are already taken:
-    if (takenDirs.size() == 6) return false;
-
     // don't allow Z=0
     if (canGoDown && z == 1) takenDirs.push_back(5);
 
-    if (takenDirs.size() >6) {
+    // all positions around are already taken:
+    if (takenDirs.size() == 6) return false;
+
+    if (takenDirs.size() > 6) {
       cout << "ERROR: more than 6 taken dirs!" <<endl;
       exit(8);
     }
@@ -160,6 +167,10 @@ int Species::killOldAndWeakCreatures(){
         || (CONTRAINT_NEED_SUN && !c->hasEnoughEnergy())
         || (CONSTRAINT_BALANCING && !c->isBalanced())){
       if (DEBUG) cout << "Creature dies." <<endl;
+      if (CONTRAINT_NEED_SUN && !c->hasEnoughEnergy()) deathsByLackOfEnergy++;
+      if (CONSTRAINT_BALANCING && !c->isBalanced()) deathsByLackOfBalance++;
+      if (c->cells.size() >= (unsigned int)world.maxCells) deathsByOverGrowth++;
+      if (world.cycle - c->creationCycle >= MAX_CREATURE_AGE) deathsByOldAge++;
       delete c;
       itCreature = creatures.erase(itCreature);
       ++deathCount;

@@ -19,7 +19,7 @@ class Viewer {
     static void drawWorld();
     static void drawDominantSpecies();
     static void updateWorldCubes();
-    static void updateDominantSpeciesCubes();
+    static void updateDominantSpeciesCubes(bool showBiggestCreatureOrTypical);
     static void addSpeciesCubes(vector<Cube*>* destination, Species* s);
     static void cleanup();
 };
