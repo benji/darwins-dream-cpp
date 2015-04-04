@@ -2,7 +2,6 @@ Darwin's dream (C++ version)
 =================
 
 <b>Abstract</b><br/>
-This project attempt to create digital species derived from simple natural selection rules.
 
 The objective is to demonstrate how the constraints for survival drives the shape of the species through natural selection.
 
