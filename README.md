@@ -15,28 +15,24 @@ Please see common.h for settings/customizations/performance.
 
 Commands:
   * F - Fullscreen
-  * S - pring Summary of the current species (with some lineage info)
+  * S - Summary: Prints a summary of the current species (with some lineage info)
   * [SPACE] - pause/resume simulation
-  * N - when paused, run a single cycle
+  * N - Next: when paused, runs a single cycle
   * F1 - perform a consitency check on the cells (debug)
   * '=' - Switches the right view to show either the biggest creature or the typical DNA creature from the current dominant species.
   * [ESC]/Q - exit
 
 Constraints:
 There are strict rules for survival:
-  * Sunlight constraint: the creature must gather enough energy from its cells to survive. The more cells, the more energy it needs. If a creature is in the shade of another, it will not get as much sunlight (see CONTRAINT_NEED_SUN, SUNLIGHT_LOSS_RATIO)
+  * Sunlight constraint: the creature must gather enough energy from its cells to survive. The more cells, the more energy it needs. If a creature is in the shade of another, it will not get as much sunlight (see CONTRAINT_NEED_SUN, MIN_ENERGY_PER_CELL, SUNLIGHT_LOSS_RATIO)
   * Balancing constraint: the creatures must not lean too much in one direction (see CONSTRAINT_BALANCING, BALANCING_THRESHOLD)
-  * Other constraint exist about the age of a creature and its ability to grow (see MAX_CREATURE_AGE, GROW_OR_DIE)
+  * Other constraints exist about the age of a creature and its ability to grow (see MAX_CREATURE_AGE, GROW_OR_DIE)
 
-Reproduction:
-A recent addition has been to make the children appear close to their parents (see LOCALITY_ENABLED, LOCALITY_RADIUS). This creates patches of colors corresponding to competing territories of species.
-(see REPRODUCTION_RATE)
+Reproduction (see REPRODUCTION_RATE)
+A recent addition has been to make a new creature appear close to its parent (see LOCALITY_ENABLED, LOCALITY_RADIUS). This creates patches of colors corresponding to competing territories of species.
 
-Mutation:
+Mutation (see MUTATION_RATE)
 One of the DNA segment that dictates the direction of growth of a cell will be altered. The resulting species may or may not be fit for survival.
-(see MUTATION_RATE)
-
-
 
 Performance:
 You can configure the number of threads to use in common.h. I recommend to use NbCores - 1 (see NB_THREADS).
