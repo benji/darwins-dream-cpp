@@ -1,8 +1,10 @@
 Darwin's dream (C++ version)
 =================
- 
-An attempt to create digital species derived from simple natural selection rules.
 
+<b>Abstract</b><br/>
+This project attempt to create digital species derived from simple natural selection rules.
+
+The objective is to demonstrate how the constraints for survival drives the shape of the species through natural selection.
 
 The program generates some initial species with random DNA, and creates a few creatures.<br/>
 Each creature is composed of several Cells.<br/>
@@ -11,7 +13,7 @@ The program will launch a window that will display a 3D view of the World on the
 
 ![](https://raw.github.com/benji/darwins-dream-cpp/master/docs/screenshot-3.png)
 
-Please see common.h for settings/customizations/performance.
+<b>Usage</b><br/>
 
 Commands:
   * F - Fullscreen
@@ -21,6 +23,8 @@ Commands:
   * F1 - perform a consitency check on the cells (debug)
   * '=' - Switches the right view to show either the biggest creature or the typical DNA creature from the current dominant species.
   * [ESC]/Q - exit
+
+Please see common.h for settings/customizations/performance.
 
 <b>Constraints</b><br/>
 There are strict rules for survival:
