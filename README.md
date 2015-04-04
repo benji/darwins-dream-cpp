@@ -3,7 +3,7 @@ Darwin's dream (C++ version)
 
 <b>Abstract</b><br/>
 
-The objective is to demonstrate how the constraints for survival drives the shape of the species through natural selection.
+The intention is to demonstrate how the constraints for survival drives the shape of the species through natural selection.
 
 The program generates some initial species with random DNA, and creates a few creatures.<br/>
 Each creature is composed of several Cells.<br/>
@@ -35,17 +35,20 @@ There are strict rules for survival:
 (see REPRODUCTION_RATE)<br/>
 A recent addition has been to make a new creature appear close to its parent (see LOCALITY_ENABLED, LOCALITY_RADIUS). This creates patches of colors corresponding to competing territories of species.
 
-Mutation (see MUTATION_RATE)
+<b>Mutations</b><br/>
+(see MUTATION_RATE)<br/>
 One of the DNA segment that dictates the direction of growth of a cell will be altered. The resulting species may or may not be fit for survival.
 
 <b>Performance</b><br/>
 You can configure the number of threads to use in common.h. I recommend to use NbCores - 1 (see NB_THREADS).
 
+<b>TODO</b><br/>
+- Allow to grow from any existing cell, not only from the head (see PROGRESSIVE_DNA)
+- Randomly sprinkle new species out of nowhere to improve competition.
+
+<b>Technicalities</b><br/><br/>
+
 RULE_SEEDS_Z0:<br/>
 The Z=0 plan is underground and reserved for new seeds (first cell of new creatures).<br/>
 From there the creature will grow a cell at Z=1 and never come back at Z=0.<br/>
 This is actually a performance improvement that greatly simplify the search for an available tile underground.
-
-<h5>TODO</h5>
-- Allow to grow from any existing cell, not only from the head (see PROGRESSIVE_DNA)
-- Randomly sprinkle new species out of nowhere to improve competition. 
