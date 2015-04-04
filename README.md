@@ -46,7 +46,7 @@ You can configure the number of threads to use in common.h. I recommend to use N
 - Allow to grow from any existing cell, not only from the head (see PROGRESSIVE_DNA)
 - Randomly sprinkle new species out of nowhere to improve competition.
 
-<b>Technicalities</b><br/><br/>
+<b>Technicalities</b><br/>
 
 RULE_SEEDS_Z0:<br/>
 The Z=0 plan is underground and reserved for new seeds (first cell of new creatures).<br/>
