@@ -62,7 +62,7 @@ void World::sunshineOnSlice(int minX, int maxX){ // [minX; maxX]
         Cell* c = world.registry.registryXYZ[i][j][k];
         if (c != NULL){
           c->energy = energyFromSun;
-          energyFromSun/=10.;
+          energyFromSun*=SUNLIGHT_LOSS_RATIO;
         }
       }
     }

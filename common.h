@@ -24,10 +24,12 @@ const int MAX_CELLS = 30;
 const float REPRODUCTION_RATE = 0.1;
 const float MUTATION_RATE = 0.01;
 const float MIN_ENERGY_PER_CELL = .5;
-const int NB_THREADS = 3;
+const float SUNLIGHT_LOSS_RATIO = 0.15;
 const int BALANCING_THRESHOLD = 6*6;
 const int MAX_CREATURE_AGE = 30;
 const int LOCALITY_RADIUS = 8;
+
+const int NB_THREADS = 3;
 
 const bool DEBUG = false;
 const bool OUT_SUMMARY = false;
