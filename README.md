@@ -34,7 +34,7 @@ A recent addition has been to make a new creature appear close to its parent (se
 Mutation (see MUTATION_RATE)
 One of the DNA segment that dictates the direction of growth of a cell will be altered. The resulting species may or may not be fit for survival.
 
-Performance:
+<h4>Performance</h4>
 You can configure the number of threads to use in common.h. I recommend to use NbCores - 1 (see NB_THREADS).
 
 RULE_SEEDS_Z0:
@@ -44,3 +44,4 @@ This is actually a performance improvement that greatly simplify the search for 
 
 TODO:
 - Allow to grow from any existing cell, not only from the head (see PROGRESSIVE_DNA)
+- Randomly sprinkle new species out of nowhere to improve competition. 
