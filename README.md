@@ -1,4 +1,4 @@
-darwins-dream-cpp
+Darwin's dream (C++ version)
 =================
  
 An attempt to create digital species derived from simple natural selection rules.
