@@ -14,20 +14,28 @@ const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 400;
 
 const bool GROW_OR_DIE = true;
-const bool CONTRAINT_NEED_SUN = true;
-const bool CONSTRAINT_BALANCING = true;
-const bool LOCALITY_ENABLED = true;
-const bool PROGRESSIVE_DNA = false;
-
 const int WORLD_LENGTH = 200;
+
 const int MAX_CELLS = 30;
-const float REPRODUCTION_RATE = 0.1;
-const float MUTATION_RATE = 0.01;
+const int MAX_CREATURE_AGE = 30;
+
+const bool CONTRAINT_NEED_SUN = true;
 const float MIN_ENERGY_PER_CELL = .5;
 const float SUNLIGHT_LOSS_RATIO = 0.15;
+
+const bool CONSTRAINT_BALANCING = true;
 const int BALANCING_THRESHOLD = 6*6;
-const int MAX_CREATURE_AGE = 30;
+
+const bool LOCALITY_ENABLED = true;
 const int LOCALITY_RADIUS = 8;
+
+const bool PROGRESSIVE_DNA = false;
+const float REPRODUCTION_RATE = 0.1;
+const float MUTATION_RATE = 0.01;
+
+// 2.5 = attempt to create on average 2.5 species per cycle
+// <=> 2 attempts ; and another one with 50% chances
+const float SPONANEOUS_SPECIES_PER_CYCLE = 1.0;
 
 const int NB_THREADS = 3;
 

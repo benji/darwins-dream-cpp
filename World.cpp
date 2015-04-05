@@ -51,6 +51,10 @@ Species* World::evolve(Species* s, Creature* c){
   Species* newSpecies = createSpecies(s);
   if (reproduce(newSpecies, c) == NULL) newSpecies->noRoomForNewSpecies = true;
   //cout<<"Reproduced evolved species from "<<c->x<<","<<c->y<<" to "<<(*(newSpecies->creatures.begin()))->x<<","<<(*(newSpecies->creatures.begin()))->y<<endl;
+  if (newSpecies != NULL){
+      ++cycleNewSpeciesCount;
+      ++cycleBirthCount;
+  }
   return newSpecies;
 }
 
@@ -72,12 +76,8 @@ void World::sunshineOnSlice(int minX, int maxX){ // [minX; maxX]
 void World::reproductionMutationOnCreature(Creature* c){
   Species* s = &(c->species);
 
-  if (randDouble() < MUTATION_RATE){
-    if (evolve(s, c) != NULL) {
-      ++cycleNewSpeciesCount;
-      ++cycleBirthCount;
-    }
-  }
+  if (randDouble() < MUTATION_RATE) evolve(s, c);
+
   if (randDouble() < REPRODUCTION_RATE){
     if (reproduce(s, c) != NULL) ++cycleBirthCount;
   }
@@ -163,6 +163,19 @@ void World::lifecycle(){
     cycleDeathCount += s->killOldAndWeakCreatures();
   }
   CLOCKS.pause(CLOCK_DEATH);
+
+  // spontaneous species
+  float attempts = SPONANEOUS_SPECIES_PER_CYCLE;
+  while (attempts > 0){
+    if (attempts >= 1 || (attempts < 1 && randDouble() < attempts)){
+      Species* s = createSpecies(NULL);
+      if (reproduce(s, NULL) != NULL){
+        // cout << "Cycle:"<<cycle<<" - spontaneous creature created." <<endl;
+      }
+    }
+    attempts -= 1;
+  }
+
 
   // reproduction & mutation
   CLOCKS.start(CLOCK_REPRODUCTION);

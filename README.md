@@ -10,7 +10,7 @@ Each creature is composed of several Cells.<br/>
 The DNA dictates the growth direction for each Cell.<br/>
 The program will launch a window that will display a 3D view of the World on the left, and the shape of the dominant species on the right, rotating.
 
-![](https://raw.github.com/benji/darwins-dream-cpp/master/docs/screenshot-3.png)
+![](https://raw.github.com/benji/darwins-dream-cpp/master/docs/screenshot-4.png)
 
 <b>Usage</b><br/>
 
@@ -39,12 +39,15 @@ A recent addition has been to make a new creature appear close to its parent (se
 (see MUTATION_RATE)<br/>
 One of the DNA segment that dictates the direction of growth of a cell will be altered. The resulting species may or may not be fit for survival.
 
+<b>Spontaneous species</b><br/>
+(see SPONANEOUS_SPECIES_PER_CYCLE)<br/>
+Randomly sprinkle new species out of nowhere to improve competition.
+
 <b>Performance</b><br/>
 You can configure the number of threads to use in common.h. I recommend to use NbCores - 1 (see NB_THREADS).
 
 <b>TODO</b><br/>
 - Allow to grow from any existing cell, not only from the head (see PROGRESSIVE_DNA)
-- Randomly sprinkle new species out of nowhere to improve competition.
 
 <b>Technicalities</b><br/>
 
