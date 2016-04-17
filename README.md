@@ -3,10 +3,14 @@ Darwin's dream (C++ version)
 
 <b>Abstract</b><br/>
 
-The intention is to demonstrate how the constraints for survival drives the shape of the species through natural selection.
+The intention of this project is to demonstrate how survival constraints shapes the species' phenotype through natural selection.
 
-The program generates some initial species with random DNA, and creates a few creatures.<br/>
-Each creature is composed of several Cells.<br/>
+Following the model of plants, each creature needs to receive enough sunlight (energy constraint) and to grow upright (balancing constraint) in order to survive. The creatures compete for sunlight: if a create is in the shadow of another, it will only receive a small fraction of the sun's energy.
+
+The result is the emergence of creatures with a clearly identifiable vertical stem, and a platform at the top to harness sunlight.
+
+The program generates a few initial species with random DNA and creates a few creatures.<br/>
+Each Creature is composed of several Cells.<br/>
 The DNA dictates the growth direction for each Cell.<br/>
 The program will launch a window that will display a 3D view of the World on the left, and the shape of the dominant species on the right, rotating.
 
