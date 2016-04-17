@@ -12,7 +12,7 @@ The result is the emergence of creatures with a clearly identifiable vertical st
 The program generates a few initial species with random DNA and creates a few creatures.<br/>
 Each Creature is composed of several Cells.<br/>
 The DNA dictates the growth direction for each Cell.<br/>
-The program will launch a window that will display a 3D view of the World on the left, and the shape of the dominant species on the right, rotating.
+The program will launch a window that will display a 3D view of the World on the left, and the typical shape of the dominant species on the right, rotating.
 
 ![](https://raw.github.com/benji/darwins-dream-cpp/master/docs/screenshot-4.png)
 
