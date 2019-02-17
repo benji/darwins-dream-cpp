@@ -1,4 +1,5 @@
 #include <GL/glut.h>
+#include <unistd.h>
 
 #include "rendering.h"
 #include "viewer.h"

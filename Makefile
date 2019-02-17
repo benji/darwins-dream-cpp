@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-Wall -std=c++0x -pthread -pedantic -I/usr/include/GL -Ofast
-LDFLAGS=-lGL -lGLU -lglut
+LDFLAGS=-lGL -lGLU -lglut -lpthread
 SOURCES=main.cpp utils.cpp viewer.cpp rendering.cpp Cell.cpp Creature.cpp Species.cpp CellsRegistry.cpp World.cpp Clocks.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=main
